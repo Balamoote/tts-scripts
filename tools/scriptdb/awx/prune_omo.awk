@@ -23,8 +23,11 @@ BEGIN {
 }
 
 {
-    for (i = 3; i <= NF; i++) 
-        oma[$2][$i]
+    for (i = 3; i <= NF; i++) { oma[$2][$i] };
+
+    s0=$0; gsub("ё","е",$0); gsub("'","",$0);
+    for (i = 3; i <= NF; i++) { if ($2 != $i) print s0 >> "_error_OMOs" };
+
 }
 
 END {

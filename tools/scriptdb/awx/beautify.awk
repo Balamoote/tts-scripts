@@ -8,7 +8,7 @@
 #   или
 #   ./hclean.awk -ord  -- "причесать" все скрипты
 #
-# Последняя версия файла находится тут: https://github.com/Balamoote/gtts-scripts
+# Последняя версия файла находится тут: https://github.com/Balamoote/tts-scripts
 function sortchunk(chunk, sep,     ret, charr, chars, i, chnum)
 {        split(chunk, charr, sep); for ( i in charr ) { chars[charr[i]] = charr[i] }; chnum = asort(chars);
          ret = chars[1]; for ( i = 2; i <= chnum; i++ ) { ret = ret sep chars[i] }; return ret }

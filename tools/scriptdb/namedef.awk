@@ -1,5 +1,5 @@
 # Скрипт простановки ударений в именах собственных
-# Последняя версия файла тут: https://github.com/Balamoote/gtts-scripts
+# Последняя версия файла тут: https://github.com/Balamoote/tts-scripts
 @load "rwarray"
 
 function joinpat(array, seps, nuf,    ret, i, k) { # Склеить строку обратно
@@ -27,20 +27,15 @@ BEGIN {
 
    if (redix == 0 && gawk52 == 1) { readall(namecache) } else {
 
-#         s/\\\\xcc\\\\xa0/\\xcc\\xa0/g;\
-#         s/\\\\xcc\\\\xa3/\\xcc\\xa3/g;\
-#         s/\\\\xcc\\\\xa4/\\xcc\\xa4/g;\
-#         s/\\\\xcc\\\\xad/\\xcc\\xad/g;\
-#         s/\\\\xcc\\\\xb0/\\xcc\\xb0/g;\
-#         s/^_(.)(.+)=(\\\\xcc\\\\x[ab][034d])(.)(.+)=g$/\\u\\1\\2 \\3\\u\\4\\5/g;\
-   cmd = "zcat " inax "namebase.gz | sed -r 's/([аеёиоуыэюя])\\x27/\\1\\xcc\\x81/gI;\
-                                             s/^_(.)(.+)=(.)(.+)=g$/\\u\\1\\2 \\u\\3\\4/g;'";
+   cmd = "zcat " inax "namebase.gz | \
+       sed -r 's/([аеёиоуыэюя])\\x27/\\1\\xcc\\x81/gI; \
+               s/^_(.)(.+)=(.)(.+)$/\\u\\1\\2 \\u\\3\\4 \\U\\1\\2\\E \\U\\3\\4\\E/g;'";
    while ((cmd|getline) > 0) {
 
-         if ($2 ~ /[Ёё]/) { yok = gensub("'","","g",$2) };
+         if ($2 ~ /[Ёё]/) { Yok = gensub("'","","g",$2); YOK = gensub("'","","g",$4) };
 
-         namedef[$1]=$2;
-         namedef[yok]=$2;
+         namedef[$1] =$2; namedef[$3] =$4;
+         namedef[Yok]=$2; namedef[YOK]=$4;
 
    }; close(cmd);
 
@@ -55,11 +50,8 @@ BEGIN {
  nf=patsplit($0, l, patword, sep);
 
  for (i=1; i<=nf; i++) {
-    
-    if ( l[i] ~ capword ) { lcf1 = substr(l[i],1,1); lcf2=tolower(substr(l[i],2)); lcfield = lcf1 lcf2; if ( lcfield in namedef ) { l[i]=toupper(namedef[lcfield]) }; }
-    else { if ( l[i] in namedef ) { l[i]=namedef[l[i]] }; };
-        
- }
+   if ( l[i] in namedef ) { l[i]=namedef[l[i]] };
+ };
 
  # вывести изменённую строку
  $0 = joinpat(l, sep, nf)

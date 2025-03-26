@@ -1,5 +1,5 @@
 # Библиотека различных функций обработки текста
-# Последняя версия файла тут: https://github.com/Balamoote/gtts-scripts
+# Последняя версия файла тут: https://github.com/Balamoote/tts-scripts
 
 # служебные фунции
 function readfile(file,  tmp, save_rs) {            # Функция чтения файла в скаляр

@@ -1,6 +1,6 @@
 BEGIN {
 # Скрипт чтения словарных баз в массивы
-# Последняя версия файла тут: https://github.com/Balamoote/gtts-scripts
+# Последняя версия файла тут: https://github.com/Balamoote/tts-scripts
     # let @a=1|%s/;DIC\["\zs[0-9]\+\ze"\]/\=''.(@a+setreg('a',@a+1))/g|%s/k<=\zs\d\+\ze;/\=''.(@a-1)/g
     # %s:\[$1\];\zs\ze:DIC["1"]++;:gc
     # %s:DIC\["\d\+"\]++;::gc

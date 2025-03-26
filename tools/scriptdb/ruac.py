@@ -1,5 +1,5 @@
 # Оригинал пакета ruaccent тут: https://github.com/Den4ikAI/ruaccent
-# Свежая версия данного скрипта тут: https://github.com/Balamoote/gtts-scripts/tools/scriptdb/ruac.py
+# Свежая версия данного скрипта тут: https://github.com/Balamoote/tts-scripts/tools/scriptdb/ruac.py
 
 # Для более корректной работы, найдите файл ruaccent.py, поменяйте и дополните так:
 # self_normalize_seq="[^a-zA-Z0-9\sа-яА-ЯёЁ—–.,!?:;\"'‘’(){}\[\]«»„“”\\\`_~@#$%^&*=/-]"
@@ -21,19 +21,23 @@ from ruaccent import RUAccent
 start_time = time.time()
 
 # Параметры ruaccent по умолчанию
-use_dictionary = True  # Использовать встроенный словарь однозначных ударений, выключается по -nodic
-custom_dict = {}    # подгрузить пользовательский словарь однозначных ударений: -dic
-device = "CUDA"     # CPU или CUDA
+use_dictionary = (
+    True  # Использовать встроенный словарь однозначных ударений, выключается по -nodic
+)
+custom_dict = {}  # подгрузить пользовательский словарь однозначных ударений: -dic
+device = "CUDA"  # CPU или CUDA
 model_name = "turbo3.1"  # название модели
-max_length = 1023   # размер чанка
+max_length = 1023  # размер чанка
 
 # Параметры скрипта по умолчанию
-show_status  = 1    # вывод статуса при обработке файла (выключен для stdin), выключить: -nostat или -norep
-final_report = 1    # вывод финального отчета, выключить: -norep
-plused       = 0    # 0 = ста́вить ударе́ния, 1 = ст+авить удар+ения, включить: -plus
-save_accent  = 1    # восстанавливать уже имеющиеся ударения из исходного текста, выключить: -nosave
-see_no_error = 1    # скрыть дефектные результаты обработки в errata.txt; в конечной строке дефекты устраняются всегда, включить: -errors
-onnx_log_lvl = 3    # Настройка лога onnx, может быть нужна, если используем CUDA
+show_status = 1  # вывод статуса при обработке файла (выключен для stdin), выключить: -nostat или -norep
+final_report = 1  # вывод финального отчета, выключить: -norep
+plused = 0  # 0 = ста́вить ударе́ния, 1 = ст+авить удар+ения, включить: -plus
+save_accent = (
+    1  # восстанавливать уже имеющиеся ударения из исходного текста, выключить: -nosave
+)
+see_no_error = 1  # скрыть дефектные результаты обработки в errata.txt; в конечной строке дефекты устраняются всегда, включить: -errors
+onnx_log_lvl = 3  # Настройка лога onnx, может быть нужна, если используем CUDA
 
 ort.set_default_logger_severity(onnx_log_lvl)
 
@@ -51,9 +55,18 @@ pat_acc = re.compile("[^а-яА-ЯёЁ\u0301\u0320\u0323\u0324\u032d\u0330]+")
 
 # Паттетрны для convert_accent
 patterns = {
-    "apostrophe_to_plus": (re.compile(r"([аеёиоуыэюяАЕЁИОУЫЭЮЯ])'"), lambda m: f"+{m.group(1)}",),
-    "accent_to_plus": (re.compile(r"([аеёиоуыэюяАЕЁИОУЫЭЮЯ])\u0301"), lambda m: f"+{m.group(1)}",),
-    "plus_to_accent": (re.compile(r"\+([аеёиоуыэюяАЕЁИОУЫЭЮЯ])"), lambda m: f"{m.group(1)}\u0301",),
+    "apostrophe_to_plus": (
+        re.compile(r"([аеёиоуыэюяАЕЁИОУЫЭЮЯ])'"),
+        lambda m: f"+{m.group(1)}",
+    ),
+    "accent_to_plus": (
+        re.compile(r"([аеёиоуыэюяАЕЁИОУЫЭЮЯ])\u0301"),
+        lambda m: f"+{m.group(1)}",
+    ),
+    "plus_to_accent": (
+        re.compile(r"\+([аеёиоуыэюяАЕЁИОУЫЭЮЯ])"),
+        lambda m: f"{m.group(1)}\u0301",
+    ),
 }
 
 pre_clearns = (
@@ -189,7 +202,13 @@ else:
     acc_seq = re.compile(r"\u0301")
 
 accentizer = RUAccent()
-accentizer.load(omograph_model_size=model_name, use_dictionary=use_dictionary, custom_dict=custom_dict, device=device, tiny_mode=False)
+accentizer.load(
+    omograph_model_size=model_name,
+    use_dictionary=use_dictionary,
+    custom_dict=custom_dict,
+    device=device,
+    tiny_mode=False,
+)
 
 # Чтение текста из файла или stdin
 if len(sys.argv) > 1 and sys.argv[-1] not in keys_list:

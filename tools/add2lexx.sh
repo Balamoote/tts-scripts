@@ -1,6 +1,6 @@
 #!/bin/bash
 # Добавить новые шаблоны в tts.txt и отсортировать
-# Последняя версия файла тут: https://github.com/Balamoote/gtts-scripts 
+# Последняя версия файла тут: https://github.com/Balamoote/tts-scripts 
 
 #set -e
 export LC_COLLATE=C

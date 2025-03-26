@@ -35,7 +35,7 @@
 # При обработке очень больших файлов с текстом, можно использовать ключ -wo, чтобы только собрать слова, но не расставлять ударения.
 
 # Книга должна быть в кодировке UTF-8
-# Последняя версия файла тут: https://github.com/Balamoote/gtts-scripts 
+# Последняя версия файла тут: https://github.com/Balamoote/tts-scripts 
 # Для работы модуля дискретных скриптов обработки именных омографов в nomo-$book нужны следующие плагины vim
 # 1) https://github.com/inkarkat/vim-PatternsOnText
 # 2) https://github.com/inkarkat/vim-ingo-library (чтобы работал п. 1)
@@ -49,6 +49,9 @@ suf=nam
 
 aux="scriptaux"
 sdb="scriptdb"
+
+# Переменные обработаки текста по умолчанию
+preview=1; nama=0; dixa=0;
 
 printf '\e[32m%s \e[32;4;1m%s\e[0m\n' "Скрипт" "\"Имена\""
 
@@ -68,6 +71,7 @@ backup="$book".$suf
 
 # Установка редактора: vim или neovim
 edi=$(sed -rn 's/^\s*editor\s*=\s*(vim|nvim)\s*$/\1/ p' $sdb/settings.ini)
+if command -v pigz >/dev/null 2>&1; then zipper="pigz"; else zipper="gzip"; fi
 
 # Установка корректировки ширины вывода превью в дискретных скриптах
 termcor=$(sed -rn 's/^\s*termcorrection\s*=\s*([-0-9]*)\s*$/\1/ p' $sdb/settings.ini)
@@ -107,11 +111,14 @@ case $key in
  -f) # удалить директорию nomo-book
   if [[ -d "$wrkdir" ]]; then rm -rf "nomo-$book"; printf '\e[36m%s \e[33m%s \e[36m%s\e[0m\n' "Директория" $wrkdir "удалена."; exit 1
   else printf '\e[36m%s \e[33m%s \e[36m%s\e[0m\n' "Директории" $wrkdir "не существует. Используйте другой ключ."; exit 1; fi ;;
- -n) # Обработать имена, собрать слова, директорию namo- не удалять (если хотим продолжить работу)
-  preview=1; printf '\e[32m%s\e[0m\n' "Однозначные омографы, превью и дискретные скрипты." ;;
+ -n) # Собрать слова, директорию namo- не удалять (если хотим продолжить работу)
+  nama=0; dixa=0; printf '\e[32m%s\e[0m\n' "Собрать слова. Ударения: словари выключены." ;;
  -gg) # Обработать имена, собрать слова, директорию namo- удалить и создать заново
-  preview=1; if [[ -d "$wrkdir" ]]; then rm -rf "$wrkdir"; mkdir "$wrkdir";
-  printf '\e[36m%s \e[33m%s \e[36m%s\e[0m\n' "Директория" $wrkdir "пересоздана."; else mkdir "$wrkdir"; fi ;;
+  nama=1; dixa=0; if [[ -d "$wrkdir" ]]; then rm -rf "$wrkdir"; mkdir "$wrkdir";
+  printf '\e[36m%s \e[33m%s \e[36m%s\e[0m\n' "Директория" $wrkdir "пересоздана. Собрать слова. Ударения: включён только namebase."; else mkdir "$wrkdir"; fi ;;
+ -dixa) # Обработать все не-омографы, собрать слова, директорию namo- удалить и создать заново
+  nama=0; dixa=1; if [[ -d "$wrkdir" ]]; then rm -rf "$wrkdir"; mkdir "$wrkdir";
+  printf '\e[36m%s \e[33m%s \e[36m%s\e[0m\n' "Директория" $wrkdir "пересоздана. Собрать слова. Ударения: все словари включены."; else mkdir "$wrkdir"; fi ;;
  *) # Нечто другое
   printf '\e[32m%s \e[93m%s \e[32m%s \e[93m%s\e[0m\n' "Задайте ключ или книгу. Например:" "./get-words.sh -gg book.fb2" "или" "./get-words.fb2 book.fb2"; exit 0 ;;
 esac
@@ -191,24 +198,24 @@ find . -type f -name "[01][0-9]_*\.list" -exec rm '{}'  \;
              s/^(.*)-(.*)$/\0\n\1=\n_\2/g" | sed -r "s/^_-/_/; s/-=$/=/" | sort -u > $stadir/bookwords.list
     locdicsize=$(cat $stadir/bookwords.list | wc -l )
 
- grep -Ff $stadir/bookwords.list <(zcat $aux/dic.pat.gz)           | gzip > $stadir/dic.pat.gz
- grep -Ff $stadir/bookwords.list <(zcat $aux/unistress-all.pat.gz) | gzip > $stadir/unistress-all.pat.gz
- grep -Ff $stadir/bookwords.list <(zcat $aux/malc.pat.gz)          | gzip > $stadir/malc.pat.gz
- grep -Ff $stadir/bookwords.list <(zcat $aux/yodef.pat.gz)         | gzip > $stadir/yodef.pat.gz
- grep -Ff $stadir/bookwords.list <(zcat $aux/yolc.pat.gz)          | gzip > $stadir/yolc.pat.gz
- grep -Ff $stadir/bookwords.list <(zcat $aux/yoyo.pat.gz)          | gzip > $stadir/yoyo.pat.gz
- grep -Ff $stadir/bookwords.list <(zcat $aux/yoyo_lc.pat.gz)       | gzip > $stadir/yoyo_lc.pat.gz
- grep -Ff $stadir/bookwords.list <(zcat $aux/names-all.pat.gz)     | gzip > $stadir/names-all.pat.gz
+ grep -Ff $stadir/bookwords.list <(zcat $aux/dic.pat.gz)           | $zipper > $stadir/dic.pat.gz
+ grep -Ff $stadir/bookwords.list <(zcat $aux/unistress-all.pat.gz) | $zipper > $stadir/unistress-all.pat.gz
+ grep -Ff $stadir/bookwords.list <(zcat $aux/malc.pat.gz)          | $zipper > $stadir/malc.pat.gz
+ grep -Ff $stadir/bookwords.list <(zcat $aux/yodef.pat.gz)         | $zipper > $stadir/yodef.pat.gz
+ grep -Ff $stadir/bookwords.list <(zcat $aux/yolc.pat.gz)          | $zipper > $stadir/yolc.pat.gz
+ grep -Ff $stadir/bookwords.list <(zcat $aux/yoyo.pat.gz)          | $zipper > $stadir/yoyo.pat.gz
+ grep -Ff $stadir/bookwords.list <(zcat $aux/yoyo_lc.pat.gz)       | $zipper > $stadir/yoyo_lc.pat.gz
+ grep -Ff $stadir/bookwords.list <(zcat $aux/names-all.pat.gz)     | $zipper > $stadir/names-all.pat.gz
 
- grep -Ff $stadir/bookwords.list <(zcat $sdb/unistress.gz)         | gzip > $stadir/unistress.gz
- grep -Ff $stadir/bookwords.list <(zcat $sdb/unistrehy.gz)         | gzip > $stadir/unistrehy.gz
- grep -Ff $stadir/bookwords.list <(zcat $sdb/malc.gz)              | gzip > $stadir/malc.gz
- grep -Ff $stadir/bookwords.list <(zcat $sdb/yodef.gz)             | gzip > $stadir/yodef.gz
- grep -Ff $stadir/bookwords.list <(zcat $sdb/yodhy.gz)             | gzip > $stadir/yodhy.gz
- grep -Ff $stadir/bookwords.list <(zcat $sdb/yolc.gz)              | gzip > $stadir/yolc.gz
- grep -Ff $stadir/bookwords.list <(zcat $sdb/yoyo.gz)              | gzip > $stadir/yoyo.gz
- grep -Ff $stadir/bookwords.list <(zcat $sdb/yoyo_lc.gz)           | gzip > $stadir/yoyo_lc.gz
- grep -Ff $stadir/bookwords.list <(zcat $sdb/namebase.gz)          | gzip > $stadir/namebase.gz
+ grep -Ff $stadir/bookwords.list <(zcat $sdb/unistress.gz)         | $zipper > $stadir/unistress.gz
+ grep -Ff $stadir/bookwords.list <(zcat $sdb/unistrehy.gz)         | $zipper > $stadir/unistrehy.gz
+ grep -Ff $stadir/bookwords.list <(zcat $sdb/malc.gz)              | $zipper > $stadir/malc.gz
+ grep -Ff $stadir/bookwords.list <(zcat $sdb/yodef.gz)             | $zipper > $stadir/yodef.gz
+ grep -Ff $stadir/bookwords.list <(zcat $sdb/yodhy.gz)             | $zipper > $stadir/yodhy.gz
+ grep -Ff $stadir/bookwords.list <(zcat $sdb/yolc.gz)              | $zipper > $stadir/yolc.gz
+ grep -Ff $stadir/bookwords.list <(zcat $sdb/yoyo.gz)              | $zipper > $stadir/yoyo.gz
+ grep -Ff $stadir/bookwords.list <(zcat $sdb/yoyo_lc.gz)           | $zipper > $stadir/yoyo_lc.gz
+ grep -Ff $stadir/bookwords.list <(zcat $sdb/namebase.gz)          | $zipper > $stadir/namebase.gz
 
     md5sum $stadir/bookwords.list $stadir/text-book.txt $stadir/dic.pat.gz $stadir/unistress-all.pat.gz $stadir/malc.pat.gz $stadir/yodef.pat.gz \
            $stadir/yolc.pat.gz $stadir/yoyo.pat.gz $stadir/yoyo_lc.pat.gz $stadir/names-all.pat.gz $stadir/unistress.gz $stadir/malc.gz \
@@ -222,12 +229,12 @@ find . -type f -name "[01][0-9]_*\.list" -exec rm '{}'  \;
 
 # Список обычных слов (только с маленькой буквы) -- слова, отсутствующие в словарях лексики
  sed -r 's/^/ /g' $stadir/text-book.txt | grep -Po "(?<![$RUUC$rulc$unxc])[$rulc$unxc]+" | grep -Ev "[$unxc]" | sed -r "s/^.+$/_\0=/g" | \
-  grep -Fvf <(zcat $stadir/dic.pat.gz $stadir/yoyo.pat.gz $stadir/yolc.pat.gz $stadir/yoyo_lc.pat.gz) |
-      sort -u | sed -r "s/^_(.+)=$/_\1=\1=/g" > 00_wrd_newlex.list
+  grep -Fvf <(zcat $stadir/dic.pat.gz $stadir/yoyo.pat.gz $stadir/yoyo_lc.pat.gz) |
+      sort -u | sed -r "s/^_(.+)=$/_\1=\1/g" > 00_wrd_newlex.list
 
 # Список обычных слов (только с маленькой буквы) -- слова, отсутствующие в словарях ударений
  sed -r 's/^/ /g' $stadir/text-book.txt | grep -Po "(?<![$RUUC$rulc$unxc])[$rulc$unxc]+" | grep -Ev "[$unxc]" | sed -r "s/^.+$/_\0=/g" | \
-  grep -Fvf <(zcat $stadir/unistress-all.pat.gz $stadir/yoyo.pat.gz) | sort -u | sed -r "s/^_(.+)=$/_\1=\1=/g" > 01_wrd_newbas.list
+  grep -Fvf <(zcat $stadir/unistress-all.pat.gz $stadir/malc.pat.gz) | sort -u | sed -r "s/^_(.+)=$/_\1=\1/g" > 01_wrd_newbas.list
 
 # Список слов с заглавной буквы НЕ в начале предложения
 grep -Po "(?<=[A-Za-zА-Яа-яёЁ0-9,}):;$unxc$unxs])[ ’(«$qtsd–—-]+[$unxc]?[$RUUC][$rulc$unxc]+" $stadir/text-book.txt | grep -Ev "[$unxc]" | \
@@ -257,12 +264,15 @@ gw_cur=$(date +%s.%N); duration=$( echo $gw_cur - $gw_prev | bc ); gw_prev=$gw_c
 LC_ALL="en_US.UTF-8" printf '\e[36m%s \e[93m%.2f \e[36m%s, \e[0m' "Слов:" $duration "сек"
 
 # Список возможных неизвестных имён
- grep -Fvf <(zcat $stadir/yoyo.pat.gz $stadir/unistress-all.pat.gz) $stadir/surcap-bas.pat | sed -r 's/^_(.*=)$/_\1\1g/g' > 02_nom_newsur.list
- grep -Fvf <(zcat $stadir/yoyo.pat.gz $stadir/unistress-all.pat.gz) $stadir/anycap-bas.pat | sed -r 's/^_(.*=)$/_\1\1g/g' > 03_nom_newany.list
+grep -Fvf <(zcat $stadir/unistress-all.pat.gz) $stadir/surcap-bas.pat | sed -r 's/^_(.*)=$/_\1=\1/g' > 02_nom_newsur.list
+grep -Fvf <(zcat $stadir/unistress-all.pat.gz) $stadir/anycap-bas.pat | sed -r 's/^_(.*)=$/_\1=\1/g' > 03_nom_newany.list
 
  # Списки потенциальных имён, уже присутствующих в словере общей лексики
- grep -Ff <(zcat $stadir/yoyo.pat.gz $stadir/unistress-all.pat.gz)  $stadir/surcap-lex.pat | sed -r 's/^_(.*=)$/_\1\1g/g' > 04_nom_surlex.list
- grep -Ff <(zcat $stadir/yoyo.pat.gz $stadir/unistress-all.pat.gz)  $stadir/anycap-lex.pat | sed -r 's/^_(.*=)$/_\1\1g/g' > 05_nom_anylex.list
+ grep -Ff <(zcat $stadir/unistress-all.pat.gz) $stadir/surcap-lex.pat > $stadir/04_nom_surlex.pat
+ grep -Ff <(zcat $stadir/unistress-all.pat.gz) $stadir/anycap-lex.pat > $stadir/05_nom_anylex.pat
+ uniz="$stadir/unistress.gz $stadir/yoyo.gz $stadir/yodef.gz"
+ zgrep -Fhf $stadir/04_nom_surlex.pat $uniz > 04_nom_surlex.list
+ zgrep -Fhf $stadir/05_nom_anylex.pat $uniz > 05_nom_anylex.list
 
 # Некоторые выделяют ударения тэгами… по умолчанию выключено: лучше обработать руками
 #s=(\w)<emphasis>([$RVUC$rvlc])<\/emphasis>=\1\2\xcc\x81=g
@@ -273,10 +283,16 @@ LC_ALL="en_US.UTF-8" printf '\e[36m%s \e[93m%.2f \e[36m%s, \e[0m' "Слов:" $d
 gw_cur=$(date +%s.%N); duration=$( echo $gw_cur - $gw_prev | bc ); gw_prev=$gw_cur;
 LC_ALL="en_US.UTF-8" printf '\e[36m%s \e[93m%.2f \e[36m%s\e[0m\n' "Имён:" $duration "сек"
 
-# Применяем шаблоны
-printf '\e[36m%s\e[0m ' "Расстановка ударений в именах собственных …"
+# Применяем словари ударений
 
-awk -v indb="$sdb/" -v inax="$stadir" -f $sdb/namedef.awk "$stadir"/text-book.txt > "$wrkdir"/text-book.txt
+if [[ $dixa -eq 1 ]]; then # Применить все словари
+  printf '\e[36m%s\e[0m ' "Расстановка ударений во всех известных словах и именах …"
+  awk -v indb="$sdb/" -v inax="$stadir" -f $sdb/unidef.awk "$stadir"/text-book.txt > "$wrkdir"/text-book.txt  ;
+fi;
+if [[ $nama -eq 1 ]]; then # Применить только словарь namebase
+  printf '\e[36m%s\e[0m ' "Расстановка ударений только из словаря namebase …"
+  awk -v indb="$sdb/" -v inax="$stadir" -f $sdb/namedef.awk "$stadir"/text-book.txt > "$wrkdir"/text-book.txt ;
+fi;
 
 gw_cur=$(date +%s.%N); duration=$( echo $gw_cur - $gw_prev | bc ); gw_prev=$gw_cur;
 LC_ALL="en_US.UTF-8" printf '\e[36m%s \e[93m%.2f \e[36m%s\e[0m\n' "выполнена за" $duration "сек"
@@ -298,21 +314,26 @@ for i in [01][0-9]_*.list; do nb=$(wc -l < $i); nu=$(echo $i | sed -r "s/^(.+)(\
 if [[ $preview -eq 1 ]]; then
  printf '\e[36m%s \e[33m%s\e[0m\n' "Скрипты для обработки имён-омографов сохранены в" $wrkdir
 
- grep -Ff <(zcat $aux/mano-uc.pat.gz) $stadir/anycap-all.pat >  $wrkdir/mano-uc-all.pat
- grep -Ff <(zcat $aux/mano-uc.pat.gz) $stadir/surcap-all.pat >> $wrkdir/mano-uc-all.pat
+ grep -Ff <(zcat $aux/mano-sm.pat.gz) $stadir/anycap-all.pat >  $wrkdir/mano-uc-all.pat
+ grep -Ff <(zcat $aux/mano-sm.pat.gz) $stadir/surcap-all.pat >> $wrkdir/mano-uc-all.pat
  sort -u -o $wrkdir/mano-uc-all.pat $wrkdir/mano-uc-all.pat
 
- zgrep -Ff $wrkdir/mano-uc-all.pat <(zcat $sdb/mano-uc.gz) | sed -r "
- s/^_(.)(.+)=/\u\1\2/g
+ grep -Ff $wrkdir/mano-uc-all.pat <(zcat $sdb/mano-uc.gz) | sed -r "
   s/([АЕЁИОУЫЭЮЯаеёиоуыэюя])\x27/\1\xcc\x81/g
 # s/\\\xcc\\\xa0/\xcc\xa0/g
 # s/\\\xcc\\\xa3/\xcc\xa3/g
 # s/\\\xcc\\\xa4/\xcc\xa4/g
 # s/\\\xcc\\\xad/\xcc\xad/g
 # s/\\\xcc\\\xb0/\xcc\xb0/g
+  s/([_ ])(.)/\1\u\2/g
+  s/[_=]//g;
         " | sort -u > $wrkdir/omo-luc.lst
  rm $wrkdir/mano-uc-all.pat
 fi
+
+# Возвращаем графику назад
+cat $wrkdir/text-book.txt $stadir/binary-book.txt > "$book"
+
 # Создать дискретные скрипты обработки омографов в nomo-$book
 # Дискретные скрипты запускаются из директории nomo-$book по отдельности каждый.
 # ВНИМАНИЕ: для этой операции необходимо иметь навыки работы в редакторе vim !!!
@@ -338,9 +359,6 @@ else # Если не нашли имён-омографов для ручной 
  rm -rf $wrkdir
 fi # maomchk 2
 
-
-# Возвращаем графику назад
-cat $wrkdir/text-book.txt $stadir/binary-book.txt > "$book"
 
 gw_cur=$(date +%s.%N); duration=$( echo $gw_cur - $gw_prev | bc ); tot_dur=$( echo $gw_cur - $gw_time0 | bc )
 

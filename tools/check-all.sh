@@ -1,6 +1,6 @@
 #!/bin/bash
 # Скрипт проверки целостности пакета и подготовки вспомогательных файлов.
-# Последняя версия файла тут: https://github.com/Balamoote/gtts-scripts 
+# Последняя версия файла тут: https://github.com/Balamoote/tts-scripts 
 # Требует: bash, sed, grep, awk, uniq, sort, bc т.е. стандартный набор утилит, который присутствует на большинстве linux-систем.
 
 # Варианты запуска: в консоли Linux/Mac, Cygwin под Windows, Termux под Android
@@ -10,7 +10,7 @@
 # Использование: запустить ./check-all.sh 
 #set -e
 export LC_COLLATE=C
-
+if command -v pigz >/dev/null 2>&1; then zipper="pigz"; else zipper="gzip"; fi
 aux="scriptaux"
 sdb="scriptdb"
 
@@ -30,7 +30,7 @@ case "$1" in
 	*) # Проверить, существует ли файл книги
 		if [[ -s "$1" ]]; then book="$1"
 		else printf '\e[35m%s \e[93m%s \e[35m%s \e[93m%s \e[93m%s \e[35m%s\e[0m\n' \
-			"Использование:" "./check-all.sh" "или" "./check-all.sh [fa|fg|fy|fm]"; fi ;;
+			"Использование:" "./check-all.sh" "или" "./check-all.sh [fa|fg|fy|fm]"; fi ; exit 1 ;;
 esac; fi
 
 # Массив со списком обязательных файлов
@@ -66,7 +66,7 @@ if [[ $aomo -eq 1 ]] && [[ $tst -eq 1 ]]; then
        	printf '\e[36m%s \e[32m%s ' "MOM:" "старые"
 else
   yod=0; uni=0
-  sed -r "s/=.+$/=/g" <(zcat $sdb/malc.gz) | gzip > $aux/malc.pat.gz
+  sed -r "s/=.+$/=/g" <(zcat $sdb/malc.gz) | $zipper > $aux/malc.pat.gz
 
   cd $sdb
   ./hclean.sh prune_omo > /dev/null
@@ -75,7 +75,7 @@ else
   # Формируем в $aux/ файлы mano-lc.pat.gz mano-uc.pat.gz mano-cc.pat.gz mano-ca.pat.gz
   awk -vomtype="mano" -f $sdb/awx/omopat.awk
 
-  #./testrule.sh > /dev/null # создать awk-базу для testrule.sh
+   ./testrule.sh > /dev/null # создать awk-базу для testrule.sh
 
   md5sum $sdb/mano-uc.gz $aux/mano-uc.pat.gz $sdb/mano-lc.gz $aux/mano-lc.pat.gz $sdb/malc.gz \
          $sdb/omo-index.sed $aux/mano-cc.pat.gz $aux/mano-ca.pat.gz $aux/malc.pat.gz > $aux/zaomo.md5
@@ -95,10 +95,10 @@ fi
 if [[ $jofik -eq 1 ]] && [[ $yod -eq 1 ]]; then
        	printf '\e[36m%s \e[32m%s ' "YOF:" "старые"
 else
-	zcat $sdb/yodef.gz | sed -r "s/=.+$/=/g" | gzip > $aux/yodef.pat.gz
-  zgrep "ё"      $sdb/mano-lc.gz           | gzip > $sdb/yomo-lc.gz
-  zgrep "ё"      $sdb/mano-uc.gz           | gzip > $sdb/yomo-uc.gz
-# sed -r "s/=.+$/=/g" <(zcat $sdb/yolc.gz)    | gzip > $aux/yolc.pat.gz
+	zcat $sdb/yodef.gz | sed -r "s/=.+$/=/g" | $zipper > $aux/yodef.pat.gz
+  zgrep "ё"      $sdb/mano-lc.gz           | $zipper > $sdb/yomo-lc.gz
+  zgrep "ё"      $sdb/mano-uc.gz           | $zipper > $sdb/yomo-uc.gz
+  sed -r "s/=.+$/=/g" <(zcat $sdb/yolc.gz)    | $zipper > $aux/yolc.pat.gz
 
   # Формируем в $aux/ файлы yomo-lc.pat.gz yomo-uc.pat.gz yomo-cc.pat.gz yomo-ca.pat.gz
   awk -vomtype="yomo" -f $sdb/awx/omopat.awk
@@ -106,7 +106,7 @@ else
   # Формируем в $sdb/  : yoyo.gz yoyo_lc.gz
   #           в $aux/ : yoyo.pat.gz yoyo_lc.pat.gz yoye.pat.gz yoye_lc.pat.gz
   awk -f $sdb/awx/yopat.awk
-  sed -r "s/=.+$/=/g" <(zcat $sdb/yoyo_lc.gz) | gzip >> $aux/yoyo.pat.gz
+  sed -r "s/=.+$/=/g" <(zcat $sdb/yoyo_lc.gz) | $zipper >> $aux/yoyo.pat.gz
 
   # Создаём yodef.bin
   echo "" | awk -vindb="$sdb/" -vinax="$aux/" -f $sdb/yodef.awk >/dev/null
@@ -122,9 +122,9 @@ fi
 if [[ $stu -eq 1 ]]; then
 	printf '\e[36m%s \e[32m%s ' "STU:" "старый" 
 else
-  zcat $sdb/unistress.gz $sdb/unistrehy.gz | sed -r 's/=.+$/=/g' | gzip > $aux/unistress.pat.gz
+  zcat $sdb/unistress.gz $sdb/unistrehy.gz | sed -r 's/=.+$/=/g' | $zipper > $aux/unistress.pat.gz
   zcat $sdb/unistress.gz $sdb/unistrehy.gz $sdb/mano-lc.gz $sdb/malc.gz $sdb/yodef.gz $sdb/yodhy.gz $sdb/yoyo.gz $sdb/yoyo_alt.gz |\
-       sed -r 's/=.+$/=/g' | gzip > $aux/unistress-all.pat.gz
+       sed -r 's/=.+$/=/g' | $zipper > $aux/unistress-all.pat.gz
   printf '\e[36m%s \e[93m%s ' "STU:" "новый" 
   md5sum $sdb/unistress.gz $sdb/mano-lc.gz $sdb/malc.gz $sdb/yodef.gz $sdb/yodhy.gz $sdb/yoyo.gz $sdb/yoyo_alt.gz \
          $aux/unistress-all.pat.gz $sdb/unistrehy.gz > $aux/zstu.md5;
@@ -133,22 +133,22 @@ fi
 if [[ $ndb -eq 1 ]]; then
        	printf '\e[36m%s \e[32m%s ' "NDB:" "старые"
 else
-	sed -r 's/=.+$/=/g' <(zcat $sdb/namebase.gz) | gzip > $aux/namebase.pat.gz
-	zcat $aux/namebase.pat.gz $aux/mano-uc.pat.gz | sort -u | gzip > $aux/names-all.pat.gz
-  md5sum $sdb/namebase.gz $aux/namebase.pat.gz $aux/names-all.pat.gz > $aux/zndb.md5
+	sed -r 's/=.+$/=/g' <(zcat $sdb/namebase.gz) | $zipper > $aux/namebase.pat.gz
+	zcat $aux/namebase.pat.gz $aux/mano-sm.pat.gz | sort -u | $zipper > $aux/names-all.pat.gz
+  md5sum $sdb/namebase.gz $aux/namebase.pat.gz $aux/mano-sm.pat.gz $aux/names-all.pat.gz > $aux/zndb.md5
   printf '\e[36m%s \e[93m%s ' "NDB:" "новые"
 fi
  
 if [[ $dix -eq 0 ]]; then
   dic=0
-  zcat $sdb/dix_prq.gz | awk -f $sdb/gen_prq.awk | sort -u | gzip > $aux/dic_prq.gz
+  zcat $sdb/dix_prq.gz | awk -f $sdb/gen_prq.awk | sort -u | $zipper > $aux/dic_prq.gz
   md5sum $sdb/dix_prq.gz $sdb/dic_prq.gz > $aux/zdix.md5
 fi
 
 if [[ $dic -eq 1 ]]; then
        	printf '\e[36m%s \e[32m%s ' "DIC:" "старые"
 else
-  zcat $sdb/dic_*.gz | awk '{ print "_" $1 "=" }' | sort -u | gzip > $aux/dic.pat.gz
+  zcat $sdb/dic_*.gz | awk '{ print "_" $1 "=" }' | sort -u | $zipper > $aux/dic.pat.gz
   md5sum $aux/dic.pat.gz $sdb/dic_prq.gz $sdb/dix_prq.gz $sdb/dic_gl.gz $sdb/dic_prl.gz $sdb/dic_suw.gz $sdb/dic_cust.gz $sdb/dic_rest.gz > $aux/zdic.md5
   printf '\e[36m%s \e[93m%s ' "DIC:" "новые"
 fi

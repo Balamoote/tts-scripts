@@ -2,7 +2,7 @@
 # Скрипт ёфикации текста
 # Делает "однозначную" ёфикацию. Ё-омографами занимается ./momo.sh
 # Имеет смысл запускать только с ключом -gg, и обработать некоторые омографы вручную, остальное передав ./momo.sh
-# Последняя версия файла тут: https://github.com/Balamoote/gtts-scripts 
+# Последняя версия файла тут: https://github.com/Balamoote/tts-scripts 
 # Ручная обработка ё-омографов через дискретные скрипты работает только с установленным плагинами vim:
 # 1) vim-ingo-library, брать тут https://github.com/inkarkat/vim-ingo-library
 # 2) vim-PatternsOnText, брать тут https://github.com/inkarkat/vim-PatternsOnText

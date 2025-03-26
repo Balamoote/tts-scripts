@@ -1,6 +1,6 @@
 #!/bin/bash
 # Добавить новые слова в базы: основной и оверрайда
-# Последняя версия файла тут: https://github.com/Balamoote/gtts-scripts 
+# Последняя версия файла тут: https://github.com/Balamoote/tts-scripts 
 
 #set -e
 export LC_COLLATE=C

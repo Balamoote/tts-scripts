@@ -1,5 +1,5 @@
 # Подпрограмма формирования текстового превью для дискретных скриптов
-# Последняя версия файла находится тут: https://github.com/Balamoote/gtts-scripts
+# Последняя версия файла находится тут: https://github.com/Balamoote/tts-scripts
 # При запуске требует следующие переменные (-v):
 #   obook = имя файла книги, которую будут править дискретные скрипты: имя файла
 #   bkwrkdir = временная директория книги
@@ -19,6 +19,8 @@ BEGIN {
     correcti = strtonum ( termcor )
     totallen = int((twd-4)/2); # Общая длина вывода, должна полность умещаться на половину экрана ("быстрый просмотр" в mc, т.е. еще -2), зависит от файлового менеджера
     maxwidth = twd - rightpad; # максимальная ширина вывода строки омографов во время создания превью
+
+    bedug_width = 0;     # Выводить в консоль длину строки превью, если она больше maxwidth. DEBUG
 
     unxy    = "[\xcc\x81\xcc\xa0\xcc\xa3\xcc\xa4\xcc\xad\xcc\xb0]"
     unxn    = "[^\xcc\x81\xcc\xa0\xcc\xa3\xcc\xa4\xcc\xad\xcc\xb0]"
@@ -101,8 +103,8 @@ for ( wrd in omos ) { #e2
         lnumwidt = length(num);	                             # Ширина вывода номера строки из количества строк в книге
         lookfwrd = totallen-lookback-wlen-lnumwidt+correcti; # Длина правой части превьюшки
 
-        if ( progs ) { 
-          maxprint += wlen + 1;                                # Текущая длина вывода в консоль, считаем для перевода строки
+        if ( bedug_width ) { 
+          maxprint += wlen + 1;                                # DEBUG: Текущая длина вывода в консоль, считаем для перевода строки
           if ( maxprint >= maxwidth ) { printf ("\n" ); maxprint = 0 };
           printf ( "\033[33m%s ", wrd );
         };

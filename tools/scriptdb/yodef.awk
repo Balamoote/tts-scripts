@@ -1,5 +1,5 @@
 # Скрипт ёфикации однозначных случаев
-# Последняя версия файла тут: https://github.com/Balamoote/gtts-scripts
+# Последняя версия файла тут: https://github.com/Balamoote/tts-scripts
 @load "rwarray"
 @include "scriptdb/functions.awk"
 
@@ -26,20 +26,24 @@ BEGIN {
    if (redix == 0 && gawk52 == 1) { readall(yocache) } else {
 
    cmd = "zcat " indb "yodef.gz " indb "yodhy.gz | \
-          sed -r 's/_(.)(.+)=(.)(.+)\\b/\\1\\2 \\3\\4 \\u\\1\\2 \\u\\3\\4 \\U\\1\\2\\E \\U\\3\\4\\E/g; \
+          sed -r 's/([_=-])(.)/\\1\\u\\2/g; s/_//g; s/=/ /g; \
+                  s/(.)(.+) (.)(.+)/\\L\\1\\2 \\3\\4\\E \\1\\L\\2\\E \\3\\L\\4\\E \\U\\0\\E \\0/g; \
                   s/\\x27/\xcc\x81/g;'";
    while ((cmd|getline) > 0) {
          yok=gensub("\\xcc\\x81","","g",$2)
          Yok=gensub("\\xcc\\x81","","g",$4)
          YOK=gensub("\\xcc\\x81","","g",$6)
+         YoK=gensub("\\xcc\\x81","","g",$8)
 
-         yodef[$1] =$2; yodef[$3] =$4; yodef[$5] =$6;
-         yodef[yok]=$2; yodef[Yok]=$4; yodef[YOK]=$6;
+         yodef[$1] =$2; yodef[$3] =$4; yodef[$5] =$6; yodef[$7] =$8;
+         yodef[yok]=$2; yodef[Yok]=$4; yodef[YOK]=$6; yodef[YoK]=$8;
 
    } close(cmd);
+
    cmd = "zcat " indb "yolc.gz | sed -r 's/^_//g; s/=/ /g; s/\\x27/\xcc\x81/g'";
    while ((cmd|getline) > 0) {
 
+        if ($2 ~ /[Ёё]/) { yok = gensub("'","","g",$2); yodef[yok]=$2; };
         yodef[$1]=$2;
 
    } close(cmd);
