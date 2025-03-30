@@ -9,7 +9,7 @@ aux="scriptaux"
 sdb="scriptdb"
 
 S1=$(echo "$1" | sed -r "s/ё/[её]/g; s/\*/.*/g")
-if [[ $S1 != $1 ]] && [[ $echo_S1 -eq 1 ]]; then printf "%s\n" $S1; fi
+if [[ $S1 != $1 && $echo_S1 -eq 1 ]]; then printf "%s\n" $S1; fi
 
 dicword="^"$S1"\b"
 bfword="(\s|#)"$S1"(#|\s|$)"

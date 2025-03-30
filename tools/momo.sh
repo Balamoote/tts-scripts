@@ -425,7 +425,7 @@ if [[ $main_do -eq 1 ]]; then # main_do
   zcat $sdb/mano-lc.gz $sdb/mano-uc.gz | sed -r "s/([_ ])(.)/\1\u\2/g"    | grep -Ff $bookwrkdir/manofi-uc.pat >> $bookwrkdir/mano-luc.txt
   zcat $sdb/mano-lc.gz $sdb/mano-uc.gz | sed -r "s/([$RUUC$rulc]+)/\U\0/g"| grep -Ff $bookwrkdir/manofi-cc.pat >> $bookwrkdir/mano-luc.txt
   
-  if [[ $disc_do -eq 1 ]] && [[ -s $bookwrkdir/mano-luc.txt ]]; then # Проверяем найдено ли хоть что-то из омографов… discretchk 0
+  if [[ $disc_do -eq 1 && -s $bookwrkdir/mano-luc.txt ]]; then # Проверяем найдено ли хоть что-то из омографов… discretchk 0
     sed -r "
            s/^_(.+)=/\1/g
            s/\x27/\xcc\x81/g
@@ -447,10 +447,11 @@ if [[ $main_do -eq 1 ]]; then # main_do
     twd=$(tput cols)
     
     # Определяем дефолтный результат словаря lexx
+     zgrep -Ff <(sed -r 's/^([^ ]+) .*/_\l\1=/g' $bookwrkdir/omo-luc.lst | sort -u) $sdb/uniomo.gz |\
+            	   sed -r 's/_([^=]+)(=.+)$/\1=#\2/'| sed "s/\x27/\xcc\x81/" > $bookwrkdir/omo-lexx.txt
+    
     #zgrep -Ff <(grep -Fof <(zcat $aux/ttspat.$suf.gz) <(sed -r 's/^([^ ]+) .*/_\l\1=/g' $bookwrkdir/omo-luc.lst | sort -u)) $aux/tts0.$suf.gz |\
     #       	sed -r 's/_([^"=]+)(\"=\"\s.+\")$/\1#\" \1\2/' | sed -r 's/_([^=]+)(=.+)$/\1=#\1\2/'| sed "s/\x27/\xcc\x81/" > $bookwrkdir/omo-lexx.txt
-    
-    echo "" > $bookwrkdir/omo-lexx.txt # заглушка: дописать получение дефолтного варианта из uniomo для дискретного скрипта
     
       sed -r "s/\xe2\x80\xa4/./g; s/\xe2\x80\xa7//g" $bookwrkdir/text-book.txt | \
         awk -vobook=$obook -vtwd=$twd -vpreview=$preview -vtermcor=$termcor -veditor=$edi -vbkwrkdir="$bookwrkdir/" -vindb="$sdb/" \

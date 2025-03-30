@@ -62,7 +62,7 @@ if [[ -s $aux/classes.md5 ]] && md5sum -c --status $aux/classes.md5 >/dev/null 2
 
 ### Выполняем проверку вспомогательных файлов из ./momo.sh
 
-if [[ $aomo -eq 1 ]] && [[ $tst -eq 1 ]]; then
+if [[ $aomo -eq 1 && $tst -eq 1 ]]; then
        	printf '\e[36m%s \e[32m%s ' "MOM:" "старые"
 else
   yod=0; uni=0
@@ -92,7 +92,7 @@ fi
 
 ### Выполняем проверку вспомогательных файлов из ./yofik.sh
 
-if [[ $jofik -eq 1 ]] && [[ $yod -eq 1 ]]; then
+if [[ $jofik -eq 1 && $yod -eq 1 ]]; then
        	printf '\e[36m%s \e[32m%s ' "YOF:" "старые"
 else
 	zcat $sdb/yodef.gz | sed -r "s/=.+$/=/g" | $zipper > $aux/yodef.pat.gz

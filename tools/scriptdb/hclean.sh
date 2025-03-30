@@ -267,22 +267,29 @@ case $key in
                          if (len == 1) { print i "=" j >> "_U_2bases"}
                          else { if (len != 0) {print i "=" j >> "_U_namuni_omo"}} }} }' _U_names_conflict
 
-            zgrep -v "'" unistress.gz yodef.gz
+            zgrep -v -e "'" -e "[^$rvlc]'" unistress.gz yodef.gz namebase.gz
             rg -zH " [^- ']( |$)" mano-lc.gz mano-uc.gz
 
             zcat unistrehy.gz yodhy.gz |sed -r "s/^.*=//g"|\
               awk -F"-" '{ for(i=1; i <=NF; i++) { ci=$i; va=gsub(/[аяеэыиуюоё]/,"",ci)
-                             if($i !~ "\x27" && va > 1 ) print $0 } }'
+                               if ($i !~ "\x27" && va > 1   ) print $0 };
+                               if ($0  ~ /[^аяеэыиуюоё]\x27/) print $0 }'
 
             zgrep -FvHf mano_luc.pat uniomo.gz
             zgrep -FvHf mano_luc.pat mano-lc.gz mano-uc.gz
 
-            tmp_files=( _U_omo _N_omo _N_omo_in_NB _U_uniq_D.pat _N_uniq_D.pat _U_names_conflict )
-            for file in "${tmp_files[@]}"; do [[ ! -s $file ]] && rm "$file"; done
+            if [[ -s "_U_omo" ]]; then fnum=$(grep -c ^ _U_omo); printf '%s %s %s\n' "Омографов в общей лексике:" $fnum "==> _U_omo"; fi;
+            if [[ -s "_N_omo" ]]; then fnum=$(grep -c ^ _N_omo); printf '%s %s %s\n' "Омографов в базе имён    :" $fnum "==> _N_omo"; fi;
+            if [[ -s "_N_omo_in_NB" ]]; then fnum=$(grep -c ^ _N_omo_in_NB); printf '%s %s %s\n' "Известные омографы в базе имён:" $fnum "==> _N_omo_in_NB"; fi;
+            if [[ -s "_U_error" ]]; then fnum=$(grep -c ^ _U_error); printf '%s %s %s\n' "Найдено ошибок:" $fnum "==> _U_error"; fi;
+            if [[ -s "_U_2bases" ]]; then fnum=$(grep -c ^ _U_2bases); printf '%s %s %s\n' "Повторения в базах имён и лексики:" $fnum "==> _U_2bases"; fi;
+            if [[ -s "_U_namuni_omo" ]]; then fnum=$(grep -c ^ _U_namuni_omo); printf '%s %s %s\n' "Омографы на 2 базы:" $fnum "==> _U_namuni_omo"; fi;
 
-            tmp_files=( _U_unar _N_unar _U_uni _U_una _U_names_pat _U_uni_pat _U_names_conflict _U_uniq_D.pat _N_uniq_D.pat mano_luc.pat \
-                        _U_error _U_namuni_omo _U_2bases mano_luc.pat )
-            for file in "${tmp_files[@]}"; do [[ -s $file ]] && rm "$file"; done
+            tmp_files=( _U_omo _N_omo _N_omo_in_NB _U_error _U_namuni_omo _U_2bases )
+            for file in "${tmp_files[@]}"; do if [[ -f "$file" && ! -s "$file" ]]; then rm "$file"; fi; done
+
+            tmp_files=( _U_unar _N_unar _U_uni _U_una _U_names_pat _U_uni_pat _U_uniq_D.pat _N_uniq_D.pat mano_luc.pat mano_luc.pat _U_names_conflict )
+            for file in "${tmp_files[@]}"; do [[ -f $file ]] && rm "$file"; done
 
             exit 1; ;;
 

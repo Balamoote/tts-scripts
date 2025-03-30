@@ -70,8 +70,8 @@ BEGIN {
 
     for ( x in omolexx ) { lx = length(x);
         if ( substr(x, lx, 1 ) == "=" ) {
-            if ( oml == lx-1 ) { if ( substr(lcm, 1, lx-1) == substr(x, 1, lx-1) ) { lexxpart = sprintf("%s %s", "Шаблон в lexx:", omolexx[x]) } } }
-            else { if ( oml >= lx ) { if (substr(lcm, 1, lx) == x)	{  lexxpart = sprintf("%s %s", "Шаблон в lexx:", omolexx[x]) } } };
+            if ( oml == lx-1 ) { if ( substr(lcm, 1, lx-1) == substr(x, 1, lx-1) ) { lexxpart = sprintf("%s %s", "По умолчанию:", substr(omolexx[x],2)) } } }
+            else { if ( oml >= lx ) { if (substr(lcm, 1, lx) == x)	{ lexxpart = sprintf("%s %s", "По умолчанию:", substr(omolexx[x],2)) } } };
                 };  
             if ( lexxpart == "" ) { lexxpart = sprintf("%s", "Шаблон в lexx: нет" ) };
 

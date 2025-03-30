@@ -173,7 +173,8 @@ if [[ -s $bookwrkdir/omo-luc.lst ]]; then # Проверка найдены ли
 printf '\e[32m%s' "Создание дискретных скриптов обработки ё-омографов:"
 twd=$(tput cols)
 
-touch $bookwrkdir/omo-lexx.txt # заглушка
+zgrep -Ff <(sed -r 's/^([^ ]+) .*/_\l\1=/g' $bookwrkdir/omo-luc.lst | sort -u) $sdb/uniomo.gz |\
+            sed -r 's/_([^=]+)(=.+)$/\1=#\2/'| sed "s/\x27/\xcc\x81/" > $bookwrkdir/omo-lexx.txt
 #zgrep -Ff <(grep -Fof <(zcat $aux/ttspat.$suf.gz) <(sed -r 's/^([^ ]+) .*/_\l\1=/g' $bookwrkdir/omo-luc.lst | sort -u)) $aux/tts0.$suf.gz |\
 #       	sed -r 's/_([^"=]+)(\"=\"\s.+\")$/\1#\" \1\2/' | sed -r 's/_([^=]+)(=.+)$/\1=#\1\2/'| sed "s/\x27/\xcc\x81/" > $bookwrkdir/omo-lexx.txt
 

@@ -18,7 +18,7 @@ IN=$(echo "$IN" | sed -r "\
   ")
 
 #printf "\e[93m%s\e[0m %s\n" "Поиск:" "$IN"
-if [[ -n "$clip_IN" ]] && [[ "$clip_IN" != "$IN" ]]; then
+if [[ -n "$clip_IN" && "$clip_IN" != "$IN" ]]; then
   echo -n "$IN" | xsel --clipboard --input
 fi
 

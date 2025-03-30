@@ -55,7 +55,7 @@ preview=1; nama=0; dixa=0;
 
 printf '\e[32m%s \e[32;4;1m%s\e[0m\n' "Скрипт" "\"Имена\""
 
-if [[ -f "$1" ]] && [[ -s "$1" ]]; then
+if [[ -f "$1" && -s "$1" ]]; then
   book=$1; 
   if [[ -d nomo-"$book" ]]; then
          key="-n"; printf '\e[33m%s \e[93m%s\e[0m\n' "Найдена директория nomo. Используем ключ:" "-n";
@@ -345,7 +345,8 @@ if [[ -s $wrkdir/omo-luc.lst ]]; then # Проверка найдены ли и�
 printf '\e[32m%s' "Создание дискретных скриптов обработки имён-омографов:"
 twd=$(tput cols)
 
-touch $wrkdir/omo-lexx.txt
+zgrep -Ff <(sed -r 's/^([^ ]+) .*/_\l\1=/g' $bookwrkdir/omo-luc.lst | sort -u) $sdb/uniomo.gz |\
+            sed -r 's/_([^=]+)(=.+)$/\1=#\2/'| sed "s/\x27/\xcc\x81/" > $bookwrkdir/omo-lexx.txt
 
 sed -r "s/\xe2\x80\xa4/./g; s/\xe2\x80\xa7//g" $stadir/text-book.txt | \
     awk -vobook=$obook -vtwd=$twd -vpreview=$preview -vtermcor=$termcor -veditor=$edi -vindb="$sdb/" -vbkwrkdir="$wrkdir/" -f $sdb/preview.awk
