@@ -97,7 +97,7 @@ d2u;
 obook="$book" # омографы пишутся в $book, т.е. в основной файл книги
 #obook="$book".man # омографы пишутся в $book.man, т.е. в бэкап скрипта ./momo.sh
 #obook="$book".yoy # омографы пишутся в $book.yoy, т.е. в бэкап скрипта ./yofik.sh
-#obook="$book".nam # омографы пишутся в $book.nam, т.е. в бэкап скрипта ./get-words.sh.
+#obook="$book".nam # омографы пишутся в $book.nam, т.е. в бэкап скрипта ./lexxer.sh.
 
 case $key in 
 	-gg   )	main_do=1; single=0; swrd=0; sgrp=0; vse=0; fixomo=1; disc_do=1; preview=1; morphy=0; ruac=0; locdic=1; blist=0; wlist=0; rm_wdir ;;
@@ -421,7 +421,7 @@ if [[ $main_do -eq 1 ]]; then # main_do
   
   # Список всех омографов в обоих регистрах
   #zgrep -Ff $bookwrkdir/manofi-uc.pat $sdb/mano-uc.gz >  $bookwrkdir/mano-luc.txt
-  zgrep -Ff $bookwrkdir/manofi-lc.pat $sdb/mano-lc.gz                                                               > $bookwrkdir/mano-luc.txt
+  zgrep -Ff $bookwrkdir/manofi-lc.pat $sdb/mano-lc.gz                                                           > $bookwrkdir/mano-luc.txt
   zcat $sdb/mano-lc.gz $sdb/mano-uc.gz | sed -r "s/([_ ])(.)/\1\u\2/g"    | grep -Ff $bookwrkdir/manofi-uc.pat >> $bookwrkdir/mano-luc.txt
   zcat $sdb/mano-lc.gz $sdb/mano-uc.gz | sed -r "s/([$RUUC$rulc]+)/\U\0/g"| grep -Ff $bookwrkdir/manofi-cc.pat >> $bookwrkdir/mano-luc.txt
   

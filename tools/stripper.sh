@@ -22,88 +22,95 @@ st="\xcc\x81\xcc\xa0\xcc\xa3\xcc\xa4\xcc\xad\xcc\xb0\xe2\x80\xa4\xe2\x80\xa7"
 aux="scriptaux"
 sdb="scriptdb"
 
+keylist="-[sa|ds|w|wb|sn|so|xn|xo|na]"
+
 printf '\e[32m%s\e[0m\n' "Скрипт \"Очистка файла…\""
 
-if [[ -s "$1" ]]; then book=$1; backup="$book".str;
-	if [[ -n $2 ]]; then key=$2
-	else printf '\e[36m%s\e[0m\n' "Ключ не задан."; exit 0; fi
-else printf '\e[36m%s\e[0m\n' "Книга не задана."; exit 0; fi
+ if [[ -s "$1" ]]; then book=$1; backup="$book".str;
+   if [[ -n $2 ]]; then key=$2
+     if [[ -d trip-"$book" ]]; then rm -rf trip-"$book"/ && mkdir trip-"$book"; else mkdir trip-"$book"; fi
+   else printf '\e[36m%s %s\e[0m\n' "Ключ не задан. Возможные ключи:" "$keylist"; exit 0; fi
+ else printf '\e[36m%s\e[0m\n' "Книга не задана."; exit 0; fi
+
+ d2u () { if [[ -e "$backup" ]]; then printf '\e[36m%s \e[33m%s\e[0m\n' "Найден и восстановлен бэкап:" "$backup"; crlf=$(file $backup | grep -o "CRLF"; );
+            if [[ -n $crlf ]]; then dos2unix "$backup" &>/dev/null; fi; cp "$backup" "$book";
+          else crlf=$(file "$book" | grep -o "CRLF"); if [[ -n $crlf ]]; then dos2unix "$book" &>/dev/null; fi; cp "$book" "$backup"; fi; }
+
+ b2t () { sed "/<binary/Q" "$book" | sed -r "s/\xc2\xa0/ /g" > trip-"$book"/text-book.txt
+          sed -n '/<binary/,$p' "$book" > trip-"$book"/binary-book.txt; split_exist=1; }
 
 case $key in 
-	-sa | --stripall) # удалить все служебные символы, а также все ударения, восстановить символ точки.
-		sset=$unxs$unxc; dobackup=1; printf '\e[36m%s\e[0m\n' "Удалить все служебные символы, а также все ударения, восстановить символ точки." ;;
-	-dc | --delcor) # удалить служебные символы и восстановить символ точки, ударение не трогать
-		sset=$unxc;  dobackup=1; printf '\e[36m%s\e[0m\n' "Удалить служебные символы и восстановить символ точки" ;;
-	-sy | --stripyo) # удалить ударение на "ё".
-		syo=1; dobackup=1; printf '\e[36m%s\e[0m\n' "Удалить ударения на букву ё." ;;
-	-w | --word) # удалить служебные символы и ударения в указанном слове, регистрозависимо. Бэкап НЕ делать. Только 1 вариантов: Слова|СЛОВА|слова
-		if [[ -n $3 ]]; then wrd=$3; dobackup=0; printf '\e[36m%s \e[93m%s\e[0m\n' "Очистить слово" $wrd ; else printf '\e[36m%s\e[0m\n' "Не задано слово для очистки."; fi ;;
-	-wb | --wordb) # удалить служебные символы и ударения в указанном слове, регистрозависимо. Сделать бэкап.
-		if [[ -n $3 ]]; then wrd=$3; dobackup=1; printf '\e[36m%s \e[93m%s\e[0m\n' "Очистить слово" $wrd ; else printf '\e[36m%s\e[0m\n' "Не задано слово для очистки."; fi ;;
-	-wn | --wordnot) # удалить служебные символы и ударения везде, кроме всех вариантов омографа. Бэкап делать. Любой из вариантов: Слова|СЛОВА|слова
-		if [[ -n $3 ]]; then somo=$3; indb="$sdb/"; dobackup=1; #printf '\e[36m%s \e[93m%s\e[0m\n' "Очистить слово" $wrd ;
-	       		else printf '\e[36m%s\e[0m\n' "Не задано слово для оставления в тексте."; fi ;;
-	-xn | --groupnot) # удалить служебные символы и ударения везде, кроме всех вариантов омографа. Бэкап делать. Все омографы из группы.
-		if [[ -n $3 ]]; then xomo=$3; indb="$sdb/"; dobackup=1; #printf '\e[36m%s \e[93m%s\e[0m\n' "Очистить слово" $wrd ;
-	       		else printf '\e[36m%s\e[0m\n' "Не задано слово для оставления в тексте."; fi ;;
-	-na | --names) # удалить служебные символы и ударения во всех именах, кроме имён-омографов. Сделать бэкап.
-		names=1; dobackup=1; printf '\e[36m%s\e[0m\n' "Очистить все имена…" ;;
+  -sa) # удалить все служебные символы, а также все ударения, восстановить символ точки.
+  	  d2u; b2t; sset=$unxs$unxc;
+      printf '\e[36m%s\e[0m ' "Удалить все служебные символы, а также все ударения, восстановить символ точки."
+      sed -ri "s=[$sset]+==g; s=[$unxd]=.=g" trip-"$book"/text-book.txt
+      printf '\e[36m%s\e[0m\n' "Файл очищен." ;;
+  -dc) # удалить служебные символы и восстановить символ точки, ударение не трогать
+  	  d2u; b2t; sset=$unxc;
+      printf '\e[36m%s\e[0m ' "Удалить служебные символы и восстановить символ точки"
+      sed -ri "s=[$sset]+==g; s=[$unxd]=.=g" trip-"$book"/text-book.txt
+      printf '\e[36m%s\e[0m\n' "Файл очищен." ;;
+  -sy) # удалить ударение на "ё".
+  	  d2u; b2t; syo=1; printf '\e[36m%s\e[0m ' "Удалить ударения на букву ё."
+      sed -ri "s=([Ёё])\xcc\x81=\1=g" trip-"$book"/text-book.txt
+      printf '\e[36m%s\e[0m\n' "Файл очищен." ;;
+  -se) # "ё" -->>> "е".
+  	  d2u; b2t; sye=1; printf '\e[36m%s\e[0m ' "Заменить ё на е."
+      sed -ri "s=([Ёё])\xcc\x81=\1=g; s=Ё=Е=g; s=ё=е=g;" trip-"$book"/text-book.txt
+      printf '\e[36m%s\e[0m\n' "Файл очищен." ;;
+      
+  -w) # удалить служебные символы и ударения в указанном слове, регистрозависимо. Бэкап НЕ делать. Только 1 вариантов: Слова|СЛОВА|слова
+  	  if [[ -n $3 ]]; then
+           b2t; wrd=$3; swch="ws"; printf '\e[36m%s \e[93m%s\e[0m ' "Очистить слово" $wrd
+           awk -vsomo=$somo -vindb=$indb -vswch=$swch -f $sdb/awx/stripper.awk trip-"$book"/text-book.txt > trip-"$book"/text-book.txt.awk
+           printf '\e[36m%s \e[93m%s \e[36m%s\e[0m\n' "Слово" $wrd "очищено."
+      else printf '\e[36m%s\e[0m\n' "Не задано слово для очистки."; fi ;;
+  -wb) # удалить служебные символы и ударения в указанном слове, регистрозависимо. Сделать бэкап.
+  	  if [[ -n $3 ]]; then
+           d2u; b2t; wrd=$3; swch="ws"; printf '\e[36m%s \e[93m%s\e[0m\n' "Очистить слово" $wrd
+           awk -vsomo=$somo -vindb=$indb -vswch=$swch -f $sdb/awx/stripper.awk trip-"$book"/text-book.txt > trip-"$book"/text-book.txt.awk
+           printf '\e[36m%s \e[93m%s \e[36m%s\e[0m\n' "Слово" $wrd "очищено."
+      else printf '\e[36m%s\e[0m\n' "Не задано слово для очистки."; fi ;;
+  -sn) # удалить служебные символы и ударения везде, кроме всех вариантов омографа. Бэкап делать. Любой из вариантов: Слова|СЛОВА|слова
+      if [[ -n $3 ]]; then
+           d2u; b2t; somo=$3; indb="$sdb/"; swch="sn"; printf '\e[36m%s \e[93m%s ...\e[0m ' "Очистить слово" $somo
+           awk -vsomo=$somo -vindb=$indb -vswch=$swch -f $sdb/awx/stripper.awk trip-"$book"/text-book.txt > trip-"$book"/text-book.txt.awk
+           mv trip-"$book"/text-book.txt.awk trip-"$book"/text-book.txt
+           printf '\e[36m%s \e[93m%s \e[36m%s\e[0m\n' "Всё, кроме слова" $somo ", очищено."
+      else printf '\e[36m%s\e[0m\n' "Не задано слово для оставления в тексте."; fi ;;
+  -so) # удалить служебные символы и ударения во всех вариантах омографа. Бэкап делать. Любой из вариантов: Слова|СЛОВА|слова...
+      if [[ -n $3 ]]; then
+           d2u; b2t; somo=$3; indb="$sdb/"; swch="so"; printf '\e[36m%s \e[93m%s ...\e[0m ' "Очистить слово" $somo
+           awk -vsomo=$somo -vindb=$indb -vswch=$swch -f $sdb/awx/stripper.awk trip-"$book"/text-book.txt > trip-"$book"/text-book.txt.awk
+           mv trip-"$book"/text-book.txt.awk trip-"$book"/text-book.txt
+           printf '\e[36m%s \e[93m%s \e[36m%s\e[0m\n' "Все́ варианты слова" $somo "очищены."
+      else printf '\e[36m%s\e[0m\n' "Не задано слово для оставления в тексте."; fi ;;
+  -xn) # удалить служебные символы и ударения везде, кроме всех вариантов омографа. Бэкап делать. Все омографы не из группы.
+      if [[ -n $3 ]]; then
+           d2u; b2t; xomo=$3; indb="$sdb/"; swch="xn"; printf '\e[36m%s \e[93m%s\e[0m ' "Очистить слово" $xomo
+           awk -vxomo=$xomo -vindb=$indb -vswch=$swch -f $sdb/awx/stripper.awk trip-"$book"/text-book.txt > trip-"$book"/text-book.txt.awk
+           mv trip-"$book"/text-book.txt.awk trip-"$book"/text-book.txt
+           printf '\e[36m%s \e[93m%s \e[36m%s\e[0m\n' "Всё, кроме группы" $xomo "очищено."
+      else printf '\e[36m%s\e[0m\n' "Не задано слово для оставления в тексте."; fi ;;
+  -xo) # удалить служебные символы и ударения во всех вариантах омографа. Бэкап делать. Все омографы из группы.
+    	if [[ -n $3 ]]; then
+           d2u; b2t; xomo=$3; indb="$sdb/"; swch="xo"; printf '\e[36m%s \e[93m%s\e[0m' "Очистить группу" $xomo ;
+           awk -vxomo=$xomo -vindb=$indb -vswch=$swch -f $sdb/awx/stripper.awk trip-"$book"/text-book.txt > trip-"$book"/text-book.txt.awk
+           mv trip-"$book"/text-book.txt.awk trip-"$book"/text-book.txt
+           printf '\e[36m. %s \e[93m%s\e[36m%s\e[0m\n' "Группа" $xomo ", очищена."
+      else printf '\e[36m%s\e[0m\n' "Не задано слово для оставления в тексте."; fi ;;
+  -na) # удалить служебные символы и ударения во всех именах, кроме имён-омографов. Сделать бэкап.
+  	       d2u; b2t; swch="na"; printf '\e[36m%s\e[0m ' "Очистить все имена из namebase …"
+           awk -vxomo=$xomo -vinax=$inax -vswch=$swch -f $sdb/awx/stripper.awk trip-"$book"/text-book.txt > trip-"$book"/text-book.txt.awk
+           mv trip-"$book"/text-book.txt.awk trip-"$book"/text-book.txt
+           printf '\e[36m%s \e[33m%s \e[36m%s\e[0m\n' "Имена книги" $book ", кроме омографов, очищены." ;;
 	*) # левый ключ
-		printf '\e[36m%s \e[93m%s\e[0m\n' "Задайте правильный ключ из:" "-sa, -ds, -w, -wb, --stripall, --delcor, --word,  --wordb"; exit 0 ;;
+		printf '\e[36m%s \e[93m%s\e[0m\n' "Задайте правильный ключ из:" "$keylist"; exit 0 ;;
 esac
 
-d2u () { if [[ -e "$backup" ]]; then printf '\e[36m%s \e[33m%s\e[0m\n' "Найден и восстановлен бэкап:" "$backup"; crlf=$(file $backup | grep -o "CRLF"; );
-            if [[ -n $crlf ]]; then dos2unix "$backup" &>/dev/null; fi; cp "$backup" "$book";
-        else crlf=$(file "$book" | grep -o "CRLF"); if [[ -n $crlf ]]; then dos2unix "$book" &>/dev/null; fi; cp "$book" "$backup"; fi; }
-
-if [[ -d trip-"$book" ]]; then rm -rf trip-"$book"/ && mkdir trip-"$book"; else mkdir trip-"$book"; fi
-if [[ $dobackup = "1" ]]; then d2u; fi
-
-sed "/<binary/Q" "$book" | sed -r "s/\xc2\xa0/ /g" > trip-"$book"/text-book.txt
-sed -n '/<binary/,$p' "$book" > trip-"$book"/binary-book.txt
-
-if [[ -n $sset ]]; then
-	sed -ri "s=[$sset]+==g" trip-"$book"/text-book.txt
-	sed -ri "s=[$unxd]=.=g" trip-"$book"/text-book.txt
-	printf '\e[36m%s\e[0m\n' "Файл очищен."
+if [[ $split_exist -eq 1 ]]; then
+   cat trip-"$book"/text-book.txt trip-"$book"/binary-book.txt > "$book"
 fi
-
-if [[ -n $syo ]]; then
-  sed -ri "s=([Ёё])\xcc\x81=\1=g" trip-"$book"/text-book.txt
-	printf '\e[36m%s\e[0m\n' "Файл очищен."
-fi
-
-if [[ -n $wrd ]]; then
-	seden=[$st]?$(echo $wrd | sed -r "s/./\0[$st]*/g")
-	sed -ri "s=([^$RUCl])$seden([^$rulc])=\1$wrd\2=g" trip-"$book"/text-book.txt
-	printf '\e[36m%s \e[93m%s \e[36m%s\e[0m\n' "Слово" $wrd "очищено."
-fi
-
-if [[ -n $somo ]]; then
-	awk -vsomo=$somo -vindb=$indb -f $sdb/awx/strip_not_omo.awk trip-"$book"/text-book.txt > trip-"$book"/text-book.txt.awk
-  mv trip-"$book"/text-book.txt.awk trip-"$book"/text-book.txt
-	printf '\e[36m%s \e[93m%s \e[36m%s\e[0m\n' "Все, кроме слова" $somo ", очищено."
-fi
-
-if [[ -n $xomo ]]; then
-	awk -vxomo=$xomo -vindb=$indb -f $sdb/awx/strip_not_omo.awk trip-"$book"/text-book.txt > trip-"$book"/text-book.txt.awk
-  mv trip-"$book"/text-book.txt.awk trip-"$book"/text-book.txt
-	printf '\e[36m%s \e[93m%s \e[36m%s\e[0m\n' "Все, кроме группы" $xomo ", очищено."
-fi
-
-if [[ -n $names ]]; then
-	readarray -t narr < <(grep -Po "(?<![$RUCl$unxs$unxc])[$RUUC][$RUCl$unxs$unxc]+" trip-"$book"/text-book.txt | sed -r "s/[^$RUCl]//g; s/^.+$/_\L\0=/g" | \
-		grep -Ff <(zcat $aux/namebase.pat.gz) | sort -u | sed -r "s/[_=]//g; s/^./\u\0/g")
-
-	for wrd in ${narr[@]}; do
-		seden=[$st]?$(echo $wrd | sed -r "s/./\0[$st]?/g")
-		sed -ri "s=([^$RUCl])$seden([^$rulc])=\1$wrd\2=g" trip-"$book"/text-book.txt
-	done
-	printf '\e[36m%s \e[33m%s \e[36m%s\e[0m\n' "Имена книги" $book ", кроме омографов, очищены."
-fi
-
-
-cat trip-"$book"/text-book.txt trip-"$book"/binary-book.txt > "$book"
 
 # Удаляем временные файлы
 rm -rf trip-"$book"

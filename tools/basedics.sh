@@ -11,6 +11,8 @@ sdb="scriptdb"
 S1=$(echo "$1" | sed -r "s/ё/[её]/g; s/\*/.*/g")
 if [[ $S1 != $1 && $echo_S1 -eq 1 ]]; then printf "%s\n" $S1; fi
 
+if [[ $1 =~ ^x[0-9]+$ ]]; then grparp=1; fi
+
 dicword="^"$S1"\b"
 bfword="(\s|#)"$S1"(#|\s|$)"
 sstring="\b"$S1"\b"
@@ -58,6 +60,14 @@ case $2 in
   ;;
 esac
 
+if [[ $grparp -eq 1 ]]; then
+   $grepper $1 automo.gz |\
+          awk 'BEGIN {FS="[ :]"} { gsub(/\x27/,"́",$5);
+               $0 = gensub(/(.)\x27/,"\033[32m\\1\xcc\x81\033[0m","g",$0)
+               printf ( "\033[36m%s\033[0m %s \033[33m%s\033[0m \033[93m%s\033[0m\n", $1, $4, $3, $5 ) }'
+               exit 1;
+fi
+
 $grepper "$astromo" automo.gz |\
     awk 'BEGIN {FS="[ :]"} { gsub(/\x27/,"́",$5);
          $0 = gensub(/(.)\x27/,"\033[32m\\1\xcc\x81\033[0m","g",$0)
@@ -67,7 +77,7 @@ printf '\n\e[32m%s \e[96m%s \e[93m%s \e[96m%s\e[0m\n' "Looking up:" ">>>" $S1 "<
 
 # Ударения отмечены знаком ударения и цветом или только цветом
 if [[ -z "$str" ]]; then
- $grepper "$wrd" unistress.gz unistrehy.gz yodef.gz yodhy.gz yoyo_alt.gz namebase.gz mano-uc.gz mano-lc.gz |\
+ $grepper "$wrd" unistress.gz unistrehy.gz yodef.gz yodhy.gz yoyo_alt.gz namebase.gz mano-uc.gz mano-lc.gz malc.gz uniomo.gz |\
     awk -v pad=$pad -F"[ _=:]+" '{
               $0 = gensub(/(.)\x27/,"\033[32m\\1\xcc\x81\033[0m","g",$0)
               len1=length($1);

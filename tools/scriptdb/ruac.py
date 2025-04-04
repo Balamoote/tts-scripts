@@ -24,7 +24,7 @@ start_time = time.time()
 use_dictionary = (
     True  # Использовать встроенный словарь однозначных ударений, выключается по -nodic
 )
-custom_dict = {}  # подгрузить пользовательский словарь однозначных ударений: -dic
+custom_dict = {}  # подгрузить пользовательский словарь однозначных ударений: -cust
 device = "CUDA"  # CPU или CUDA
 model_name = "turbo3.1"  # название модели
 max_length = 1023  # размер чанка
@@ -85,7 +85,7 @@ def convert_accent(text, conversion_type):
     return text
 
 
-# Функция для загрузки custom_dict из файлов dic.gz со строками вида _слово=сло'во
+# Функция для загрузки custom_dict из файла dic.gz со строками вида _слово=сло'во
 def load_custom_dict(*file_paths):
     #   custom_dict = {}
     for file_path in file_paths:

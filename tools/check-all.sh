@@ -21,16 +21,18 @@ if [[ ! -z "$1" ]]; then
 case "$1" in
 	fa |--fall ) # Принудительно заново создать все вспомогательные файлы для скриптов
        [[ -d $aux ]] && rm -rf $aux/ && mkdir $aux;;
-	fg | --fgwrd ) # Перепроверить вспомогательные файлы get-words.sh
+	fg | --fgwrd ) # Перепроверить вспомогательные файлы lexxer.sh
 		if [[ -s $aux/zndb.md5 ]]; then rm $aux/zndb.md5; fi ;;
 	fy | --fyofik ) # Перепроверить вспомогательные файлы yofik.sh
 		if [[ -s $aux/zjofik.md5 ]]; then rm $aux/zjofik.md5; fi ;;
 	fm | --fmomo ) # Перепроверить вспомогательные файлы momo.sh
 		if [[ -s $aux/zaomo.md5 ]]; then rm $aux/zaomo.md5; fi ;;
+	fu | --fmomo ) # Перепроверить вспомогательные файлы momo.sh
+		if [[ -s $aux/zuni.md5 ]]; then rm $aux/zuni.md5; fi ;;
 	*) # Проверить, существует ли файл книги
 		if [[ -s "$1" ]]; then book="$1"
 		else printf '\e[35m%s \e[93m%s \e[35m%s \e[93m%s \e[93m%s \e[35m%s\e[0m\n' \
-			"Использование:" "./check-all.sh" "или" "./check-all.sh [fa|fg|fy|fm]"; fi ; exit 1 ;;
+			"Использование:" "./check-all.sh" "или" "./check-all.sh [fa|fg|fy|fm|fu]"; fi ; exit 1 ;;
 esac; fi
 
 # Массив со списком обязательных файлов
@@ -85,7 +87,7 @@ fi
 if [[ $uni -eq 0 ]]; then
   yod=0; yofik=0
   cd $sdb
-  ./hclean.sh stress > /dev/null
+  ./hclean.sh unis > /dev/null
   cd ..
   md5sum $sdb/uniomo.gz $sdb/unistrehy.gz $sdb/yodhy.gz $sdb/unistress.gz $sdb/yodef.gz > $aux/zuni.md5
 fi
@@ -118,7 +120,7 @@ else
          > $aux/zjofik.md5
 fi
 
-### Выполняем проверку вспомогательных файлов из ./get-words.sh
+### Выполняем проверку вспомогательных файлов из ./lexxer.sh
 if [[ $stu -eq 1 ]]; then
 	printf '\e[36m%s \e[32m%s ' "STU:" "старый" 
 else

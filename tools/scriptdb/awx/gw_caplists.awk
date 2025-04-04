@@ -1,7 +1,7 @@
 @load "rwarray"
 
 BEGIN { PROCINFO["sorted_in"]="@ind_num_asc"
-# Скрипт генерации служебных списков для get-words.sh
+# Скрипт генерации служебных списков для lexxer.sh
 # Последняя версия файла тут: https://github.com/Balamoote/tts-scripts
     # внешние переменные
     # indb inax book
