@@ -944,7 +944,6 @@ BEGIN {
         if ($2~ /^гео_неод_ед_жен_род$/                        ){  sgn_edze_ro       [$1]=$3; continue };
         if ($2~ /^гео_неод_ед_жен_нескл$/                      ){  sgn_edze_ne       [$1]=$3; continue };
         if ($2~ /^гео_неод_абр_ед_жен_нескл$/                  ){  agn_edze_ne       [$1]=$3; continue };
-        if ($2~ /^гео_неод_ед_жен_мест$/                       ){  sgn_edze_me       [$1]=$3; continue };
        };
        if ($2~ /^гео_неод_ед_муж_/ ) {
         if ($2~ /^гео_неод_ед_муж_вин$/                        ){  sgn_edmu_im       [$1]=$3; continue };
@@ -1301,6 +1300,12 @@ BEGIN {
          if ($2 ~ /_ед/ && $2 !~ /_прош_ед_ср$/ ) {split($3,itmz,"#"); for (j in itmz) { if (itmz[j] && itmz[j] in md_gl) { md_ed[$1]=$3 };};};
          if ($2 ~ /_мн/                         ) {split($3,itmz,"#"); for (j in itmz) { if (itmz[j] && itmz[j] in md_gl) { md_mn[$1]=$3 };};};
          if ($2 ~ /^дееп_/                      ) {split($3,itmz,"#"); for (j in itmz) { if (itmz[j] && itmz[j] in md_gl) { md_dp[$1]=$3 };};};
+
+         # link_gl для глаголов-связок
+         if ($2 ~ /_прош_ед_ср$/                ) {split($3,itmz,"#"); for (j in itmz) { if (itmz[j] && itmz[j] in link_gl) { ln_bz[$1]=$3 };};};
+         if ($2 ~ /_ед/ && $2 !~ /_прош_ед_ср$/ ) {split($3,itmz,"#"); for (j in itmz) { if (itmz[j] && itmz[j] in link_gl) { ln_ed[$1]=$3 };};};
+         if ($2 ~ /_мн/                         ) {split($3,itmz,"#"); for (j in itmz) { if (itmz[j] && itmz[j] in link_gl) { ln_mn[$1]=$3 };};};
+         if ($2 ~ /^дееп_/                      ) {split($3,itmz,"#"); for (j in itmz) { if (itmz[j] && itmz[j] in link_gl) { ln_dp[$1]=$3 };};};
 
       if($2~  /^гл_несов_непер_/ ){
 
@@ -2052,6 +2057,7 @@ BEGIN {
                      indb "dic_prq.gz " \
                      indb "dic_rest.gz " \
                      indb "dic_suw.gz " \
+                     indb "dic_prop.gz " \
                      indb "automo.gz " \
                      indb "class.list.gz " \
                      indb "omoid_auto.gz " \
@@ -2068,6 +2074,7 @@ BEGIN {
                      locdic "dic_prq.gz " \
                      locdic "dic_rest.gz " \
                      locdic "dic_suw.gz " \
+                     locdic "dic_prop.gz " \
                      indb "automo.gz " \
                      indb "class.list.gz " \
                      indb "omoid_auto.gz " \

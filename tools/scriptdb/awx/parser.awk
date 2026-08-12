@@ -283,7 +283,25 @@ cst="deep deep_na deep_ne deep_pa deep_pe deep_pn geo_mn geo_sr gl_aux_be gl_bue
      suw_nomntv suw_nomnvi suw_odda suw_oded suw_odedda suw_odedim suw_odedmuda suw_odedpr suw_odedro suw_odedsrda suw_odedtv suw_odedvi suw_odim suw_odmn suw_odmnda \
      suw_odmnim suw_odmnro suw_odmnvi suw_odpr suw_odro suw_odtv suw_odvi suw_odzv suw_pr suw_ro suw_tv suw_vi sz sz_i sz_iili titul vvod digits vsyo_sy vsje_sy \
      name_im_sy name_vi_sy name_ro_sy name_da_sy name_tv_sy name_pr_sy name_any_sy sw_es_r_sy sw_mn_i_sy sw_mn_v_sy isSing_sy isPlur_sy preph_vi preph_da cap \
-     preph_ro preph_tv preph_any prl_pv_any sz_qto sz_dge sz_kak sz_kogda pre_s mqast_srav suw_mn";
+     preph_ro preph_tv preph_any prl_pv_any sz_qto sz_dge sz_kak sz_kogda pre_s mqast_srav suw_mn nes_any nes_da nes_ed nes_edda nes_edim nes_edme nes_edmuda \
+     nes_edmuim nes_edmume nes_edmupr nes_edmuro nes_edmutv nes_edmuvi nes_edne nes_edpr nes_edro nes_edsrda nes_edsrim nes_edsrpr nes_edsrro nes_edsrvi nes_edtv \
+     nes_edvi nes_edzeda nes_edzeim nes_edzene nes_edzepr nes_edzero nes_edzetv nes_edzevi nes_im nes_mn nes_mnda nes_mnim nes_mnne nes_mnpr nes_mnro nes_mntv \
+     nes_mnvi nes_mu nes_noed nes_noedim nes_noedmuda nes_noedmuim nes_noedpr nes_noedro nes_noedsrda nes_noedtv nes_noedvi nes_nomn nes_nomnim nes_nomnpr nes_nomnro \
+     nes_nomntv nes_nomnvi nes_ob nes_odda nes_oded nes_odedda nes_odedim nes_odedmuda nes_odedpr nes_odedro nes_odedsrda nes_odedtv nes_odedvi nes_odim nes_odmn \
+     nes_odmnda nes_odmnim nes_odmnro nes_odmnvi nes_odpr nes_odro nes_odtv nes_odvi nes_odzv nes_pr nes_ro nes_sr nes_tv nes_vi nes_ze fam_any fam_da fam_dane \
+     fam_ed fam_edda fam_edim fam_edmuda fam_edmuim fam_edmupr fam_edmuro fam_edmutv fam_edmuvi fam_edne fam_edpr fam_edro fam_edtv fam_edvi fam_edzeda fam_edzeim \
+     fam_edzene fam_edzepr fam_edzero fam_edzetv fam_edzevi fam_im fam_mn fam_mnda fam_mnim fam_mnne fam_mnpr fam_mnro fam_mntv fam_mnvi fam_mu fam_ne fam_pr fam_prne \
+     fam_ro fam_rone fam_tv fam_tvne fam_vi fam_vine fam_ze loc_any loc_da loc_ed loc_edda loc_edim loc_edme loc_edmuda loc_edmuim loc_edmume loc_edmupr loc_edmuro \
+     loc_edmutv loc_edmuvi loc_edne loc_edpr loc_edro loc_edsrda loc_edsrim loc_edsrpr loc_edsrro loc_edsrvi loc_edtv loc_edvi loc_edzeda loc_edzeim loc_edzene \
+     loc_edzepr loc_edzero loc_edzetv loc_edzevi loc_im loc_mn loc_mnda loc_mnim loc_mnne loc_mnpr loc_mnro loc_mntv loc_mnvi loc_mu loc_pr loc_ro loc_sr loc_tv \
+     loc_vi loc_ze nam_any nam_da nam_dane nam_ed nam_edda nam_edim nam_edmuda nam_edmuim nam_edmupr nam_edmuro nam_edmutv nam_edmuvi nam_edne nam_edpr nam_edro \
+     nam_edtv nam_edvi nam_edzeda nam_edzeim nam_edzene nam_edzepr nam_edzero nam_edzetv nam_edzevi nam_im nam_imne nam_mn nam_mnda nam_mnim nam_mnne nam_mnpr \
+     nam_mnro nam_mntv nam_mnvi nam_mu nam_ob nam_odmnda nam_odmnro nam_pr nam_prne nam_ro nam_rone nam_tv nam_tvne nam_vi nam_vine nam_ze nam_zvne org_any org_da \
+     org_ed org_edda org_edim org_edmuda org_edmuim org_edmupr org_edmuro org_edmutv org_edmuvi org_edne org_edpr org_edro org_edsrda org_edsrim org_edsrpr \
+     org_edsrro org_edsrvi org_edtv org_edvi org_edzeda org_edzeim org_edzene org_edzepr org_edzero org_edzetv org_edzevi org_im org_mn org_mnda org_mnim org_mnne \
+     org_mnpr org_mnro org_mntv org_mnvi org_mu org_pr org_ro org_sr org_tv org_vi org_ze pat_any pat_da pat_ed pat_edda pat_edim pat_edmuda pat_edmuim pat_edmupr \
+     pat_edmuro pat_edmutv pat_edmuvi pat_edpr pat_edro pat_edtv pat_edvi pat_edzeda pat_edzeim pat_edzepr pat_edzero pat_edzetv pat_edzevi pat_im pat_mn pat_mnda \
+     pat_mnim pat_mnpr pat_mnro pat_mntv pat_mnvi pat_mu pat_pr pat_ro pat_tv pat_vi pat_ze suw_odedne suw_noedne lnk_mn";
  stoar(cst,funarr," "); #
 
 cst="ist_any ist_nar_mest ist_nar_napr ist_nar_spos ist_nar_vrem ist_prl_edmuim ist_prl_edmupr ist_prl_edmuvi ist_prl_edsrpr ist_prl_edzeda ist_prl_edzeim \

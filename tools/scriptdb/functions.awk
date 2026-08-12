@@ -533,6 +533,13 @@ function mod_any(n,       wd,ret) { if(!wd)wd=lc(n); if (wd in md_bz||wd in md_e
 
 # вспомогательные глаголы                                                                                                                               
 function gl_aux_be(n,     wd,ret) { if(!wd)wd=lc(n); if (wd in gla_be)                                                                          {ret=1} else {ret=0}; return ret}
+
+# Глаголы связки
+function lnk_bz(n,        wd,ret) { if(!wd)wd=lc(n); if (wd in ln_bz)                                                                           {ret=1} else {ret=0}; return ret}
+function lnk_ed(n,        wd,ret) { if(!wd)wd=lc(n); if (wd in ln_ed)                                                                           {ret=1} else {ret=0}; return ret}
+function lnk_mn(n,        wd,ret) { if(!wd)wd=lc(n); if (wd in ln_mn)                                                                           {ret=1} else {ret=0}; return ret}
+function lnk_dp(n,        wd,ret) { if(!wd)wd=lc(n); if (wd in ln_dp)                                                                           {ret=1} else {ret=0}; return ret}
+function lnk_any(n,       wd,ret) { if(!wd)wd=lc(n); if (wd in ln_bz||wd in ln_ed||wd in ln_mn||wd in ln_dp)                                    {ret=1} else {ret=0}; return ret}
                                                                                                                                                 
 # указательные местоимения                                                                                                                      
 function muk_edmuim(n,    wd,ret) { if(!wd)wd=lc(n); if (wd in muc_edmuim)                                                                      {ret=1} else {ret=0}; return ret}
@@ -2202,7 +2209,7 @@ function suw_odmnda(n,                                                          
                           wd in sio_mn_ne||wd in sfo_mn_ne)                                                                                     {ret=1} else {ret=0}; return ret}
 function suw_noed(n,                                                                                                                            wd,ret) { if(!wd)wd=lc(n);
                       if (wd in swn_edmu_da||wd in son_edmu_da||wd in sgn_edmu_da||wd in swn_edmu_im||wd in son_edmu_im||wd in sgn_edmu_im||
-                          wd in swn_edmu_me||wd in son_edmu_me||wd in sgn_edmu_me||wd in swn_edmu_ne||wd in aon_edmu_ne||wd in agn_edmu_ne||
+                          wd in swn_edmu_me||wd in sgn_edmu_me||wd in swn_edmu_ne||wd in aon_edmu_ne||wd in agn_edmu_ne||
                           wd in swn_edmu_pr||wd in son_edmu_pr||wd in sgn_edmu_pr||wd in swn_edmu_pt||wd in swn_edmu_ro||wd in son_edmu_ro||
                           wd in sgn_edmu_ro||wd in swn_edmu_sq||wd in swn_edmu_tv||wd in son_edmu_tv||wd in sgn_edmu_tv||wd in swn_edob_da||
                           wd in swn_edob_im||wd in swn_edob_ne||wd in swn_edob_pr||wd in swn_edob_ro||wd in swn_edob_tv||wd in swn_edob_vi||
@@ -2250,14 +2257,21 @@ function suw_nomnvi(n,                                                          
 function suw_nomnro(n,    wd,ret) { if(!wd)wd=lc(n); if (wd in sw_mn_ro||wd in swn_mn_ro||wd in son_mn_ro||wd in sgn_mn_ro)                     {ret=1} else {ret=0}; return ret}
 function suw_nomntv(n,    wd,ret) { if(!wd)wd=lc(n); if (wd in swn_mn_tv||wd in son_mn_tv||wd in sgn_mn_tv)                                     {ret=1} else {ret=0}; return ret}
 function suw_nomnpr(n,    wd,ret) { if(!wd)wd=lc(n); if (wd in swn_mn_pr||wd in son_mn_pr||wd in sgn_mn_pr)                                     {ret=1} else {ret=0}; return ret}
-function suw_edme(n,      wd,ret) { if(!wd)wd=lc(n); if (wd in swn_edmu_me||wd in son_edmu_me||wd in sgn_edmu_me||wd in swn_edze_me)            {ret=1} else {ret=0}; return ret}
-function suw_edmume(n,    wd,ret) { if(!wd)wd=lc(n); if (wd in swn_edmu_me||wd in son_edmu_me||wd in sgn_edmu_me)                               {ret=1} else {ret=0}; return ret}
+function suw_edme(n,      wd,ret) { if(!wd)wd=lc(n); if (wd in swn_edmu_me||wd in sgn_edmu_me||wd in swn_edze_me)            {ret=1} else {ret=0}; return ret}
+function suw_edmume(n,    wd,ret) { if(!wd)wd=lc(n); if (wd in swn_edmu_me||wd in sgn_edmu_me)                               {ret=1} else {ret=0}; return ret}
 function suw_edzeme(n,    wd,ret) { if(!wd)wd=lc(n); if (wd in swn_edze_me)                                                                     {ret=1} else {ret=0}; return ret}
 function suw_edne(n,                                                                                                                            wd,ret) { if(!wd)wd=lc(n);
                       if (wd in sw_edmu_ne||wd in sw_edob_ne||wd in swn_edmu_ne||wd in aon_edmu_ne||wd in agn_edmu_ne||wd in son_edmu_ne||
                           wd in sgn_edmu_ne||wd in swn_edob_ne||wd in swn_edsr_ne||wd in aon_edsr_ne||wd in agn_edsr_ne||wd in son_edsr_ne||
                           wd in sgn_edsr_ne||wd in swn_edze_ne||wd in aon_edze_ne||wd in agn_edze_ne||wd in son_edze_ne||wd in sgn_edze_ne||
                           wd in swo_edmu_ne||wd in sio_edmu_ne||wd in sfo_edmu_ne||wd in swo_edob_ne||wd in swo_edze_ne||wd in sio_edze_ne||
+                          wd in sfo_edze_ne||wd in swo_edsr_ne)                                                                                 {ret=1} else {ret=0}; return ret}
+function suw_noedne(n,                                                                                                                           wd,ret) { if(!wd)wd=lc(n);
+                      if (wd in sw_edmu_ne||wd in sw_edob_ne||wd in swn_edmu_ne||wd in aon_edmu_ne||wd in agn_edmu_ne||wd in son_edmu_ne||
+                          wd in sgn_edmu_ne||wd in swn_edob_ne||wd in swn_edsr_ne||wd in aon_edsr_ne||wd in agn_edsr_ne||wd in son_edsr_ne||
+                          wd in sgn_edsr_ne||wd in swn_edze_ne||wd in aon_edze_ne||wd in agn_edze_ne||wd in son_edze_ne||wd in sgn_edze_ne)     {ret=1} else {ret=0}; return ret}
+function suw_odedne(n,                                                                                                                          wd,ret) { if(!wd)wd=lc(n);
+                      if (wd in swo_edmu_ne||wd in sio_edmu_ne||wd in sfo_edmu_ne||wd in swo_edob_ne||wd in swo_edze_ne||wd in sio_edze_ne||
                           wd in sfo_edze_ne||wd in swo_edsr_ne)                                                                                 {ret=1} else {ret=0}; return ret}
 function suw_edzene(n,                                                                                                                          wd,ret) { if(!wd)wd=lc(n);
                       if (wd in swn_edze_ne||wd in aon_edze_ne||wd in agn_edze_ne||wd in son_edze_ne||wd in sgn_edze_ne||wd in swo_edze_ne||
@@ -2564,7 +2578,7 @@ function nes_odmnro(n,                                                          
 function nes_odmnda(n,                                                                                                                          wd,ret) { if(!wd)wd=lc(n);
                       if (wd in sqo_mn_da||wd in sio_mn_da||wd in sfo_mn_da||wd in sio_mn_ne||wd in sfo_mn_ne)                                  {ret=1} else {ret=0}; return ret}
 function nes_noed(n,                                                                                                                            wd,ret) { if(!wd)wd=lc(n);
-                      if (wd in son_edmu_da||wd in sgn_edmu_da||wd in son_edmu_im||wd in sgn_edmu_im||wd in son_edmu_me||wd in sgn_edmu_me||
+                      if (wd in son_edmu_da||wd in sgn_edmu_da||wd in son_edmu_im||wd in sgn_edmu_im||wd in sgn_edmu_me||
                           wd in aon_edmu_ne||wd in agn_edmu_ne||wd in son_edmu_pr||wd in sgn_edmu_pr||wd in son_edmu_ro||wd in sgn_edmu_ro||
                           wd in son_edmu_tv||wd in sgn_edmu_tv||wd in son_edsr_da||wd in sgn_edsr_da||wd in son_edsr_im||wd in sgn_edsr_im||
                           wd in aon_edsr_ne||wd in agn_edsr_ne||wd in son_edsr_ne||wd in sgn_edsr_ne||wd in son_edsr_ro||wd in sgn_edsr_ro||
@@ -2595,8 +2609,8 @@ function nes_nomnvi(n,                                                          
 function nes_nomnro(n,    wd,ret) { if(!wd)wd=lc(n); if (wd in son_mn_ro||wd in sgn_mn_ro)                                                      {ret=1} else {ret=0}; return ret}
 function nes_nomntv(n,    wd,ret) { if(!wd)wd=lc(n); if (wd in son_mn_tv||wd in sgn_mn_tv)                                                      {ret=1} else {ret=0}; return ret}
 function nes_nomnpr(n,    wd,ret) { if(!wd)wd=lc(n); if (wd in son_mn_pr||wd in sgn_mn_pr)                                                      {ret=1} else {ret=0}; return ret}
-function nes_edme(n,      wd,ret) { if(!wd)wd=lc(n); if (wd in son_edmu_me||wd in sgn_edmu_me)                                                  {ret=1} else {ret=0}; return ret}
-function nes_edmume(n,    wd,ret) { if(!wd)wd=lc(n); if (wd in son_edmu_me||wd in sgn_edmu_me)                                                  {ret=1} else {ret=0}; return ret}
+function nes_edme(n,      wd,ret) { if(!wd)wd=lc(n); if (wd in sgn_edmu_me)                                                  {ret=1} else {ret=0}; return ret}
+function nes_edmume(n,    wd,ret) { if(!wd)wd=lc(n); if (wd in sgn_edmu_me)                                                  {ret=1} else {ret=0}; return ret}
 function nes_edne(n,                                                                                                                            wd,ret) { if(!wd)wd=lc(n);
                       if (wd in aon_edmu_ne||wd in agn_edmu_ne||wd in son_edmu_ne||wd in sgn_edmu_ne||wd in aon_edsr_ne||wd in agn_edsr_ne||
                           wd in son_edsr_ne||wd in sgn_edsr_ne||wd in aon_edze_ne||wd in agn_edze_ne||wd in son_edze_ne||wd in sgn_edze_ne||
@@ -2969,8 +2983,6 @@ function org_ro(n,        wd,ret) { if(!wd)wd=lc(n); if (wd in son_edmu_ro||wd i
 function org_da(n,        wd,ret) { if(!wd)wd=lc(n); if (wd in son_edmu_da||wd in son_edsr_da||wd in son_edze_da||wd in son_mn_da)              {ret=1} else {ret=0}; return ret}
 function org_tv(n,        wd,ret) { if(!wd)wd=lc(n); if (wd in son_edmu_tv||wd in son_edsr_tv||wd in son_edze_tv||wd in son_mn_tv)              {ret=1} else {ret=0}; return ret}
 function org_pr(n,        wd,ret) { if(!wd)wd=lc(n); if (wd in son_edmu_pr||wd in son_edsr_pr||wd in son_edze_pr||wd in son_mn_pr)              {ret=1} else {ret=0}; return ret}
-function org_edme(n,      wd,ret) { if(!wd)wd=lc(n); if (wd in son_edmu_me)                                                                     {ret=1} else {ret=0}; return ret}
-function org_edmume(n,    wd,ret) { if(!wd)wd=lc(n); if (wd in son_edmu_me)                                                                     {ret=1} else {ret=0}; return ret}
 function org_edne(n,                                                                                                                            wd,ret) { if(!wd)wd=lc(n);
                       if (wd in aon_edmu_ne||wd in son_edmu_ne||wd in aon_edsr_ne||wd in son_edsr_ne||wd in aon_edze_ne||wd in son_edze_ne)     {ret=1} else {ret=0}; return ret}
 function org_edzene(n,    wd,ret) { if(!wd)wd=lc(n); if (wd in aon_edze_ne||wd in son_edze_ne)                                                  {ret=1} else {ret=0}; return ret}

@@ -5,12 +5,13 @@ GUI-надстройка для управления скриптами заме
 """
 
 import json
+import os
 import re
 import subprocess
 import tkinter as tk
 import tkinter.font as tkfont
 import unicodedata
-import os
+
 try:
     import psutil
 except ImportError:
@@ -38,6 +39,7 @@ DEFAULT_COLORS = {
     "bg_entry": "#000000",
     "fg_entry": "#FFFFFF",
     "bg_om_highlight": "#FFD700",
+    "fg_om_highlight": "#000000",
     "bg_sel_line": "#1E3A5F",
     "fg_accent": "#00FF00",
     "fg_heading_focus": "#00FF00",
@@ -58,8 +60,8 @@ DEFAULT_FONTS = {
     "ui": ("TkDefaultFont", 10),
     "scripts": ("TkDefaultFont", 10),
     "occurrences": ("DejaVu Sans", 13),
-    "context": ("DejaVu Sans", 14),
-    "omograph": ("DejaVu Sans", 15),
+    "context": ("DejaVu Sans", 16),
+    "omograph": ("DejaVu Sans", 16),
     "variant_bar": ("TkDefaultFont", 12, "bold"),
 }
 
@@ -71,6 +73,7 @@ DEFAULT_SETTINGS = {
     "auto_cache_size": 10,
     "auto_cache": False,
     "allow_context_edit": False,
+    "font_scale": 1.0,
 }
 
 def load_config():
@@ -86,6 +89,12 @@ def load_config():
             for key, value in settings.items():
                 if key in DEFAULT_SETTINGS:
                     DEFAULT_SETTINGS[key] = value
+            scale = DEFAULT_SETTINGS.get("font_scale", 1.0)
+            if scale != 1.0:
+                for key in DEFAULT_FONTS:
+                    val = DEFAULT_FONTS[key]
+                    if isinstance(val, tuple) and len(val) >= 2:
+                        DEFAULT_FONTS[key] = (val[0], int(val[1] * scale)) + val[2:]
             colors = config.get("colors", {})
             for key, value in colors.items():
                 if key in DEFAULT_COLORS:
@@ -105,7 +114,7 @@ def tokenize_line(line):
         if start > prev_end:
             tokens.append({"type": "gap", "text": line[prev_end:start]})
         word_text = match.group()
-        clean = "".join(c for c in word_text if not unicodedata.combining(c))
+        clean = "".join(c for c in word_text if not unicodedata.combining(c)).replace("ё", "е").replace("Ё", "Е")
         tokens.append({"type": "word", "text": word_text, "clean": clean})
         prev_end = end
     if prev_end < len(line):
@@ -143,8 +152,13 @@ class OmographManager:
         self._occ_cache_order = []
         self._occ_cache_size = DEFAULT_SETTINGS.get("cache_size", 20)
         self._undo_stack = []
+        self._occ_sort_col = None
         self._tooltips = {}
-
+        self._occ_font_obj = tk.font.Font(family=DEFAULT_FONTS["occurrences"][0], size=DEFAULT_FONTS["occurrences"][1])
+        self._om_font_obj = tk.font.Font(family=DEFAULT_FONTS["omograph"][0], size=DEFAULT_FONTS["omograph"][1])
+        self._context_font_obj = tk.font.Font(family=DEFAULT_FONTS["context"][0], size=DEFAULT_FONTS["context"][1])
+        self._script_items_cache = None
+        self._script_items_dirty = True
         self.create_widgets()
         self.bind_hotkeys()
         self.root.protocol("WM_DELETE_WINDOW", self._on_close)
@@ -259,8 +273,13 @@ class OmographManager:
                     "word": "",
                     "variants": [],
                     "unaccented_count": 0,
+                    "auto_pattern": "",
                 }
                 for line in content.split("\n"):
+                    if "Автошаблон:" in line:
+                        m = re.search(r"Автошаблон:\s*(\S+)", line)
+                        if m:
+                            info["auto_pattern"] = m.group(1)
                     if "По умолчанию:" in line:
                         m = re.search(r"По умолчанию:\s*(\S+)", line)
                         if m:
@@ -275,11 +294,13 @@ class OmographManager:
                             info["variants"].append({"accented": m.group(1), "plain": m.group(2)})
                     # Извлекаем путь к целевому файлу из sed-строки
                     if "sed -ri" in line and target_file is None:
-                        m = re.search(r"sed -ri.*?[/\s](\w+\.fb2)", line)
+                        m = re.search(r"sed -ri.*?\.\./(\S+)", line)
                         if m:
                             target_file = self.script_dir.parent / m.group(1)
                 if info["variants"]:
                     info["word"] = info["variants"][0]["plain"]
+                    if "default" not in info:
+                        info["default"] = info["variants"][0]["accented"]
                     self.scripts_info[info["word"]] = info
             except Exception as e:
                 print(f"Ошибка парсинга {script_file}: {e}")
@@ -304,12 +325,23 @@ class OmographManager:
             raw_lines = raw_lines[:cut]
             self.lines = [tokenize_line(line) for line in raw_lines]
             self._original_lines = {i: detokenize_line(tokens) for i, tokens in enumerate(self.lines)}
+            self._build_word_index()
             self._tokenized = True
         except FileNotFoundError:
             self.lines = []
             self._tokenized = False
 
+    def _build_word_index(self):
+        self._word_index = {}
+        for li, tokens in enumerate(self.lines):
+            for ti, t in enumerate(tokens):
+                if t["type"] == "word":
+                    word = t["clean"]
+                    if word not in self._word_index:
+                        self._word_index[word] = []
+                    self._word_index[word].append((li, ti))
     def _mark_dirty(self, li):
+        self._script_items_dirty = True
         self._dirty_lines.add(li)
         cnt = len(self._dirty_lines)
         self.occ_counter_var.set(str(cnt) if cnt > 0 else "")
@@ -365,7 +397,7 @@ class OmographManager:
     # ======================== ВСПОМОГАТЕЛЬНЫЕ ========================
 
     def _is_unaccented(self, text):
-        return not any(unicodedata.combining(ch) for ch in text)
+        return not any(unicodedata.combining(ch) for ch in text) and "ё" not in text.lower()
 
     def _clean_accents(self, text):
         return "".join(c for c in text if not unicodedata.combining(c))
@@ -536,6 +568,8 @@ class OmographManager:
     def populate_occurrences(self, word):
         self.occurrences_tree.delete(*self.occurrences_tree.get_children())
         self.occurrences = []
+        self._occ_sort_col = None
+        self._update_occ_headings()
         show_all = self.show_all_var.get()
 
         cache_key = (word, show_all)
@@ -555,50 +589,38 @@ class OmographManager:
             return
 
         CONTEXT = DEFAULT_SETTINGS.get("context_length", 40)
-        max_om_width = 0
         batch = []
-        for li, tokens in enumerate(self.lines):
-            # Проверяем есть ли слово в строке перед detokenize
-            has_word = any(t["type"] == "word" and t["clean"] == word for t in tokens)
-            if not has_word:
-                continue
-            line_str = detokenize_line(tokens).rstrip("\n\r")
-            for ti, t in enumerate(tokens):
-                if t["type"] == "word" and t["clean"] == word:
-                    if not show_all and not self._is_unaccented(t["text"]):
-                        continue
-
-                    pos = 0
-                    for tj in range(ti):
-                        pos += len(tokens[tj]["text"])
-                    om_start = pos
-                    om_end = pos + len(t["text"])
-
-                    ctx_start = max(0, om_start - CONTEXT)
-                    ctx_end = min(len(line_str), om_end + CONTEXT)
-
-                    prefix = line_str[ctx_start:om_start]
-                    om_text = line_str[om_start:om_end]
-                    suffix = line_str[om_end:ctx_end]
-
-                    if ctx_start > 0:
-                        prefix = "…" + prefix
-                    if ctx_end < len(line_str):
-                        suffix = suffix + "…"
-
-                    line_num = li + 1
-                    is_accented = not self._is_unaccented(t["text"])
-
-                    om_width = tk.font.Font().measure(om_text)
-                    max_om_width = max(max_om_width, om_width)
-                    batch.append((line_num, li, ti, prefix, om_text, suffix, is_accented))
+        if hasattr(self, "_word_index") and word in self._word_index:
+            for li, ti in self._word_index[word]:
+                tokens = self.lines[li]
+                t = tokens[ti]
+                if not show_all and not self._is_unaccented(t["text"]):
+                    continue
+                line_str = detokenize_line(tokens).rstrip("\n\r")
+                pos = 0
+                for tj in range(ti):
+                    pos += len(tokens[tj]["text"])
+                om_start = pos
+                om_end = pos + len(t["text"])
+                ctx_start = max(0, om_start - CONTEXT)
+                ctx_end = min(len(line_str), om_end + CONTEXT)
+                prefix = line_str[ctx_start:om_start]
+                om_text = line_str[om_start:om_end]
+                suffix = line_str[om_end:ctx_end]
+                if ctx_start > 0:
+                    prefix = "…" + prefix
+                if ctx_end < len(line_str):
+                    suffix = suffix + "…"
+                line_num = li + 1
+                is_accented = not self._is_unaccented(t["text"])
+                batch.append((line_num, li, ti, prefix, om_text, suffix, is_accented))
 
         self.occurrences = [(b[0], b[1], b[2]) for b in batch]
         self._occ_cache = batch
         self._occ_cache_key = (word, show_all)
 
         # Автоширина колонок с учётом шрифта occurrences
-        occ_font_obj = tk.font.Font(family=DEFAULT_FONTS["occurrences"][0], size=DEFAULT_FONTS["occurrences"][1])
+        occ_font_obj = self._occ_font_obj
         max_line = max(b[0] for b in batch) if batch else 1
         line_width = occ_font_obj.measure(str(max_line)) + 15
         self.occurrences_tree.column("line", width=int(line_width), stretch=False)
@@ -696,7 +718,7 @@ class OmographManager:
         # Вычисляем паддинг до вставки
         if om_text:
             self.context_text.update_idletasks()
-            font_obj = tk.font.Font(family=DEFAULT_FONTS["context"][0], size=DEFAULT_FONTS["context"][1])
+            font_obj = self._context_font_obj
             char_w = font_obj.measure("0")
             win_w = self.context_text.winfo_width()
             if win_w < 100:
@@ -753,6 +775,13 @@ class OmographManager:
             self.progress_var.set("Выделенный текст скопирован")
         except tk.TclError:
             pass
+
+    def _copy_auto_pattern(self, event):
+        pattern = self.auto_pattern_var.get()
+        if pattern and pattern != "нет":
+            self.root.clipboard_clear()
+            self.root.clipboard_append(pattern)
+            self.progress_var.set("Номер шаблона скопирован в буфер")
 
     def _insert_context_with_accents(self, text, base_tag):
         """Вставляет текст в context_text, подсвечивая ударения зелёным."""
@@ -884,7 +913,7 @@ class OmographManager:
             text="Все",
             variable=self.show_all_scripts_var,
             command=self.filter_scripts,
-        ).pack(side=tk.RIGHT)
+        ).pack(side=tk.RIGHT, padx=(2,0))
         refresh_btn = tk.Label(
             left_header,
             text="⟳",
@@ -954,28 +983,17 @@ class OmographManager:
             padx=4,
             cursor="hand2",
         )
-        refresh_occ_btn.pack(side=tk.LEFT, padx=2)
+        refresh_occ_btn.pack(side=tk.LEFT, padx=(0, 2))
         refresh_occ_btn.bind("<Button-1>", lambda e: self._refresh_occurrences())
+
         self.show_all_var = tk.BooleanVar(value=False)
         ttk.Checkbutton(
             occ_toolbar,
             text="Все",
             variable=self.show_all_var,
             command=self._on_show_all_toggle,
-        ).pack(side=tk.LEFT, padx=(10, 2))
-        self.occ_counter_var = tk.StringVar(value="")
-        self.occ_counter_label = tk.Label(
-            occ_toolbar,
-            textvariable=self.occ_counter_var,
-            font=DEFAULT_FONTS["ui"],
-            fg=DEFAULT_COLORS["fg_dirty_label"],
-            bg=DEFAULT_COLORS["bg_main"],
-            width=6,
-            anchor="e",
-            relief="sunken",
-            padx=3,
-        )
-        self.occ_counter_label.pack(side=tk.LEFT, padx=(5, 10))
+        ).pack(side=tk.LEFT, padx=(0, 2))
+
         self.occ_variants_text = tk.Text(
             occ_toolbar,
             height=1,
@@ -989,6 +1007,20 @@ class OmographManager:
         self.occ_variants_text.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(2, 2))
         self.occ_variants_text.tag_configure("center", justify="center")
         self.occ_variants_text.tag_configure("accent", foreground=DEFAULT_COLORS["fg_accent"])
+
+        self.occ_counter_var = tk.StringVar(value="")
+        self.occ_counter_label = tk.Label(
+            occ_toolbar,
+            textvariable=self.occ_counter_var,
+            font=DEFAULT_FONTS["ui"],
+            fg=DEFAULT_COLORS["fg_dirty_label"],
+            bg=DEFAULT_COLORS["bg_main"],
+            width=5,
+            anchor="e",
+            relief="sunken",
+            padx=3,
+        )
+        self.occ_counter_label.pack(side=tk.LEFT, padx=(2, 0))
 
         style.configure(
             "Occurrences.Treeview",
@@ -1011,9 +1043,9 @@ class OmographManager:
             style="Occurrences.Treeview",
         )
         self.occurrences_tree.heading("line", text="Стр", command=self._sort_occurrences_by_line)
-        self.occurrences_tree.heading("prefix", text="← контекст", command=self._sort_occurrences_by_prefix)
+        self.occurrences_tree.heading("prefix", text="⟵ контекст", command=self._sort_occurrences_by_prefix)
         self.occurrences_tree.heading("omograph", text="Ом", command=self._sort_occurrences_by_line)
-        self.occurrences_tree.heading("suffix", text="контекст →", command=self._sort_occurrences_by_suffix)
+        self.occurrences_tree.heading("suffix", text="контекст ⟶", command=self._sort_occurrences_by_suffix)
         self.occurrences_tree.column("line", minwidth=30, width=40, anchor="e", stretch=False)
         self.occurrences_tree.column("prefix", width=300, anchor="e")
         self.occurrences_tree.column("omograph", width=80, anchor="center")
@@ -1032,8 +1064,27 @@ class OmographManager:
         self.occurrences_tree.bind("<FocusIn>", self._on_tree_focus_in)
         self.occurrences_tree.bind("<FocusOut>", self._on_tree_focus_out)
 
+        # Нижняя плашка: шаблон + варианты
+        bottom_om_frame = ttk.Frame(right_col)
+        bottom_om_frame.grid(row=1, column=0, sticky="ew", pady=(5, 0))
+
+        self.auto_pattern_var = tk.StringVar(value="")
+        self.auto_pattern_label = tk.Label(
+            bottom_om_frame,
+            textvariable=self.auto_pattern_var,
+            font=DEFAULT_FONTS["ui"],
+            fg=DEFAULT_COLORS["fg_dirty_label"],
+            bg=DEFAULT_COLORS["bg_main"],
+            width=5,
+            anchor="center",
+            relief="sunken",
+            padx=3,
+        )
+        self.auto_pattern_label.pack(side=tk.LEFT, padx=(0, 2))
+        self.auto_pattern_label.bind("<Button-3>", self._copy_auto_pattern)
+
         self.variants_text = tk.Text(
-            right_col,
+            bottom_om_frame,
             height=1,
             wrap=tk.NONE,
             font=DEFAULT_FONTS["variant_bar"],
@@ -1042,7 +1093,7 @@ class OmographManager:
             relief="sunken",
             state="disabled",
         )
-        self.variants_text.grid(row=1, column=0, sticky="ew", pady=(5, 0))
+        self.variants_text.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(2, 0))
         self.variants_text.tag_configure("accent", foreground=DEFAULT_COLORS["fg_accent"])
 
         context_frame = ttk.Frame(right_col)
@@ -1100,6 +1151,10 @@ class OmographManager:
         self.context_text.bind("<Key-Cyrillic_yeru>", lambda e: self._center_context_on_omograph())
         self.context_text.bind("<Key-Cyrillic_ya>", lambda e: self._scroll_context_chars(-3))
         self.context_text.bind("<Key-Cyrillic_che>", lambda e: self._scroll_context_chars(3))
+        self.context_text.bind("<MouseWheel>", self._on_mousewheel)
+        self.context_text.bind("<Shift-MouseWheel>", self._on_mousewheel_horizontal)
+        self.context_text.bind("<Button-4>", lambda e: self.context_text.xview_scroll(-3, "units"))
+        self.context_text.bind("<Button-5>", lambda e: self.context_text.xview_scroll(3, "units"))
 
         self.mono_font = self._get_mono_font()
         for key in list(DEFAULT_FONTS.keys()):
@@ -1110,7 +1165,7 @@ class OmographManager:
         self.context_text.tag_configure(
             "omograph",
             background=DEFAULT_COLORS["bg_om_highlight"],
-            foreground=DEFAULT_COLORS["bg_text"],
+            foreground=DEFAULT_COLORS["fg_om_highlight"],
             font=DEFAULT_FONTS["omograph"],
         )
         self.context_text.tag_configure("accent", foreground=DEFAULT_COLORS["fg_accent"])
@@ -1133,7 +1188,7 @@ class OmographManager:
             fg=DEFAULT_COLORS["fg_dir_label"],
             bg=DEFAULT_COLORS["bg_main"],
         )
-        self.dir_label.place(relx=0.22, rely=0.5, anchor="w")
+        self.dir_label.place(relx=0.45, rely=0.5, anchor="center")
         self.dirty_status_var = tk.StringVar(value="Изменений нет")
         self.dirty_status_label = ttk.Label(bottom_frame, textvariable=self.dirty_status_var)
         self.dirty_status_label.pack(side=tk.RIGHT)
@@ -1213,6 +1268,12 @@ class OmographManager:
         self.root.bind("<Right>", lambda e: self._navigate_script(1))
         self.root.bind("<space>", lambda e: self._apply_default_variant())
         self.root.bind("<Escape>", lambda e: self.skip_occurrence())
+        self.root.bind("<n>", lambda e: self._sort_occurrences_by_line())
+        self.root.bind("<Key-Cyrillic_te>", lambda e: self._sort_occurrences_by_line())
+        self.root.bind("<comma>", lambda e: self._sort_occurrences_by_prefix())
+        self.root.bind("<Key-Cyrillic_be>", lambda e: self._sort_occurrences_by_prefix())
+        self.root.bind("<period>", lambda e: self._sort_occurrences_by_suffix())
+        self.root.bind("<Key-Cyrillic_yu>", lambda e: self._sort_occurrences_by_suffix())
         self.root.bind("<Control-d>", lambda e: self.change_directory())
         self.root.bind("<Control-Key-Cyrillic_ve>", lambda e: self.change_directory())
         self.root.bind("<b>", lambda e: self.open_book())
@@ -1322,6 +1383,7 @@ class OmographManager:
             self.show_context_for_occurrence(line_num, self.current_word, ti)
 
     def _undo_last(self):
+        self._script_items_dirty = True
         if not self._undo_stack:
             self.progress_var.set("Нечего отменять")
             return
@@ -1347,9 +1409,22 @@ class OmographManager:
             self.dirty_status_label.configure(foreground=DEFAULT_COLORS["fg_status_clean"])
         self.progress_var.set(f"↩ Отменено: {old_text}")
         self._scan_all_omographs()
-        self.filter_scripts()
+        self._update_cached_counts()
+        for item in self.scripts_tree.get_children():
+            if self.scripts_tree.item(item, "values")[0] == self.current_word:
+                self.scripts_tree.set(item, "found", self.scripts_info[self.current_word].get("unaccented_count", 0))
+                break
+        self.update_status()
         if self.current_word:
             self.populate_occurrences(self.current_word)
+
+    def _update_cached_counts(self):
+        if self._script_items_cache is not None:
+            self._script_items_cache = [
+                (word, self.scripts_info[word].get("unaccented_count", 0))
+                for word, _ in self._script_items_cache
+            ]
+        self._all_script_items = self._script_items_cache
 
     def _undo_all(self):
         if not self._undo_stack:
@@ -1369,6 +1444,8 @@ class OmographManager:
         self.occ_counter_var.set("")
         self.progress_var.set("↩ Отменены все изменения")
         self._scan_all_omographs()
+        self._update_cached_counts()
+        self._script_items_dirty = True
         self.filter_scripts()
         if self.current_word:
             self.populate_occurrences(self.current_word)
@@ -1412,6 +1489,15 @@ class OmographManager:
         new_pos = max(0.0, min(1.0, current[0] + shift))
         self.context_text.xview_moveto(new_pos)
 
+    def _on_mousewheel(self, event):
+        if event.state & 0x1:  # Shift
+            self.context_text.xview_scroll(-event.delta // 30, "units")
+        else:
+            self.context_text.yview_scroll(-event.delta // 30, "units")
+
+    def _on_mousewheel_horizontal(self, event):
+        self.context_text.xview_scroll(-event.delta // 30, "units")
+
     def _center_context_on_omograph(self):
         if self.current_occurrence is None:
             return
@@ -1440,21 +1526,27 @@ class OmographManager:
             self.show_context_for_occurrence(line_num, self.current_word, ti)
 
     def _sort_occurrences_by_line(self):
+        self._occ_sort_col = None
+        self._update_occ_headings()
         self._sort_occurrences_by_key(lambda x: x[0])
 
     def _sort_occurrences_by_prefix(self):
-        self._sort_occurrences_by_key(lambda x: self._last_word(x[3]))
+        self._occ_sort_col = "prefix"
+        self._update_occ_headings()
+        self._sort_occurrences_by_key(lambda x: self._words_reversed(x[3]))
 
     def _sort_occurrences_by_suffix(self):
-        self._sort_occurrences_by_key(lambda x: self._first_word(x[5]))
+        self._occ_sort_col = "suffix"
+        self._update_occ_headings()
+        self._sort_occurrences_by_key(lambda x: self._words(x[5]))
 
-    def _last_word(self, text):
+    def _words(self, text):
         words = WORD_RE.findall(text)
-        return words[-1].lower() if words else ""
+        return tuple(w.lower() for w in words) if words else ()
 
-    def _first_word(self, text):
+    def _words_reversed(self, text):
         words = WORD_RE.findall(text)
-        return words[0].lower() if words else ""
+        return tuple(w.lower() for w in reversed(words)) if words else ()
 
     def _sort_occurrences_by_key(self, key_func):
         if not hasattr(self, "_occ_cache") or not self._occ_cache:
@@ -1466,6 +1558,10 @@ class OmographManager:
         self._occ_batch_idx = 0
         self.occurrences_tree.unbind("<<TreeviewSelect>>")
         self._insert_occ_batch()
+
+    def _update_occ_headings(self):
+        self.occurrences_tree.heading("prefix", text="⟵ контекст" if self._occ_sort_col != "prefix" else "⟵ 🍀 контекст 🍀")
+        self.occurrences_tree.heading("suffix", text="контекст ⟶" if self._occ_sort_col != "suffix" else "🍀 контекст 🍀 ⟶")
 
     def _on_tree_focus_in(self, event):
         style = ttk.Style()
@@ -1487,7 +1583,16 @@ class OmographManager:
                 return
             tip = tk.Toplevel(widget)
             tip.wm_overrideredirect(True)
-            tip.wm_geometry(f"+{event.x_root + 10}+{event.y_root + 10}")
+            x = event.x_root + 10
+            y = event.y_root + 10
+            # Temporary label to measure width
+            label = tk.Label(tip, text=text, font=DEFAULT_FONTS["ui"], padx=3, pady=1)
+            width = label.winfo_reqwidth()
+            label.destroy()
+            screen_width = self.root.winfo_screenwidth()
+            if x + width > screen_width:
+                x = screen_width - width - 10
+            tip.wm_geometry(f"+{x}+{y}")
             label = tk.Label(tip, text=text, background="#FFFFAA", relief="solid", borderwidth=1, font=DEFAULT_FONTS["ui"], padx=3, pady=1)
             label.pack()
             self._tooltips[widget] = tip
@@ -1596,7 +1701,11 @@ class OmographManager:
         show_all = self.show_all_scripts_var.get()
 
         # Всегда перестраиваем полный список с актуальными счётчиками
-        self._rebuild_script_items()
+        if not self._script_items_dirty and self._script_items_cache is not None:
+            pass  # используем кэш
+        else:
+            self._rebuild_script_items()
+            self._script_items_dirty = False
 
         self.scripts_tree.delete(*self.scripts_tree.get_children())
         visible_items = []
@@ -1623,6 +1732,9 @@ class OmographManager:
             self.update_status()
 
     def _rebuild_script_items(self):
+        if not self._script_items_dirty and self._script_items_cache is not None:
+            self._all_script_items = self._script_items_cache
+            return
         items = []
         for word, info in self.scripts_info.items():
             count = info.get("unaccented_count", 0)
@@ -1642,6 +1754,8 @@ class OmographManager:
         else:
             items.sort(key=lambda x: x[0].lower())
         self._all_script_items = items
+        self._script_items_cache = items
+        self._script_items_dirty = False
 
     def _sort_scripts(self, col):
         # Первый клик — прямая, второй — обратная
@@ -1658,6 +1772,7 @@ class OmographManager:
                 self._sort_reverse_word = False
             else:
                 self._sort_reverse_found = True
+        self._script_items_dirty = True
         self._rebuild_script_items()
         self.filter_scripts()
         self.update_status()
@@ -1822,6 +1937,12 @@ class OmographManager:
         if word not in self.scripts_info:
             return
         info = self.scripts_info[word]
+        auto_pattern = info.get("auto_pattern", "")
+        self.auto_pattern_var.set(auto_pattern if auto_pattern and auto_pattern != "нет" else "нет")
+        if auto_pattern and auto_pattern != "нет":
+            self.auto_pattern_label.configure(fg=DEFAULT_COLORS["fg_accent"])
+        else:
+            self.auto_pattern_label.configure(fg=DEFAULT_COLORS["fg_dirty_label"])
 
         # Обновляем полосу вариантов с зелёными ударениями
         self.variants_text.config(state="normal")
@@ -1864,6 +1985,7 @@ class OmographManager:
     # ======================== ПРОЧЕЕ ========================
     def _update_memory_label(self):
         import os
+
         import psutil
         try:
             process = psutil.Process(os.getpid())
@@ -1897,8 +2019,15 @@ class OmographManager:
         return " | ".join(found)
 
     def refresh_all(self):
+        self._clear_cache()
+        self._undo_stack.clear()
+        self._dirty_lines.clear()
+        self.occ_counter_var.set("")
+        self.dirty_status_var.set("Изменений нет")
+        self.dirty_status_label.configure(foreground=DEFAULT_COLORS["fg_text"])
         self.load_scripts()
         self._tokenize_book()
+        self._build_word_index()
         self._scan_all_omographs()
         self.filter_scripts()
 
@@ -1910,6 +2039,14 @@ class OmographManager:
 
     def change_directory(self):
         if messagebox.askyesno("Подтверждение", "Сменить рабочую директорию?"):
+            self._clear_cache()
+            self._undo_stack.clear()
+            self._dirty_lines.clear()
+            self.occ_counter_var.set("")
+            self.dirty_status_var.set("Изменений нет")
+            self.dirty_status_label.configure(foreground=DEFAULT_COLORS["fg_text"])
+            self.progress_var.set("Смена директории...")
+            self.root.update_idletasks()
             self.select_working_directory()
             self.refresh_all()
 
