@@ -87,8 +87,11 @@ xgrp="x1111";for(wrd in omap[xgrp]){omakevars(xgrp);for(y=1;y<=wln;y++)         
  # Правила без опорных слов
  if ( se(0,"-") && w(1,"таки") )
  { l[i]=is_vsyo; V[3]++; if(dbg){print "V3"}; continue };
- if ( s(0) && w(1,"же ж") && !veq(Y["n+_prl_krmn"],2) )
+
+ if ( s(0) && w(1,"же ж") &&
+      !( q(2,"prl_krmn")||(q(2,"prl_mnim") && q(3,"mod_mn") ) ) )
  { l[i]=is_vsyo; V[4]++; if(dbg){print "V4"}; continue };
+
  if ( s(0) && w(1,"равно едино одно") )
  { l[i]=is_vsyo; V[5]++; if(dbg){print "V5"}; continue };
 
@@ -167,9 +170,9 @@ xgrp="x1111";for(wrd in omap[xgrp]){omakevars(xgrp);for(y=1;y<=wln;y++)         
         p(0) && veq(Y["n-_sos"],xsn-1) )
  { l[i]=is_vsje; V[25]++; if(dbg){print "V25"}; continue };
 
- if ( qxs(-1,"и") && veq(Y["n+_eos"],0) && p(-3) )
+ if ( w(-1,"и") && s(-1) && veN(Y["n+_eos"]) && veq(Y["n+_eos"],0) && p(-3) )
  { l[i]=is_vsyo; V[26]++; if(dbg){print "V26"}; continue };
- if ( qxs(-1,"и") && veq(Y["n+_eos"],0) && p(-2) )
+ if ( w(-1,"и") && s(-1) && veN(Y["n+_eos"]) && veq(Y["n+_eos"],0) && p(-2) )
  { l[i]=is_vsyo; V[27]++; if(dbg){print "V27"}; continue };
 
  # с числительными.
@@ -249,7 +252,6 @@ xgrp="x1111";for(wrd in omap[xgrp]){omakevars(xgrp);for(y=1;y<=wln;y++)         
       qir(3,qfn-1,"mest_da mest_3e prl_da") )
  { l[i]=is_vsyo; V[46]++; if(dbg){print "V46"}; continue };
 
-
  if ( z(0) && w(1,"кроме") && q(2,"nam_edro fam_edro pat_edro") && s(1) && cap(2) )
  { l[i]=is_vsje; V[47]++; if(dbg){print "V47"}; continue };
 
@@ -266,10 +268,14 @@ xgrp="x1111";for(wrd in omap[xgrp]){omakevars(xgrp);for(y=1;y<=wln;y++)         
         qir(1,bf_n-1,"mest_mnim nar_any prl_kred_sr") &&
         qir(bf_n+1,qfn-1,"prl_ro mest_ro mest_3e") )
     { l[i]=is_vsje; V[49]++; if(dbg){print "V49"}; continue };
-    if ( qf(bf_n+1,bf_n+3,"pre_ro") && s(0,qfn-1) &&
-        qir(1,bf_n-1,"mest_mnim nar_any prl_kred_sr mest_da suw_da") &&
+    if ( qf(bf_n+1,bf_n+3,"pre_ro pre_pr pre_da pre_tv pre_vi") && s(0,qfn-1) &&
+        qir(1,bf_n-1,"mest_mnim nar_any prl_kred_sr mest_da suw_da qast") &&
         qir(bf_n+1,qfn-1,"suw_da mest_da nar_any") )
     { l[i]=is_vsje; V[50]++; if(dbg){print "V50"}; continue };
+   if ( qb(-7,-1,"pre_pr") && s(qbn,qfn-1) &&
+       qir(1,bf_n-1,"mest_mnim nar_any prl_kred_sr mest_da suw_da") &&
+       qir(qbn+1,-1,"suw_pr prl_pr mest_pr mest_3e nar_any") )
+   { l[i]=is_vsje; V[50]++; if(dbg){print "V50"}; continue };
 
  };
 

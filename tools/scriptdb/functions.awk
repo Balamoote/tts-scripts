@@ -507,6 +507,7 @@ function caseq_sw_sw(n,m,      sw,ret) { # определить падеж су�
 
 # логические функции проверки переменных -- для лучшей читаемости. Только, если переменная не равна "" (0)
 function v2s(var,         ret) { if (typeof(var)=="untyped") {ret=""} else {ret=var}; return ret } # если переменная не инициализирована, создать ее перед проверкой (для > 5.2)
+function veN(var,         ret) { if (typeof(var)=="number")  {ret=1 } else {ret=0};   return ret } # если переменная — число (для > 5.2)
 function vge(var,  val,   ret) { if (v2s(var) >= val)                  {ret=1} else {ret=0};  return ret } # переменная больше или равна
 function vle(var,  val,   ret) { if (v2s(var) <= val)                  {ret=1} else {ret=0};  return ret } # переменная меньше или равна
 function vgt(var,  val,   ret) { if (v2s(var) >  val)                  {ret=1} else {ret=0};  return ret } # переменная больше чем

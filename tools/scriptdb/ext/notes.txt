@@ -1,1 +1,0 @@
-       qir(1,bf_n-1,"mest_mnim nar_any prl_kred_sr mest_da suw_da") &&

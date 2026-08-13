@@ -184,6 +184,7 @@ funcs["veq"]=varpat "," varpat1                                              #ve
 funcs["vgl"]=varpat "," n "," m                                              #vgl(var,v1,v2,   ret)
 funcs["vxt"]=varpat ",[-+_0-9a-z]+,[-+_0-9a-z]+"                             #vxt(var,v1,v2,   ret)
 funcs["vex"]=varpat                                                          #vex(var,         ret)
+funcs["veN"]=varpat                                                          #vex(var,         ret)
 funcs["vem"]=varpat                                                          #vem(var,         ret)
 funcs["v2v"]="[-+_0-9a-z]+,[-+_0-9a-z]+"                                     #v2v(v1,v2        ret)
 funcs["weq"]=varpat2 "," varpat2                                             #weq(var,  val,   ret)

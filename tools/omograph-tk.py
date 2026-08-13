@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 GUI-надстройка для управления скриптами замены омографов
-Запуск: python3 omograph_gui.py
+Запуск: python3 omograph-tk.py
 """
 
 import json
@@ -19,7 +19,7 @@ except ImportError:
 from pathlib import Path
 from tkinter import filedialog, messagebox, ttk
 
-CONFIG_FILE = Path("./.omograph_gui.json")
+CONFIG_FILE = Path("./.omograph_tk.json")
 STATE_FILE = Path("./scriptaux/omograph_state.json")
 WORD_RE = re.compile(r"[а-яёА-ЯЁ\u0300-\u036f]+")
 
@@ -32,7 +32,6 @@ DEFAULT_COLORS = {
     "bg_treeview": "#000000",
     "fg_treeview": "#FFFFFF",
     "bg_treeview_heading": "#2D2D2D",
-    "bg_treeview_selected": "#1E3A5F",
     "bg_button": "#3D3D3D",
     "fg_button": "#FFFFFF",
     "bg_button_active": "#555555",
@@ -49,7 +48,6 @@ DEFAULT_COLORS = {
     "bg_accented_row": "#3A3A3A",
     "fg_dir_label": "#FFFFFF",
     "fg_dirty_label": "#FFFF99",
-    "fg_heading_focus": "#00FF00",
     "fg_status_saved": "#00FF00",
     "fg_status_clean": "#FFFFFF",
     "scrollbar_bg": "#555555",
@@ -74,6 +72,7 @@ DEFAULT_SETTINGS = {
     "auto_cache": False,
     "allow_context_edit": False,
     "font_scale": 1.0,
+    "book_reader": "",
 }
 
 def load_config():
@@ -150,6 +149,8 @@ class OmographManager:
         self.occurrences = []
         self._occ_cache_dict = {}
         self._occ_cache_order = []
+        self.OCCURRENCES_BATCH_SIZE = 50
+        self.SCRIPTS_BATCH_SIZE = 100        
         self._occ_cache_size = DEFAULT_SETTINGS.get("cache_size", 20)
         self._undo_stack = []
         self._occ_sort_col = None
@@ -386,13 +387,18 @@ class OmographManager:
     def _scan_all_omographs(self):
         for info in self.scripts_info.values():
             info["unaccented_count"] = 0
+            info["total_count"] = 0
+            info["marked_count"] = 0
         if not self._tokenized:
             return
         for tokens in self.lines:
             for t in tokens:
                 if t["type"] == "word" and t["clean"] in self.scripts_info:
+                    self.scripts_info[t["clean"]]["total_count"] += 1
                     if self._is_unaccented(t["text"]):
                         self.scripts_info[t["clean"]]["unaccented_count"] += 1
+                    else:
+                        self.scripts_info[t["clean"]]["marked_count"] += 1
 
     # ======================== ВСПОМОГАТЕЛЬНЫЕ ========================
 
@@ -649,7 +655,7 @@ class OmographManager:
         self._insert_occ_batch()
 
     def _insert_occ_batch(self):
-        batch_size = 50
+        batch_size = self.OCCURRENCES_BATCH_SIZE
         batch = self._occ_batch
         start = self._occ_batch_idx
         end = min(start + batch_size, len(batch))
@@ -719,27 +725,35 @@ class OmographManager:
         if om_text:
             self.context_text.update_idletasks()
             font_obj = self._context_font_obj
+            space_w = font_obj.measure(" ")
             char_w = font_obj.measure("0")
             win_w = self.context_text.winfo_width()
             if win_w < 100:
                 win_w = 800
             screen_chars = max(1, int(win_w / char_w))
-            half_screen = screen_chars // 2
+            right_padding = " " * (screen_chars // 2)
+            half_screen_px = win_w // 2
 
-            om_char_pos = 5 + om_start_visual
-            om_char_len = len(self._clean_accents(om_text))
-            om_center_char = om_char_pos + om_char_len // 2
+            line_text = detokenize_line(self.lines[li]).rstrip("\n\r")
+            om_clean = self._clean_accents(om_text)
+            num_prefix_px = font_obj.measure("N" * 5)
+            prefix_px = font_obj.measure(self._clean_accents(line_text[:om_start]))
+            om_px = font_obj.measure(om_clean)
+            om_center_px = num_prefix_px + prefix_px + om_px // 2
 
-            if om_center_char <= half_screen:
-                padding_chars = half_screen - om_center_char
+            if om_center_px <= half_screen_px:
+                padding_px = half_screen_px - om_center_px
+                padding_chars = int(padding_px / space_w) if space_w > 0 else 0
+                padding = " " * padding_chars
             else:
+                padding = ""
                 padding_chars = 0
-            padding = " " * padding_chars
         else:
             padding = ""
             padding_chars = 0
-            om_center_char = 0
-            half_screen = 0
+            right_padding = ""
+            om_center_px = 0
+            half_screen_px = 0
 
         # Вставляем строки один раз с паддингом
         for i in range(start_line, end_line):
@@ -754,16 +768,18 @@ class OmographManager:
                 om_end = om_start + len(om_text)
                 self._insert_context_with_accents(line_text_i[:om_start], tag)
                 self.context_text.insert(tk.END, om_text, "omograph")
-                self._insert_context_with_accents(line_text_i[om_end:] + "\n", tag)
+                self._insert_context_with_accents(line_text_i[om_end:] + right_padding + "\n", tag)
             else:
                 self._insert_context_with_accents(line_text_i + "\n", tag)
 
         # Скролл только если омограф правее центра
+        self.context_text.delete("end-2c", "end-1c")
         if not DEFAULT_SETTINGS.get("allow_context_edit", False):
             self.context_text.configure(state=tk.DISABLED)
-        self.context_text.delete("end-2c", "end-1c")
-        if om_text and om_center_char > half_screen:
-            scroll_chars = om_center_char + padding_chars - half_screen
+        if om_text and om_center_px > half_screen_px:
+            scroll_px = om_center_px + padding_chars * space_w - half_screen_px
+            scroll_chars = int(scroll_px / char_w) if char_w > 0 else 0
+
             self.context_text.xview_moveto(0.0)
             self.context_text.xview_scroll(scroll_chars, "units")
 
@@ -782,6 +798,23 @@ class OmographManager:
             self.root.clipboard_clear()
             self.root.clipboard_append(pattern)
             self.progress_var.set("Номер шаблона скопирован в буфер")
+
+    def _match_occurrence(self, b, term):
+        if not term:
+            return True
+        _, _, _, prefix, om_text, suffix, _ = b
+        if "@" in term:
+            left, right = term.split("@", 1)
+            left = left[1:] if left.startswith("<") else left
+            right = right[1:] if right.startswith(">") else right
+            return (re.search(left, prefix, re.IGNORECASE) if left else True) and \
+                   (re.search(right, suffix, re.IGNORECASE) if right else True)
+        if term.startswith("<"):
+            return re.search(term[1:], prefix, re.IGNORECASE) is not None
+        if term.startswith(">"):
+            return re.search(term[1:], suffix, re.IGNORECASE) is not None
+        text = prefix + " " + om_text + " " + suffix
+        return re.search(term, text, re.IGNORECASE) is not None
 
     def _insert_context_with_accents(self, text, base_tag):
         """Вставляет текст в context_text, подсвечивая ударения зелёным."""
@@ -894,17 +927,19 @@ class OmographManager:
         left_header.pack(fill=tk.X, padx=2, pady=0)
         self.search_var = tk.StringVar()
         self.search_var.trace("w", self.filter_scripts)
-        style.configure("Search.TEntry", font=DEFAULT_FONTS["ui"])
+        style.configure("Search.TEntry", font=DEFAULT_FONTS["ui"], insertbackground=DEFAULT_COLORS["fg_text"])
         style.map(
             "Search.TEntry",
             highlightcolor=[("focus", "#FFFFFF")],
             highlightthickness=[("focus", 3)],
         )
-        self.search_entry = ttk.Entry(
+        self.search_entry = tk.Entry(
             left_header,
             textvariable=self.search_var,
-            style="Search.TEntry",
             font=DEFAULT_FONTS["ui"],
+            bg=DEFAULT_COLORS["bg_text"],
+            fg=DEFAULT_COLORS["fg_text"],
+            insertbackground=DEFAULT_COLORS["fg_text"],
         )
         self.search_entry.pack(side=tk.LEFT, padx=0, fill=tk.X, expand=True)
         self.show_all_scripts_var = tk.BooleanVar(value=False)
@@ -948,7 +983,7 @@ class OmographManager:
             style="Scripts.Treeview",
         )
         self.scripts_tree.heading("word", text="Омограф", command=lambda: self._sort_scripts("word"))
-        self.scripts_tree.heading("found", text="Стр", command=lambda: self._sort_scripts("found"))
+        self.scripts_tree.heading("found", text="#", command=lambda: self._sort_scripts("found"))
         self.scripts_tree.column("word", minwidth=80, stretch=False)
         self.scripts_tree.column("found", width=52, minwidth=52, anchor="e", stretch=False)
         scripts_scroll = ttk.Scrollbar(left_frame, orient=tk.VERTICAL, command=self.scripts_tree.yview)
@@ -993,6 +1028,19 @@ class OmographManager:
             variable=self.show_all_var,
             command=self._on_show_all_toggle,
         ).pack(side=tk.LEFT, padx=(0, 2))
+
+        self.occ_search_var = tk.StringVar()
+        self.occ_search_var.trace("w", self._filter_occurrences)
+        self.occ_search_entry = tk.Entry(
+            occ_toolbar,
+            textvariable=self.occ_search_var,
+            font=DEFAULT_FONTS["ui"],
+            width=30,
+            bg=DEFAULT_COLORS["bg_text"],
+            fg=DEFAULT_COLORS["fg_text"],
+            insertbackground=DEFAULT_COLORS["fg_text"],
+        )
+        self.occ_search_entry.pack(side=tk.LEFT, padx=(2, 2))
 
         self.occ_variants_text = tk.Text(
             occ_toolbar,
@@ -1075,13 +1123,41 @@ class OmographManager:
             font=DEFAULT_FONTS["ui"],
             fg=DEFAULT_COLORS["fg_dirty_label"],
             bg=DEFAULT_COLORS["bg_main"],
-            width=5,
+            width=6,
             anchor="center",
             relief="sunken",
             padx=3,
         )
         self.auto_pattern_label.pack(side=tk.LEFT, padx=(0, 2))
         self.auto_pattern_label.bind("<Button-3>", self._copy_auto_pattern)
+
+        self.marked_pct_var = tk.StringVar(value="")
+        self.marked_pct_label = tk.Label(
+            bottom_om_frame,
+            textvariable=self.marked_pct_var,
+            font=DEFAULT_FONTS["ui"],
+            fg=DEFAULT_COLORS["fg_text"],
+            bg=DEFAULT_COLORS["bg_main"],
+            width=6,
+            anchor="center",
+            relief="sunken",
+            padx=2,
+        )
+        self.marked_pct_label.pack(side=tk.LEFT, padx=(0, 2))
+
+        self.total_count_var = tk.StringVar(value="")
+        self.total_count_label = tk.Label(
+            bottom_om_frame,
+            textvariable=self.total_count_var,
+            font=DEFAULT_FONTS["ui"],
+            fg=DEFAULT_COLORS["fg_text"],
+            bg=DEFAULT_COLORS["bg_main"],
+            width=6,
+            anchor="center",
+            relief="sunken",
+            padx=2,
+        )
+        self.total_count_label.pack(side=tk.LEFT, padx=(0, 2))
 
         self.variants_text = tk.Text(
             bottom_om_frame,
@@ -1126,6 +1202,7 @@ class OmographManager:
             width=90,
             undo=False,
             maxundo=0,
+            takefocus=0,
             state=tk.DISABLED if not DEFAULT_SETTINGS.get("allow_context_edit", False) else tk.NORMAL,
         )
 
@@ -1140,7 +1217,6 @@ class OmographManager:
         self.context_text.bind("<a>", lambda e: self._scroll_context(-1))
         self.context_text.bind("<d>", lambda e: self._scroll_context(1))
         self.context_text.bind("<w>", lambda e: self._recenter_context())
-        self.context_text.bind("<s>", lambda e: self._center_context_on_omograph())
         self.context_text.bind("<z>", lambda e: self._scroll_context_chars(-3))
         self.context_text.bind("<x>", lambda e: self._scroll_context_chars(3))
         self.context_text.bind("<Key-Cyrillic_shorti>", lambda e: self.context_text.xview_moveto(0.0))
@@ -1148,7 +1224,6 @@ class OmographManager:
         self.context_text.bind("<Key-Cyrillic_ef>", lambda e: self._scroll_context(-1))
         self.context_text.bind("<Key-Cyrillic_ve>", lambda e: self._scroll_context(1))
         self.context_text.bind("<Key-Cyrillic_tse>", lambda e: self._recenter_context())
-        self.context_text.bind("<Key-Cyrillic_yeru>", lambda e: self._center_context_on_omograph())
         self.context_text.bind("<Key-Cyrillic_ya>", lambda e: self._scroll_context_chars(-3))
         self.context_text.bind("<Key-Cyrillic_che>", lambda e: self._scroll_context_chars(3))
         self.context_text.bind("<MouseWheel>", self._on_mousewheel)
@@ -1199,62 +1274,70 @@ class OmographManager:
 
     # ======================== ГОРЯЧИЕ КЛАВИШИ ========================
 
+    def _bind_hotkey(self, key, func):
+        def wrapper(event):
+            if self._is_edit_focus():
+                return "break"
+            return func(event)
+        self.root.bind(key, wrapper)
+
+    def _is_edit_focus(self):
+        focused = self.root.focus_get()
+        return focused in (getattr(self, "search_entry", None), getattr(self, "occ_search_entry", None))
+
     def bind_hotkeys(self):
         self.root.bind("<F1>", lambda e: self._show_help())
         self.root.bind("<F2>", lambda e: self.scripts_tree.focus_set())
         self.root.bind("<F3>", lambda e: self.occurrences_tree.focus_set())
         self.root.bind("<F4>", lambda e: self._goto_current_script())
-        self.root.bind("<F6>", lambda e: self.search_var.set(""))
-        self.root.bind("<F7>", lambda e: self.search_entry.focus_set())
+        self.root.bind("<F5>", lambda e: self.search_entry.focus_set())
+        self.root.bind("<F6>", lambda e: self.search_var.set("") or self.occ_search_var.set(""))
+        self.root.bind("<F7>", lambda e: self.occ_search_entry.focus_set())
         self.root.bind("<F8>", lambda e: self._clear_cache())
         self.root.bind("<F9>", lambda e: self._fill_cache())
-        self.root.bind("<f>", lambda e: self.search_entry.focus_set())
-        self.root.bind("<Key-Cyrillic_a>", lambda e: self.search_entry.focus_set())
-        self.root.bind("<h>", lambda e: self._toggle_show_all())
-        self.root.bind("<Key-Cyrillic_er>", lambda e: self._toggle_show_all())
-        self.root.bind("<g>", lambda e: self._toggle_show_all_scripts())
-        self.root.bind("<Key-Cyrillic_pe>", lambda e: self._toggle_show_all_scripts())
+        self._bind_hotkey("<y>", lambda e: self._toggle_show_all())
+        self._bind_hotkey("<Key-Cyrillic_en>", lambda e: self._toggle_show_all())
+        self._bind_hotkey("<t>", lambda e: self._toggle_show_all_scripts())
+        self._bind_hotkey("<Key-Cyrillic_ie>", lambda e: self._toggle_show_all_scripts())
         self.root.bind("<Control-r>", lambda e: self._refresh_all_counts())
-        self.root.bind("<s>", lambda e: self._center_context_on_omograph())
-        self.root.bind("<Key-Cyrillic_yeru>", lambda e: self._center_context_on_omograph())
-        self.root.bind("<w>", lambda e: self._recenter_context())
-        self.root.bind("<Key-Cyrillic_tse>", lambda e: self._recenter_context())
-        self.root.bind("<a>", lambda e: self._scroll_context(-1))
-        self.root.bind("<Key-Cyrillic_ef>", lambda e: self._scroll_context(-1))
-        self.root.bind("<d>", lambda e: self._scroll_context(1))
-        self.root.bind("<Key-Cyrillic_ve>", lambda e: self._scroll_context(1))
-        self.root.bind("<q>", lambda e: self.context_text.xview_moveto(0.0))
-        self.root.bind("<Key-Cyrillic_shorti>", lambda e: self.context_text.xview_moveto(0.0))
-        self.root.bind("<e>", lambda e: self.context_text.xview_moveto(1.0))
-        self.root.bind("<Key-Cyrillic_u>", lambda e: self.context_text.xview_moveto(1.0))
-        self.root.bind("<i>", lambda e: self._refresh_all_counts())
-        self.root.bind("<Key-Cyrillic_sha>", lambda e: self._refresh_all_counts())
-        self.root.bind("<o>", lambda e: self._refresh_occurrences())
-        self.root.bind("<Key-Cyrillic_shcha>", lambda e: self._refresh_occurrences())
-        self.root.bind("<z>", lambda e: self._scroll_context_chars(-3))
-        self.root.bind("<Key-Cyrillic_ya>", lambda e: self._scroll_context_chars(-3))
-        self.root.bind("<x>", lambda e: self._scroll_context_chars(3))
-        self.root.bind("<Key-Cyrillic_che>", lambda e: self._scroll_context_chars(3))
-        self.root.bind("<u>", lambda e: self._undo_last())
-        self.root.bind("<Key-Cyrillic_ghe>", lambda e: self._undo_last())
-        self.root.bind("<U>", lambda e: self._undo_all())
-        self.root.bind("<Key-Cyrillic_GHE>", lambda e: self._undo_all())
+        self._bind_hotkey("<w>", lambda e: self._recenter_context())
+        self._bind_hotkey("<Key-Cyrillic_tse>", lambda e: self._recenter_context())
+        self._bind_hotkey("<a>", lambda e: self._scroll_context(-1))
+        self._bind_hotkey("<Key-Cyrillic_ef>", lambda e: self._scroll_context(-1))
+        self._bind_hotkey("<d>", lambda e: self._scroll_context(1))
+        self._bind_hotkey("<Key-Cyrillic_ve>", lambda e: self._scroll_context(1))
+        self._bind_hotkey("<q>", lambda e: self.context_text.xview_moveto(0.0))
+        self._bind_hotkey("<Key-Cyrillic_shorti>", lambda e: self.context_text.xview_moveto(0.0))
+        self._bind_hotkey("<e>", lambda e: self.context_text.xview_moveto(1.0))
+        self._bind_hotkey("<Key-Cyrillic_u>", lambda e: self.context_text.xview_moveto(1.0))
+        self._bind_hotkey("<o>", lambda e: self._refresh_all_counts())
+        self._bind_hotkey("<Key-Cyrillic_shcha>", lambda e: self._refresh_all_counts())
+        self._bind_hotkey("<p>", lambda e: self._refresh_occurrences())
+        self._bind_hotkey("<Key-Cyrillic_ze>", lambda e: self._refresh_occurrences())
+        self._bind_hotkey("<z>", lambda e: self._scroll_context_chars(-3))
+        self._bind_hotkey("<Key-Cyrillic_ya>", lambda e: self._scroll_context_chars(-3))
+        self._bind_hotkey("<x>", lambda e: self._scroll_context_chars(3))
+        self._bind_hotkey("<Key-Cyrillic_che>", lambda e: self._scroll_context_chars(3))
+        self._bind_hotkey("<u>", lambda e: self._undo_last())
+        self._bind_hotkey("<Key-Cyrillic_ghe>", lambda e: self._undo_last())
+        self._bind_hotkey("<Control-u>", lambda e: self._undo_all())
+        self._bind_hotkey("<Control-Key-Cyrillic_ghe>", lambda e: self._undo_all())
         self.root.bind("<Control-s>", lambda e: self._write_dirty_lines())
         self.root.bind("<Control-Key-Cyrillic_yeru>", lambda e: self._write_dirty_lines())
         self.root.bind("<Control-f>", lambda e: self.search_entry.focus_set())
         self.root.bind("<Control-Key-Cyrillic_a>", lambda e: self.search_entry.focus_set())
         for i in range(1, 9):
             # 1-9 — замена текущего (видимого)
-            self.root.bind(str(i), lambda e, n=i: self._on_hotkey_variant(n, "selected"))
-            self.root.bind(f"<KP_{i}>", lambda e, n=i: self._on_hotkey_variant(n, "selected"))
+            self._bind_hotkey(str(i), lambda e, n=i: self._on_hotkey_variant(n, "selected"))
+            self._bind_hotkey(f"<KP_{i}>", lambda e, n=i: self._on_hotkey_variant(n, "selected"))
             # Alt+1-9 — замена всех видимых
-            self.root.bind(f"<Mod1-Key-{i}>", lambda e, n=i: self._on_hotkey_variant(n, "visible"))
-            self.root.bind(f"<Mod1-KP_{i}>", lambda e, n=i: self._on_hotkey_variant(n, "visible"))
+            self._bind_hotkey(f"<Mod1-Key-{i}>", lambda e, n=i: self._on_hotkey_variant(n, "visible"))
+            self._bind_hotkey(f"<Mod1-KP_{i}>", lambda e, n=i: self._on_hotkey_variant(n, "visible"))
             # Ctrl+1-9 — замена всех в файле
-            self.root.bind(f"<Control-Key-{i}>", lambda e, n=i: self._on_hotkey_variant(n, "all"))
-            self.root.bind(f"<Control-KP_{i}>", lambda e, n=i: self._on_hotkey_variant(n, "all"))
+            self._bind_hotkey(f"<Control-Key-{i}>", lambda e, n=i: self._on_hotkey_variant(n, "all"))
+            self._bind_hotkey(f"<Control-KP_{i}>", lambda e, n=i: self._on_hotkey_variant(n, "all"))
         # 0 — очистить текущее (видимое)
-        self.root.bind("0", lambda e: self._on_hotkey_clean("selected"))
+        self._bind_hotkey("0", lambda e: self._on_hotkey_clean("selected"))
         self.root.bind("<KP_0>", lambda e: self._on_hotkey_clean("selected"))
         # Alt+0 — очистить все видимые
         self.root.bind("<Mod1-Key-0>", lambda e: self._on_hotkey_clean("visible"))
@@ -1264,22 +1347,30 @@ class OmographManager:
         self.root.bind("<Control-KP_0>", lambda e: self._on_hotkey_clean("all"))
         self.root.bind("<Up>", lambda e: self._navigate_occurrence(-1))
         self.root.bind("<Down>", lambda e: self._navigate_occurrence(1))
-        self.root.bind("<Left>", lambda e: self._navigate_script(-1))
-        self.root.bind("<Right>", lambda e: self._navigate_script(1))
-        self.root.bind("<space>", lambda e: self._apply_default_variant())
-        self.root.bind("<Escape>", lambda e: self.skip_occurrence())
-        self.root.bind("<n>", lambda e: self._sort_occurrences_by_line())
-        self.root.bind("<Key-Cyrillic_te>", lambda e: self._sort_occurrences_by_line())
-        self.root.bind("<comma>", lambda e: self._sort_occurrences_by_prefix())
-        self.root.bind("<Key-Cyrillic_be>", lambda e: self._sort_occurrences_by_prefix())
-        self.root.bind("<period>", lambda e: self._sort_occurrences_by_suffix())
-        self.root.bind("<Key-Cyrillic_yu>", lambda e: self._sort_occurrences_by_suffix())
-        self.root.bind("<Control-d>", lambda e: self.change_directory())
-        self.root.bind("<Control-Key-Cyrillic_ve>", lambda e: self.change_directory())
-        self.root.bind("<b>", lambda e: self.open_book())
-        self.root.bind("<Key-Cyrillic_i>", lambda e: self.open_book())
-        self.root.bind("<Control-t>", lambda e: self.change_target_file())
-        self.root.bind("<Control-Key-Cyrillic_ie>", lambda e: self.change_target_file())
+        self._bind_hotkey("<h>", lambda e: self._occurrences_home())
+        self._bind_hotkey("<Key-Cyrillic_er>", lambda e: self._occurrences_home())
+        self._bind_hotkey("<l>", lambda e: self._occurrences_end())
+        self._bind_hotkey("<Key-Cyrillic_de>", lambda e: self._occurrences_end())
+        self._bind_hotkey("<j>", lambda e: self._occurrences_page_up())
+        self._bind_hotkey("<Key-Cyrillic_o>", lambda e: self._occurrences_page_up())
+        self._bind_hotkey("<k>", lambda e: self._occurrences_page_down())
+        self._bind_hotkey("<Key-Cyrillic_el>", lambda e: self._occurrences_page_down())
+        self._bind_hotkey("<Left>", lambda e: self._navigate_script(-1))
+        self._bind_hotkey("<Right>", lambda e: self._navigate_script(1))
+        self._bind_hotkey("<space>", lambda e: self._apply_default_variant())
+        self._bind_hotkey("<Escape>", lambda e: self.skip_occurrence())
+        self._bind_hotkey("<n>", lambda e: self._sort_occurrences_by_line())
+        self._bind_hotkey("<Key-Cyrillic_te>", lambda e: self._sort_occurrences_by_line())
+        self._bind_hotkey("<comma>", lambda e: self._sort_occurrences_by_prefix())
+        self._bind_hotkey("<Key-Cyrillic_be>", lambda e: self._sort_occurrences_by_prefix())
+        self._bind_hotkey("<period>", lambda e: self._sort_occurrences_by_suffix())
+        self._bind_hotkey("<Key-Cyrillic_yu>", lambda e: self._sort_occurrences_by_suffix())
+        self._bind_hotkey("<Control-d>", lambda e: self.change_directory())
+        self._bind_hotkey("<Control-Key-Cyrillic_ve>", lambda e: self.change_directory())
+        self._bind_hotkey("<b>", lambda e: self.open_book())
+        self._bind_hotkey("<Key-Cyrillic_i>", lambda e: self.open_book())
+        self._bind_hotkey("<Control-t>", lambda e: self.change_target_file())
+        self._bind_hotkey("<Control-Key-Cyrillic_ie>", lambda e: self.change_target_file())
 
     def _on_hotkey_variant(self, variant_num, mode="selected"):
         if not self.current_word or self.current_word not in self.scripts_info:
@@ -1410,10 +1501,11 @@ class OmographManager:
         self.progress_var.set(f"↩ Отменено: {old_text}")
         self._scan_all_omographs()
         self._update_cached_counts()
-        for item in self.scripts_tree.get_children():
-            if self.scripts_tree.item(item, "values")[0] == self.current_word:
-                self.scripts_tree.set(item, "found", self.scripts_info[self.current_word].get("unaccented_count", 0))
-                break
+        if self.current_word:
+            for item in self.scripts_tree.get_children():
+                if self.scripts_tree.item(item, "values")[0] == self.current_word:
+                    self.scripts_tree.set(item, "found", self.scripts_info[self.current_word].get("unaccented_count", 0))
+                    break
         self.update_status()
         if self.current_word:
             self.populate_occurrences(self.current_word)
@@ -1451,8 +1543,6 @@ class OmographManager:
             self.populate_occurrences(self.current_word)
 
     def _fill_cache(self):
-        self.progress_var.set("Создание кэша списков вхождений ... ожидайте")
-        self.root.update_idletasks()
         words = sorted(
             [w for w in self.scripts_info if self.scripts_info[w].get("unaccented_count", 0) > 0],
             key=lambda w: self.scripts_info[w].get("unaccented_count", 0),
@@ -1461,9 +1551,17 @@ class OmographManager:
         limit = max(1, self._occ_cache_size - 10)
         auto_limit = DEFAULT_SETTINGS.get("auto_cache_size", 10)
         limit = min(limit, auto_limit) if auto_limit > 0 else limit
-        for word in words[:limit]:
-            self.populate_occurrences(word)
-        self.progress_var.set(f"✓ Кэш заполнен ({len(self._occ_cache_dict)}/{self._occ_cache_size})")
+        self._fill_cache_queue = list(words[:limit])
+        self.progress_var.set("Создание кэша списков вхождений ... ожидайте")
+        self._fill_cache_step()
+
+    def _fill_cache_step(self):
+        if not self._fill_cache_queue:
+            self.progress_var.set(f"✓ Кэш заполнен ({len(self._occ_cache_dict)}/{self._occ_cache_size})")
+            return
+        word = self._fill_cache_queue.pop(0)
+        self.populate_occurrences(word)
+        self.root.after(10, self._fill_cache_step)
 
     def _clear_cache(self):
         self._occ_cache_dict.clear()
@@ -1497,26 +1595,6 @@ class OmographManager:
 
     def _on_mousewheel_horizontal(self, event):
         self.context_text.xview_scroll(-event.delta // 30, "units")
-
-    def _center_context_on_omograph(self):
-        if self.current_occurrence is None:
-            return
-        line_num, li, ti = self.occurrences[self.current_occurrence]
-        line_text = detokenize_line(self.lines[li]).rstrip("\n\r")
-        tokens = self.lines[li]
-        pos = 0
-        for t in tokens:
-            if t["type"] == "word" and t["clean"] == self.current_word:
-                om_start = pos
-                break
-            pos += len(t["text"])
-        else:
-            return
-        total_len = len(line_text) + 150
-        if total_len == 0:
-            return
-        fraction = om_start / total_len
-        self.context_text.xview_moveto(max(0.0, min(1.0, fraction)))
 
     def _recenter_context(self):
         if self.current_occurrence is not None and self.current_word:
@@ -1599,7 +1677,10 @@ class OmographManager:
         def leave(event):
             tip = self._tooltips.pop(widget, None)
             if tip:
-                tip.destroy()
+                try:
+                    tip.destroy()
+                except tk.TclError:
+                    pass
         widget.bind("<Enter>", enter)
         widget.bind("<Leave>", leave)
 
@@ -1620,6 +1701,34 @@ class OmographManager:
         new_idx = self.current_occurrence + direction
         if 0 <= new_idx < len(self.occurrences):
             self._select_occurrence(new_idx)
+
+    def _occurrences_home(self):
+        if self.occurrences:
+            self._select_occurrence(0)
+
+    def _occurrences_end(self):
+        if self.occurrences:
+            self._select_occurrence(len(self.occurrences) - 1)
+
+    def _occurrences_page_down(self):
+        if not self.occurrences:
+            return
+        row_height = DEFAULT_FONTS["occurrences"][1] + 8
+        visible = max(1, self.occurrences_tree.winfo_height() // row_height)
+        if visible == 0:
+            return
+        new_idx = min(len(self.occurrences) - 1, (self.current_occurrence or 0) + visible)
+        self._select_occurrence(new_idx)
+
+    def _occurrences_page_up(self):
+        if not self.occurrences:
+            return
+        row_height = DEFAULT_FONTS["occurrences"][1] + 8
+        visible = max(1, self.occurrences_tree.winfo_height() // row_height)
+        if visible == 0:
+            return
+        new_idx = max(0, (self.current_occurrence or 0) - visible)
+        self._select_occurrence(new_idx)
 
     def _navigate_script(self, direction):
         all_items = self.scripts_tree.get_children()
@@ -1719,6 +1828,11 @@ class OmographManager:
         self._insert_scripts_batch(visible_items, 0)
 
     def _insert_scripts_batch(self, items, start_idx):
+        # Автоширина колонки found
+        if items:
+            max_count = max(c for _, c in items)
+            count_width = self._occ_font_obj.measure(str(max_count)) + 15
+            self.scripts_tree.column("found", width=int(count_width), minwidth=52, anchor="e", stretch=False)
         batch_size = 100
         end = min(start_idx + batch_size, len(items))
         for i in range(start_idx, end):
@@ -1874,6 +1988,21 @@ class OmographManager:
         if self.current_word:
             self.populate_occurrences(self.current_word)
 
+    def _filter_occurrences(self, *args):
+        if not self.current_word:
+            return
+        search_term = self.occ_search_var.get()
+        if hasattr(self, "_occ_cache") and self._occ_cache:
+            self.occurrences = [(b[0], b[1], b[2]) for b in self._occ_cache
+                                if self._match_occurrence(b, search_term)]
+            self.occurrences_tree.delete(*self.occurrences_tree.get_children())
+            self._occ_batch = [b for b in self._occ_cache
+                               if self._match_occurrence(b, search_term)]
+            self._occ_batch_idx = 0
+            self.occurrences_tree.unbind("<<TreeviewSelect>>")
+            self._insert_occ_batch()
+            self.progress_var.set(f"Найдено: {len(self.occurrences)}")
+
     def _refresh_occurrences(self):
         if self.current_word:
             self._occ_cache_key = None
@@ -1891,16 +2020,22 @@ class OmographManager:
 
     # ======================== ИНФО И КНОПКИ ========================
 
-    def _insert_with_accents_variant(self, text):
+    def _insert_with_accents_to(self, widget, text):
         i = 0
         while i < len(text):
             ch = text[i]
             if i + 1 < len(text) and unicodedata.combining(text[i + 1]):
-                self.variants_text.insert(tk.END, ch + text[i + 1], "accent")
+                widget.insert(tk.END, ch + text[i + 1], "accent")
                 i += 2
             else:
-                self.variants_text.insert(tk.END, ch)
+                widget.insert(tk.END, ch)
                 i += 1
+
+    def _insert_with_accents_variant(self, text):
+        self._insert_with_accents_to(self.variants_text, text)
+
+    def _insert_with_accents_occ_variant(self, text):
+        self._insert_with_accents_to(self.occ_variants_text, text)
 
     def _update_occ_variants(self, info, word):
         self.occ_variants_text.config(state="normal")
@@ -1915,23 +2050,9 @@ class OmographManager:
                 self.occ_variants_text.insert(tk.END, "          ")
             self.occ_variants_text.insert(tk.END, label)
             self._insert_with_accents_occ_variant(text)
-        if "default" in info:
-            self.occ_variants_text.insert(tk.END, "          По умолчанию: ")
-            self._insert_with_accents_occ_variant(info["default"])
         self.occ_variants_text.insert(tk.END, " ", "center")
         self.occ_variants_text.tag_add("center", "1.0", "end")
         self.occ_variants_text.config(state="disabled")
-
-    def _insert_with_accents_occ_variant(self, text):
-        i = 0
-        while i < len(text):
-            ch = text[i]
-            if i + 1 < len(text) and unicodedata.combining(text[i + 1]):
-                self.occ_variants_text.insert(tk.END, ch + text[i + 1], "accent")
-                i += 2
-            else:
-                self.occ_variants_text.insert(tk.END, ch)
-                i += 1
 
     def update_variants_bar(self, word):
         if word not in self.scripts_info:
@@ -1943,6 +2064,11 @@ class OmographManager:
             self.auto_pattern_label.configure(fg=DEFAULT_COLORS["fg_accent"])
         else:
             self.auto_pattern_label.configure(fg=DEFAULT_COLORS["fg_dirty_label"])
+        total = info.get("total_count", 0)
+        marked = info.get("marked_count", 0)
+        pct = (marked / total * 100) if total > 0 else 0
+        self.marked_pct_var.set(f"{pct:.0f}%" if total > 0 else "—")
+        self.total_count_var.set(str(total))
 
         # Обновляем полосу вариантов с зелёными ударениями
         self.variants_text.config(state="normal")
@@ -1960,7 +2086,7 @@ class OmographManager:
             self.variants_text.insert(tk.END, label)
             self._insert_with_accents_variant(text)
         if "default" in info:
-            self.variants_text.insert(tk.END, "          По умолчанию: ")
+            self.variants_text.insert(tk.END, "          ⎵ : ")
             self._insert_with_accents_variant(info["default"])
         self.variants_text.insert(tk.END, " ", "center")
         self.variants_text.tag_add("center", "1.0", "end")
@@ -1984,9 +2110,9 @@ class OmographManager:
 
     # ======================== ПРОЧЕЕ ========================
     def _update_memory_label(self):
-        import os
-
-        import psutil
+        if psutil is None:
+            self.memory_label.config(text="psutil ✗")
+            return
         try:
             process = psutil.Process(os.getpid())
             mem_mb = process.memory_info().rss / 1024 / 1024
@@ -2022,6 +2148,8 @@ class OmographManager:
         self._clear_cache()
         self._undo_stack.clear()
         self._dirty_lines.clear()
+        self._script_items_dirty = True
+        self._script_items_cache = None
         self.occ_counter_var.set("")
         self.dirty_status_var.set("Изменений нет")
         self.dirty_status_label.configure(foreground=DEFAULT_COLORS["fg_text"])
@@ -2033,7 +2161,17 @@ class OmographManager:
 
     def open_book(self):
         try:
-            subprocess.Popen(["xdg-open", str(self.book_file)])
+            import sys
+            reader = DEFAULT_SETTINGS.get("book_reader", "")
+            if reader:
+                subprocess.Popen([reader, str(self.book_file)])
+                return
+            if sys.platform == "win32":
+                os.startfile(str(self.book_file))
+            elif sys.platform == "darwin":
+                subprocess.Popen(["open", str(self.book_file)])
+            else:
+                subprocess.Popen(["xdg-open", str(self.book_file)])
         except:
             pass
 
