@@ -579,7 +579,7 @@ class OmographManager:
         show_all = self.show_all_var.get()
 
         cache_key = (word, show_all)
-        if DEFAULT_SETTINGS.get("auto_cache", False) and cache_key in self._occ_cache_dict:
+        if cache_key in self._occ_cache_dict:
             batch, om_width, line_width = self._occ_cache_dict[cache_key]
             self.occurrences = [(b[0], b[1], b[2]) for b in batch]
             self._occ_cache = batch
@@ -1347,6 +1347,10 @@ class OmographManager:
         self.root.bind("<Control-KP_0>", lambda e: self._on_hotkey_clean("all"))
         self.root.bind("<Up>", lambda e: self._navigate_occurrence(-1))
         self.root.bind("<Down>", lambda e: self._navigate_occurrence(1))
+        self.root.bind("<Left>", lambda e: self._navigate_script(-1))
+        self.root.bind("<Right>", lambda e: self._navigate_script(1))
+        self._bind_hotkey("<space>", lambda e: self._apply_default_variant())
+        self.root.bind("<Escape>", lambda e: self.skip_occurrence())
         self._bind_hotkey("<h>", lambda e: self._occurrences_home())
         self._bind_hotkey("<Key-Cyrillic_er>", lambda e: self._occurrences_home())
         self._bind_hotkey("<l>", lambda e: self._occurrences_end())
@@ -1355,10 +1359,6 @@ class OmographManager:
         self._bind_hotkey("<Key-Cyrillic_o>", lambda e: self._occurrences_page_up())
         self._bind_hotkey("<k>", lambda e: self._occurrences_page_down())
         self._bind_hotkey("<Key-Cyrillic_el>", lambda e: self._occurrences_page_down())
-        self._bind_hotkey("<Left>", lambda e: self._navigate_script(-1))
-        self._bind_hotkey("<Right>", lambda e: self._navigate_script(1))
-        self._bind_hotkey("<space>", lambda e: self._apply_default_variant())
-        self._bind_hotkey("<Escape>", lambda e: self.skip_occurrence())
         self._bind_hotkey("<n>", lambda e: self._sort_occurrences_by_line())
         self._bind_hotkey("<Key-Cyrillic_te>", lambda e: self._sort_occurrences_by_line())
         self._bind_hotkey("<comma>", lambda e: self._sort_occurrences_by_prefix())

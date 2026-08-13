@@ -88,10 +88,6 @@ xgrp="x1111";for(wrd in omap[xgrp]){omakevars(xgrp);for(y=1;y<=wln;y++)         
  if ( se(0,"-") && w(1,"таки") )
  { l[i]=is_vsyo; V[3]++; if(dbg){print "V3"}; continue };
 
- if ( s(0) && w(1,"же ж") &&
-      !( q(2,"prl_krmn")||(q(2,"prl_mnim") && q(3,"mod_mn") ) ) )
- { l[i]=is_vsyo; V[4]++; if(dbg){print "V4"}; continue };
-
  if ( s(0) && w(1,"равно едино одно") )
  { l[i]=is_vsyo; V[5]++; if(dbg){print "V5"}; continue };
 
@@ -519,6 +515,9 @@ xgrp="x1111";for(wrd in omap[xgrp]){omakevars(xgrp);for(y=1;y<=wln;y++)         
  { l[i]=is_vsyo; V[86]++; if(dbg){print "V86"}; continue };
  if ( q(-1,"prq_kred_sr") && s(-1) )
  { l[i]=is_vsyo; V[87]++; if(dbg){print "V87"}; continue };
+
+ if ( s(0) && w(1,"же ж") )
+ { l[i]=is_vsyo; V[4]++; if(dbg){print "V444"}; continue };
 
  # прилагательные и причастия в конце предложения
  if ( q(Y["n+_eos"],"prl_krmn prq_krmn") && s(0,Y["n+_eos"]-1) &&
