@@ -8,7 +8,10 @@ BEGIN {
 }{
   line=current_len=""; delete words;
     if ( NF > 3 && $NF == "[=" ) {
-      print $1 "    " $2 " " $3 " [=";
+
+      if ( NF == 4 ) { print $1 "    " $2 " " $3 " [="; };
+      if ( NF == 5 ) { print $1 "    " $2 " " $3 "  " $4 " [="; };
+
       do { getline;
         for ( i=1; i<=NF; i++) { if ($i != "=]") words[$i] }
       } while ( $NF != "=]");

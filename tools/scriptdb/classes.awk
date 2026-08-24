@@ -1936,11 +1936,18 @@ BEGIN {
 
     } close(cmd);
 
+ # простой список омографов
+   cmd = "zcat " indb "mano-lc.gz";
+   while ((cmd|getline) > 0) {
+	   gsub(/[_=]/,"",$1); omosall[$1];
+   }; close(cmd);
+
+
  # Список классов омографов с описательными тэгами. Неочевидные кодировки в позиции падежа: z=партитив, l=локатив, q=счетная форма
    cmd = "zcat " indb "class.list.gz";
    while ((cmd|getline) > 0) {
 	   for (i=2; i<=NF; i++) { xclass[$1][i-1]=$i };
-   } close(cmd);
+   }; close(cmd);
 
    cmd = "zcat " indb "automo.gz"
    while ((cmd|getline) > 0) {
@@ -1953,35 +1960,6 @@ BEGIN {
          almo[word]=almo[Word]=almo[WORD]=$1; oms[$1]["info"][word]=$9;
          oms[$1][$3][word]=omo; oms[$1][$3][Word]=Omo; oms[$1][$3][WORD]=OMO;
    }; close(cmd);
-
-   cmd = "zcat " indb "omoid_auto.gz";
-   while ((cmd|getline) > 0) {
-           if ($1 ~ /^[а-яё]+$/) { omoid[$1][$3][$2]; continue }
-           else {
-              if ($1== "ispa_abst"   ) {for ( j in ispa_abst   ) { omoid[j][$3][$2] }; continue };
-              if ($1== "ispa_gas"    ) {for ( j in ispa_gas    ) { omoid[j][$3][$2] }; continue };
-              if ($1== "ispa_food"   ) {for ( j in ispa_food   ) { omoid[j][$3][$2] }; continue };
-              if ($1== "ispa_liquid" ) {for ( j in ispa_liquid ) { omoid[j][$3][$2] }; continue };
-              if ($1== "ispa_loose"  ) {for ( j in ispa_loose  ) { omoid[j][$3][$2] }; continue };
-              if ($1== "ispa_solid"  ) {for ( j in ispa_solid  ) { omoid[j][$3][$2] }; continue };
-              if ($1== "ispa_any"    ) {for ( j in ispa_any    ) { omoid[j][$3][$2] }; continue };
-           }
-   }; close(cmd); # словарик связаных слов, омоид в поле 1, омограф(ы) с 3-го поля
-
-   cmd = "zcat " indb "omoid_flat.gz";
-   while ((cmd|getline) > 0) {
-       for (i=3; i<=NF; i++) {
-           if ($i ~ /^[а-яё]+$/) { omoid[$1][$i][$2]; continue }
-           else {
-              if ($i== "ispa_abst"   ) {for ( j in ispa_abst   ) { omoid[$1][j][$2] }; continue };
-              if ($i== "ispa_gas"    ) {for ( j in ispa_gas    ) { omoid[$1][j][$2] }; continue };
-              if ($i== "ispa_food"   ) {for ( j in ispa_food   ) { omoid[$1][j][$2] }; continue };
-              if ($i== "ispa_liquid" ) {for ( j in ispa_liquid ) { omoid[$1][j][$2] }; continue };
-              if ($i== "ispa_loose"  ) {for ( j in ispa_loose  ) { omoid[$1][j][$2] }; continue };
-              if ($i== "ispa_solid"  ) {for ( j in ispa_solid  ) { omoid[$1][j][$2] }; continue };
-              if ($i== "ispa_any"    ) {for ( j in ispa_any    ) { omoid[$1][j][$2] }; continue };
-           }; }
-   }; close(cmd); # словарик связаных слов, омоид в поле 3+, омограф в 1 поле
 
    # обработанные слова в их конечной форме
    cmd = "zcat " indb "ist.gz | \
@@ -2060,8 +2038,6 @@ BEGIN {
                      indb "dic_prop.gz " \
                      indb "automo.gz " \
                      indb "class.list.gz " \
-                     indb "omoid_auto.gz " \
-                     indb "omoid_flat.gz " \
                      indb "ist.gz "\
                      indb "cstauto.awk " "> " inax "classes.md5"
   } else {
@@ -2077,8 +2053,6 @@ BEGIN {
                      locdic "dic_prop.gz " \
                      indb "automo.gz " \
                      indb "class.list.gz " \
-                     indb "omoid_auto.gz " \
-                     indb "omoid_flat.gz " \
                      indb "ist.gz " \
                      indb "cstauto.awk " "> " locdic "classes.md5"
   }

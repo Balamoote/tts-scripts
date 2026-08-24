@@ -328,6 +328,8 @@ class OmographManager:
             self._original_lines = {i: detokenize_line(tokens) for i, tokens in enumerate(self.lines)}
             self._build_word_index()
             self._tokenized = True
+            max_line = len(self.lines)
+            self._max_line_width = int(self._occ_font_obj.measure(str(max_line))) + 15
         except FileNotFoundError:
             self.lines = []
             self._tokenized = False
@@ -431,6 +433,43 @@ class OmographManager:
         t["text"] = self._clean_accents(t["text"])
         self._undo_stack.append(("clean", li, ti, old_text, old_clean))
 
+    def _update_occ_cache_entry(self, word, show_all, li, ti):
+        cache_key = (word, True)
+        if cache_key not in self._occ_cache_dict:
+            return
+        batch, om_width = self._occ_cache_dict[cache_key]
+        for idx, b in enumerate(batch):
+            if b[1] == li and b[2] == ti:
+                tokens = self.lines[li]
+                t = tokens[ti]
+                line_str = detokenize_line(tokens).rstrip("\n\r")
+                pos = 0
+                for tj in range(ti):
+                    pos += len(tokens[tj]["text"])
+                om_start = pos
+                om_end = pos + len(t["text"])
+                ctx_len = DEFAULT_SETTINGS.get("context_length", 40)
+                ctx_start = max(0, om_start - ctx_len)
+                ctx_end = min(len(line_str), om_end + ctx_len)
+                prefix = line_str[ctx_start:om_start]
+                suffix = line_str[om_end:ctx_end]
+                if ctx_start > 0:
+                    prefix = "…" + prefix
+                if ctx_end < len(line_str):
+                    suffix = suffix + "…"
+                batch[idx] = (li + 1, li, ti, prefix, t["text"], suffix, not self._is_unaccented(t["text"]))
+                self._occ_cache_dict[cache_key] = (batch, om_width)
+                break
+
+    def _redraw_occurrences_after_change(self, old_idx):
+        word = self.current_word
+        if not word:
+            return
+        self.populate_occurrences(word)
+        if old_idx is not None and self.occurrences:
+            new_idx = min(old_idx, len(self.occurrences) - 1)
+            self._select_occurrence(new_idx)
+
     def replace_in_file(self, word, replacement):
         count = 0
         for li, tokens in enumerate(self.lines):
@@ -451,9 +490,12 @@ class OmographManager:
         word = self.current_word
         old_idx = self.current_occurrence
         self._replace_token(li, ti, self.selected_variant)
+        self._update_occ_cache_entry(word, False, li, ti)
+        self._update_occ_cache_entry(word, True, li, ti)
         self._mark_dirty(li)
         if word in self.scripts_info:
             self.scripts_info[word]["unaccented_count"] = max(0, self.scripts_info[word].get("unaccented_count", 0) - 1)
+            self.scripts_info[word]["marked_count"] = self.scripts_info[word].get("marked_count", 0) + 1
         self._checked_words.add(word)
         self.progress_var.set("✓ Заменено вхождение")
         if not self.show_all_var.get():
@@ -482,6 +524,7 @@ class OmographManager:
                 self._ctx_li = -1
                 self._ctx_ti = -1
                 self.show_context_for_occurrence(line_num, self.current_word, ti)
+        self.update_variants_bar(self.current_word)
 
     def clean_selected_occurrence(self):
         if self.current_occurrence_data is None:
@@ -490,9 +533,12 @@ class OmographManager:
         word = self.current_word
         old_idx = self.current_occurrence
         self._clean_token(li, ti)
+        self._update_occ_cache_entry(word, False, li, ti)
+        self._update_occ_cache_entry(word, True, li, ti)
         self._mark_dirty(li)
         if word in self.scripts_info:
             self.scripts_info[word]["unaccented_count"] = max(0, self.scripts_info[word].get("unaccented_count", 0) - 1)
+            self.scripts_info[word]["marked_count"] = max(0, self.scripts_info[word].get("marked_count", 0) - 1)
         self._checked_words.add(word)
         self.progress_var.set("✓ Очищено вхождение")
         if not self.show_all_var.get():
@@ -520,11 +566,7 @@ class OmographManager:
                     )
                     self.occurrences_tree.item(item, tags=(tags[0], "row_black"))
                     break
-            if self.current_word:
-                line_num, li, ti = self.occurrences[old_idx]
-                self._ctx_li = -1
-                self._ctx_ti = -1
-                self.show_context_for_occurrence(line_num, self.current_word, ti)
+        self.update_variants_bar(self.current_word)
 
     def clean_all_occurrences(self):
         if not self.current_word:
@@ -578,17 +620,18 @@ class OmographManager:
         self._update_occ_headings()
         show_all = self.show_all_var.get()
 
-        cache_key = (word, show_all)
+        cache_key = (word, True)
         if cache_key in self._occ_cache_dict:
-            batch, om_width, line_width = self._occ_cache_dict[cache_key]
-            self.occurrences = [(b[0], b[1], b[2]) for b in batch]
+            batch, om_width = self._occ_cache_dict[cache_key]
+            display_batch = batch if show_all else [b for b in batch if not b[6]]
+            self.occurrences = [(b[0], b[1], b[2]) for b in display_batch]
             self._occ_cache = batch
             self._occ_cache_key = cache_key
-            self._occ_batch = batch
+            self._occ_batch = display_batch
             self._occ_batch_idx = 0
             self._occ_word = word
             self._occ_show_all = show_all
-            self.occurrences_tree.column("line", width=int(line_width), stretch=False)
+            self.occurrences_tree.column("line", width=int(getattr(self, "_max_line_width", 80)), stretch=False)
             self.occurrences_tree.column("omograph", width=om_width, stretch=False)
             self.occurrences_tree.unbind("<<TreeviewSelect>>")
             self._insert_occ_batch()
@@ -600,8 +643,6 @@ class OmographManager:
             for li, ti in self._word_index[word]:
                 tokens = self.lines[li]
                 t = tokens[ti]
-                if not show_all and not self._is_unaccented(t["text"]):
-                    continue
                 line_str = detokenize_line(tokens).rstrip("\n\r")
                 pos = 0
                 for tj in range(ti):
@@ -621,14 +662,14 @@ class OmographManager:
                 is_accented = not self._is_unaccented(t["text"])
                 batch.append((line_num, li, ti, prefix, om_text, suffix, is_accented))
 
-        self.occurrences = [(b[0], b[1], b[2]) for b in batch]
+        display_batch = batch if show_all else [b for b in batch if not b[6]]
+        self.occurrences = [(b[0], b[1], b[2]) for b in display_batch]
         self._occ_cache = batch
-        self._occ_cache_key = (word, show_all)
+        self._occ_cache_key = (word, True)
 
         # Автоширина колонок с учётом шрифта occurrences
         occ_font_obj = self._occ_font_obj
-        max_line = max(b[0] for b in batch) if batch else 1
-        line_width = occ_font_obj.measure(str(max_line)) + 15
+        line_width = getattr(self, "_max_line_width", 80)
         self.occurrences_tree.column("line", width=int(line_width), stretch=False)
         max_om = max((b[4] for b in batch), key=lambda t: occ_font_obj.measure(t), default="")
         om_width = int(occ_font_obj.measure(max_om)) + 8 if max_om else 80
@@ -638,16 +679,16 @@ class OmographManager:
             stretch=False,
         )
 
-        self._occ_cache_dict[(word, show_all)] = (batch, om_width, line_width)
+        self._occ_cache_dict[(word, True)] = (batch, om_width)
         if DEFAULT_SETTINGS.get("auto_cache", False):
-            self._occ_cache_order.append((word, show_all))
+            self._occ_cache_order.append((word, True))
             if len(self._occ_cache_order) > self._occ_cache_size:
                 old_key = self._occ_cache_order.pop(0)
                 if old_key in self._occ_cache_dict:
                     del self._occ_cache_dict[old_key]
         self.cache_label.config(text=f"Кэш: {len(self._occ_cache_dict)}/{self._occ_cache_size}")
 
-        self._occ_batch = batch
+        self._occ_batch = display_batch
         self._occ_batch_idx = 0
         self._occ_word = word
         self._occ_show_all = show_all
@@ -917,7 +958,7 @@ class OmographManager:
 
         # === ЛЕВАЯ КОЛОНКА ===
         left_col = ttk.Frame(main_frame)
-        left_col.grid(row=0, column=0, sticky="nsew", padx=(0, 5), pady=0)
+        left_col.grid(row=0, column=0, sticky="nsew", padx=(0, 0), pady=0)
         left_col.grid_rowconfigure(0, weight=1)
 
         left_frame = ttk.Frame(left_col)
@@ -985,11 +1026,11 @@ class OmographManager:
         self.scripts_tree.heading("word", text="Омограф", command=lambda: self._sort_scripts("word"))
         self.scripts_tree.heading("found", text="#", command=lambda: self._sort_scripts("found"))
         self.scripts_tree.column("word", minwidth=80, stretch=False)
-        self.scripts_tree.column("found", width=52, minwidth=52, anchor="e", stretch=False)
+        self.scripts_tree.column("found", width=60, minwidth=60, anchor="e", stretch=False)
         scripts_scroll = ttk.Scrollbar(left_frame, orient=tk.VERTICAL, command=self.scripts_tree.yview)
         self.scripts_tree.configure(yscrollcommand=scripts_scroll.set)
-        self.scripts_tree.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
-        scripts_scroll.pack(side=tk.RIGHT, fill=tk.Y)
+        self.scripts_tree.pack(side=tk.LEFT, fill=tk.Y, pady=(2, 0))
+        scripts_scroll.pack(side=tk.RIGHT, fill=tk.Y, pady=(2, 0))
         self.scripts_tree.bind("<<TreeviewSelect>>", self.on_script_select)
         self.scripts_tree.bind("<FocusIn>", self._on_tree_focus_in)
         self.scripts_tree.bind("<FocusOut>", self._on_tree_focus_out)
@@ -1105,8 +1146,8 @@ class OmographManager:
 
         occ_scroll = ttk.Scrollbar(occ_frame, orient=tk.VERTICAL, command=self.occurrences_tree.yview)
         self.occurrences_tree.configure(yscrollcommand=occ_scroll.set)
-        self.occurrences_tree.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
-        occ_scroll.pack(side=tk.RIGHT, fill=tk.Y)
+        self.occurrences_tree.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, pady=(2, 0))
+        occ_scroll.pack(side=tk.RIGHT, fill=tk.Y, pady=(2, 0))
 
         self.occurrences_tree.bind("<<TreeviewSelect>>", self._on_occ_tree_select)
         self.occurrences_tree.bind("<FocusIn>", self._on_tree_focus_in)
@@ -1478,10 +1519,13 @@ class OmographManager:
         if not self._undo_stack:
             self.progress_var.set("Нечего отменять")
             return
+        old_idx = self.current_occurrence
         action, li, ti, old_text, old_clean = self._undo_stack.pop()
         t = self.lines[li][ti]
         t["text"] = old_text
         t["clean"] = old_clean
+        self._update_occ_cache_entry(old_clean, False, li, ti)
+        self._update_occ_cache_entry(old_clean, True, li, ti)
         if li in self._original_lines:
             current = detokenize_line(self.lines[li])
             if current == self._original_lines[li]:
@@ -1507,8 +1551,11 @@ class OmographManager:
                     self.scripts_tree.set(item, "found", self.scripts_info[self.current_word].get("unaccented_count", 0))
                     break
         self.update_status()
-        if self.current_word:
-            self.populate_occurrences(self.current_word)
+        undo_word = old_clean
+        if undo_word:
+            self._update_occ_cache_entry(undo_word, self.show_all_var.get(), li, ti)
+            if self.current_word == undo_word:
+                self._redraw_occurrences_after_change(old_idx)
 
     def _update_cached_counts(self):
         if self._script_items_cache is not None:
@@ -1630,9 +1677,11 @@ class OmographManager:
         if not hasattr(self, "_occ_cache") or not self._occ_cache:
             return
         self._occ_cache.sort(key=key_func)
-        self.occurrences = [(b[0], b[1], b[2]) for b in self._occ_cache]
+        show_all = self.show_all_var.get()
+        display_batch = self._occ_cache if show_all else [b for b in self._occ_cache if not b[6]]
+        self.occurrences = [(b[0], b[1], b[2]) for b in display_batch]
         self.occurrences_tree.delete(*self.occurrences_tree.get_children())
-        self._occ_batch = self._occ_cache
+        self._occ_batch = display_batch
         self._occ_batch_idx = 0
         self.occurrences_tree.unbind("<<TreeviewSelect>>")
         self._insert_occ_batch()
@@ -1828,11 +1877,6 @@ class OmographManager:
         self._insert_scripts_batch(visible_items, 0)
 
     def _insert_scripts_batch(self, items, start_idx):
-        # Автоширина колонки found
-        if items:
-            max_count = max(c for _, c in items)
-            count_width = self._occ_font_obj.measure(str(max_count)) + 15
-            self.scripts_tree.column("found", width=int(count_width), minwidth=52, anchor="e", stretch=False)
         batch_size = 100
         end = min(start_idx + batch_size, len(items))
         for i in range(start_idx, end):

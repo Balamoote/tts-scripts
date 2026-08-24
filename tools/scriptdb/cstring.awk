@@ -39,11 +39,36 @@ BEGIN {
  };
 
   # Часть массивов omarr перенесены в cstrings.gz, это эквивалент вызова функции omarr в данном файле
+  # BASE ANCH ARRA = хранит базовые формы; FLAT ANCF ARRO = хранит частные формы
+  # 1x 2x 3x описание формата основного списка слов 1,2,3 элементов
+  # ANCH ANCF ARRA ARRO = с привязкой к текущему омографу. BASE FLAT = без привязки, только уникальная метка массива
   cmd = "zcat " indb "cstrings.gz";
-  while ((cmd|getline) > 0) {
-    if($2 == "1x" && $NF == "[=") { cstgrp = $1} else { for (i=1; i<=NF; i++) { if($i!= "=]" && $i!="")       {omarr[cstgrp][$i] }; }; };
-    if($2 == "2x" && $NF == "[=") { cstgrp = $1} else { for (i=1; i<=NF; i++) { if($i!= "=]" && $i!="") addw2x($i,omarr[cstgrp]) }; };
-    if($2 == "3x" && $NF == "[=") { cstgrp = $1} else { for (i=1; i<=NF; i++) { if($i!= "=]" && $i!="") addw3x($i,omarr[cstgrp]) }; };
+  while ((cmd|getline) > 0) { if (NF == 0 || $1 ~ /^#/) continue;
+    if($2 == "1x" && $3 == "BASE" && $NF == "[=") { cstgrp = $1} else { for (i=1; i<=NF; i++) { if($i != "=]")       {omarr[cstgrp][$i] }; }; };
+    if($2 == "1x" && $3 == "FLAT" && $NF == "[=") { cstgrp = $1} else { for (i=1; i<=NF; i++) { if($i != "=]")       {omarr[cstgrp][$i] }; }; };
+    if($2 == "2x" && $3 == "FLAT" && $NF == "[=") { cstgrp = $1} else { for (i=1; i<=NF; i++) { if($i != "=]") addw2x($i,omarr[cstgrp]) }; };
+    if($2 == "3x" && $3 == "FLAT" && $NF == "[=") { cstgrp = $1} else { for (i=1; i<=NF; i++) { if($i != "=]") addw3x($i,omarr[cstgrp]) }; };
+    if($2 == "1x" && $3 == "ANCH" && $NF == "[=") { cstgrp = $1; cstwrd = $4 } else { for (i=1; i<=NF; i++) { if($i != "=]")  {omoidb[cstgrp][cstwrd][$i] }; }; };
+    if($2 == "1x" && $3 == "ANCF" && $NF == "[=") { cstgrp = $1; cstwrd = $4 } else { for (i=1; i<=NF; i++) { if($i != "=]")  {omoidf[cstgrp][cstwrd][$i] }; }; };
+
+    if($2 == "1x" && $3 == "ARRA" && $NF == "[=") { cstgrp = $1; cstarr = $4 } else {
+      if (cstarr == "ispa_abst"   ) {for ( j in ispa_abst   ) { for (i=1; i<=NF; i++) { if($i != "=]") {omoidb[cstgrp][j][$i] }; }; }; };
+      if (cstarr == "ispa_gas"    ) {for ( j in ispa_gas    ) { for (i=1; i<=NF; i++) { if($i != "=]") {omoidb[cstgrp][j][$i] }; }; }; };
+      if (cstarr == "ispa_food"   ) {for ( j in ispa_food   ) { for (i=1; i<=NF; i++) { if($i != "=]") {omoidb[cstgrp][j][$i] }; }; }; };
+      if (cstarr == "ispa_liquid" ) {for ( j in ispa_liquid ) { for (i=1; i<=NF; i++) { if($i != "=]") {omoidb[cstgrp][j][$i] }; }; }; };
+      if (cstarr == "ispa_loose"  ) {for ( j in ispa_loose  ) { for (i=1; i<=NF; i++) { if($i != "=]") {omoidb[cstgrp][j][$i] }; }; }; };
+      if (cstarr == "ispa_solid"  ) {for ( j in ispa_solid  ) { for (i=1; i<=NF; i++) { if($i != "=]") {omoidb[cstgrp][j][$i] }; }; }; };
+      if (cstarr == "ispa_any"    ) {for ( j in ispa_any    ) { for (i=1; i<=NF; i++) { if($i != "=]") {omoidb[cstgrp][j][$i] }; }; }; };
+    };
+    if($2 == "1x" && $3 == "ARRO" && $NF == "[=") { cstgrp = $1; cstarr = $4 } else {
+      if (cstarr == "ispa_abst"   ) {for ( j in ispa_abst   ) { for (i=1; i<=NF; i++) { if($i != "=]") {omoidb[cstgrp][$i][j] }; }; }; };
+      if (cstarr == "ispa_gas"    ) {for ( j in ispa_gas    ) { for (i=1; i<=NF; i++) { if($i != "=]") {omoidb[cstgrp][$i][j] }; }; }; };
+      if (cstarr == "ispa_food"   ) {for ( j in ispa_food   ) { for (i=1; i<=NF; i++) { if($i != "=]") {omoidb[cstgrp][$i][j] }; }; }; };
+      if (cstarr == "ispa_liquid" ) {for ( j in ispa_liquid ) { for (i=1; i<=NF; i++) { if($i != "=]") {omoidb[cstgrp][$i][j] }; }; }; };
+      if (cstarr == "ispa_loose"  ) {for ( j in ispa_loose  ) { for (i=1; i<=NF; i++) { if($i != "=]") {omoidb[cstgrp][$i][j] }; }; }; };
+      if (cstarr == "ispa_solid"  ) {for ( j in ispa_solid  ) { for (i=1; i<=NF; i++) { if($i != "=]") {omoidb[cstgrp][$i][j] }; }; }; };
+      if (cstarr == "ispa_any"    ) {for ( j in ispa_any    ) { for (i=1; i<=NF; i++) { if($i != "=]") {omoidb[cstgrp][$i][j] }; }; }; };
+    };
   }; close(cmd);
 
  # geo ---> заменитьна loc
@@ -109,4 +134,3 @@ BEGIN {
 
 
 }
-

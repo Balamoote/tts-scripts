@@ -87,10 +87,6 @@ funcs["Qist"]=n ",\"[ _a-z]+\""                                              #Qi
 funcs["Q"]=n ",\"[ _a-z3]+\""                                                #Q(n, alist,    itmz,k,wd, ret)
 funcs["Qw_"]=n ",\"[ _a-z3]+\""                                              #Qw_(n, alist,    itmz,k,wd, ret)
 funcs["Q_w"]=n ",\"[ _a-z3]+\""                                              #Q_w(n, alist,    itmz,k,wd, ret)
-funcs["id_"]=n ",\"" ids "\""                                                #id_(n, wl,   itmz,k, ret)
-funcs["id"]=n ",\"" ids "\""                                                 #id(n, wl,    ret)
-funcs["idf"]=n "," m ",\"" ids "\""                                          #idf(n,m, wl,    k, ret)
-funcs["idb"]=n "," m ",\"" ids "\""                                          #idb(n,m, wl,    k, ret)
 funcs["qm"]=n ",\"[a-z _3]+\",((\"[- _a-z0-9]+\")|(str_[a-z_]+))"    #qm(n, isclass, wl,    ret)
 funcs["qq"]=n "," m                                                          #qq(n, m,    ret)
 funcs["bqq"]=n "," m                                                         #bqq(n, m,   k,itmz1,itmz2, ret)
@@ -132,6 +128,10 @@ funcs["ba"]=n ",((\"[-_A-z0-9]+\")|([_a-z]+))"                               #ba
 funcs["bfa"]=n "," m ",((\"[-_A-z0-9]+\")|(str_lock|str_castle))"            #bfa(n,m,wl,   itmz,j,k, ret)
 funcs["bba"]=n "," m ",((\"[-_A-z0-9]+\")|(str_lock|str_castle))"           #bba(n,m,wl,     itmz,k, ret)
 funcs["bba2"]=n "," m ",\"[-_A-z0-9]+\""                                     #bba2(n,m,wl,    itmz,k, ret)
+funcs["fa"]=n ",((\"[-_A-z0-9]+\")|([_a-z]+))"                               #fa(n,wl,     itmz,k, ret)
+funcs["ffa"]=n "," m ",((\"[-_A-z0-9]+\")|(str_lock|str_castle))"            #ffa(n,m,wl,   itmz,j,k, ret)
+funcs["fba"]=n "," m ",((\"[-_A-z0-9]+\")|(str_lock|str_castle))"           #fba(n,m,wl,     itmz,k, ret)
+funcs["fw"]=n ",\"[-A-z_]+\""                                                #fw(n, wl,    k,ret)
 funcs["Xw"]=n ",\"[_A-z]+\""                                                 #Xw(n,wl,           ret)
 funcs["xw"]=n ",\"[_A-z]+\""                                                 #xw(n,wl,           ret)
 funcs["digits"]=n
@@ -302,7 +302,7 @@ cst="deep deep_na deep_ne deep_pa deep_pe deep_pn geo_mn geo_sr gl_aux_be gl_bue
      org_edsrro org_edsrvi org_edtv org_edvi org_edzeda org_edzeim org_edzene org_edzepr org_edzero org_edzetv org_edzevi org_im org_mn org_mnda org_mnim org_mnne \
      org_mnpr org_mnro org_mntv org_mnvi org_mu org_pr org_ro org_sr org_tv org_vi org_ze pat_any pat_da pat_ed pat_edda pat_edim pat_edmuda pat_edmuim pat_edmupr \
      pat_edmuro pat_edmutv pat_edmuvi pat_edpr pat_edro pat_edtv pat_edvi pat_edzeda pat_edzeim pat_edzepr pat_edzero pat_edzetv pat_edzevi pat_im pat_mn pat_mnda \
-     pat_mnim pat_mnpr pat_mnro pat_mntv pat_mnvi pat_mu pat_pr pat_ro pat_tv pat_vi pat_ze suw_odedne suw_noedne lnk_mn";
+     pat_mnim pat_mnpr pat_mnro pat_mntv pat_mnvi pat_mu pat_pr pat_ro pat_tv pat_vi pat_ze suw_odedne suw_noedne lnk_mn suw_edsrne suw_edmune isomo";
  stoar(cst,funarr," "); #
 
 cst="ist_any ist_nar_mest ist_nar_napr ist_nar_spos ist_nar_vrem ist_prl_edmuim ist_prl_edmupr ist_prl_edmuvi ist_prl_edsrpr ist_prl_edzeda ist_prl_edzeim \

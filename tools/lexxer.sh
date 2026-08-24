@@ -47,7 +47,7 @@ key="$1"
 book="$2"
 suf="nam"
 
-if [[ "$key" == "-dixa" ]]; then suf="dix"; fi
+if [[ "$key" == "-dixa" ]]; then suf="dix"; if [[ -d "nomo-$book.stat" ]]; then rm -rf "nomo-$book.stat"; fi; fi
 
 listtype=0 # 1 = _слово=слово; 0 = слово <<< вид списка, для списков 00-03
 

@@ -1,11 +1,17 @@
-# Функции для работы с файлами, которые были обработаны SpaCy или Natasha
+# Функции для работы с файлами, которые были обработаны SpaCy или Natasha, treetagger, RNNTagger
 
 # все/всё 
 function vsyo_sy(n,    rd,ret) { split(sepphy[i+n],sprs,"#"); rd = sprs[2]
-                  if( ( rd~ "@_PRON_|@_DET_|@_ADV_" && rd~ "_Number=Sing_" ) || rd~ "@_PART__@" )                                        {ret=1}else{ret=0}; return ret }
+                  if( ( rd~ "_Number=Sing_" ) || rd~ "@_PART__@" )                                        {ret=1}else{ret=0}; return ret }
 function vsje_sy(n,    rd,ret) { split(sepphy[i+n],sprs,"#"); rd = sprs[2]
-                  if( rd~ "@_DET_|@_PRON_" && rd~ "_Number=Plur_" )                                                                      {ret=1}else{ret=0}; return ret }
+                  if( rd~ "_Number=Plur_" )                                                                      {ret=1}else{ret=0}; return ret }
 
+function vsyo_tt(n,    rd,ret) { split(sepphy[i+n],sprs,"#"); rd = sprs[2]
+                  if( ( rd~ "_P--nsnn_|_P--nsaa_|_P--nsna_|_P--nsnn_" ) )                                        {ret=1}else{ret=0}; return ret }
+function vsje_tt(n,    rd,ret) { split(sepphy[i+n],sprs,"#"); rd = sprs[2]
+                  if( rd~ "_P---paa_|_P---pla_|_P---pna_|_P---pnn_"  )                                                                      {ret=1}else{ret=0}; return ret }
+# _P--nsnn_|_P--nsaa_|_P--nsna_|_P--nsnn_
+# _P---paa_|_P---pla_|_P---pna_|_P---pnn_
 # имена собственные
 function name_im_sy(n,  rd,ret) {split(sepphy[i+n],sprs,"#");rd=sprs[2];if(rd~"@_PROPN_"&&rd~"_Case=Nom_" && rd~"_Number=Sing_")         {ret=1}else{ret=0}; return ret }
 function name_vi_sy(n,  rd,ret) {split(sepphy[i+n],sprs,"#");rd=sprs[2];if(rd~"@_PROPN_"&&rd~"_Case=Acc_" && rd~"_Number=Sing_")         {ret=1}else{ret=0}; return ret }

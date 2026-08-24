@@ -23,10 +23,6 @@ function sto2xw(string, arrto,   artmp,arr1,j,k) {             # добавит�
                 split(string, artmp, " "); for (k in artmp) { if(artmp[k]) { split(artmp[k], arr1, "_"); arrto[arr1[1]][arr1[2]] }; }; }
 function sto3xw(string, arrto,   artmp,arr1,j,k) {             # добавить в массив arrto элементы строки для 3-х связанных слов w1:w2,w3 arrto[w1][w2][w3]
                 split(string, artmp, " "); for (k in artmp) { if(artmp[k]) { split(artmp[k], arr1, "_"); arrto[arr1[1]][arr1[2]][arr1[3]] }; }; }
-function stoid(string1, string2,wid,   art1, k,j) {      # добавить в omoid[омограф из строки][омоид из строки][функция]
-                split(string1, arr1," ");split(string2, arr2," "); for (k in arr1) {for(j in arr2){omoid[arr1[k]][arr2[j]][wid]};};}
-function atoid(string, arr,wid,    k,j) {           # добавить в omoid[омограф из массива][омоид из строки][функция]
-                split(string, arr1," "); for (k in arr1) {for(j in arr){omoid[j][arr1[k]][wid]};};}
 function addw2x(el, arrto,   artmp,j,k) {          # добавить в массив arrto два_слова
                 split(el, artmp, "_"); if( el && length(artmp)==2 ) {arrto[artmp[1]][artmp[2]]} } 
 function addw3x(el, arrto,   artmp,j,k) {          # добавить в массив arrto три_таких_слова
@@ -93,7 +89,7 @@ function makebookvars_nohyphback() {                # разбить строк�
                 b=strtonum(omlin[y]);nf=splitline(book[b]);splitlinephy(bphy[b]);regwpos(wrd); }
 function makewposvars() {                           # определить переменные внутри цикла для слова в позиции i
                 i=strtonum(i); delete Y;
-                prex=edro2mnim=edro2mnvi=nizm=mn2e2pomn=loc2emd=loc2ezd=NORULE=tn=hyn=qyn=wyn=do_tn="" }
+                prex=edro2mnim=edro2mnvi=usw4edim=nizm=mn2e2pomn=loc2emd=loc2ezd=NORULE=tn=hyn=qyn=wyn=do_tn="" }
 function DO_DEBUG(array,a_prefix,   outfile, k,cmd) {
                 outfile = "_" a_prefix ".txt"; for (k in array) { if ( array[k] ) {printf ("%s%s %s %s\n", a_prefix, k, "=", array[k]) >> outfile }; }; }
 function rfix(n,m) {             # ограничить диапазон размерами строки
@@ -232,14 +228,16 @@ function Qw_(n, alist,    afun,itmz,k,wd, ret) {              # обертка �
                 ret=1; wd=lc(n); split(alist,itmz," "); for(k in itmz) { afun=itmz[k]; if(@afun(n,wd) && s(n) && sv(n,"-") ) {ret=0; break} }; return ret}
 function Q_w(n, alist,    afun,itmz,k,wd, ret) {              # обертка для нескольких функций - НЕ нахождение + пробел до
                 ret=1; wd=lc(n); split(alist,itmz," "); for(k in itmz) { afun=itmz[k]; if(@afun(n,wd) && s(n-1) && sv(n-1,"-") ) {ret=0; break} }; return ret}
-function id_(n, wl,   itmz,k, ret) {                     # связанное слово в позиции и с морфологической функцией wl
-                stotar(wordbf(n),itmz,"#");ret=""; for(k in itmz) {if ( wl in omoids[iwrd][k] ) {ret=1;break}}; return ret }
-function id(n, wl,    ret) {                        # связанное слово в позиции и с морфологической функцией wl
-                if ( wl in omoid[iwrd][lc(n)] ) {ret=1} else {ret=0}; return ret }
-function idf(n,m, wl,    k, ret) {                  # связанное слово в позиции и с морфологической функцией на n позиций вперёд
-                ret=idn=""; if(n>m)m=n;rfix(n,m); for (k=n; k<=m; k++) { if ( wl in omoid[iwrd][lc(k)] ) {ret=1; idn=k; break}; }; return ret }
-function idb(n,m, wl,    k, ret) {                  # связанное слово в позиции и с морфологической функцией на n позиций назад
-                ret=idn=""; if(n>m)n=m;rfix(n,m); for (k=m; k>=n; k--) { if ( wl in omoid[iwrd][lc(k)] ) {ret=1; idn=k; break}; }; return ret }
+function fa(n,wl,     itmz,k, ret) {                     # является ли слово(n) из массива omoidb[wl][iwrd] указанную функцию wl BASE
+               ret="";stotar(wordbf(n),itmz,"#");for(k in itmz){if(k in omoidb[wl][iwrd]){ret=1;break};}; return ret }
+function ffa(n,m,wl,   itmz,j,k, ret) {                  # нахождение ВПЕРЁД базовых форм из массива omoidb[wl] в диапазоне n-m из массивов BASE
+               ffn=FFn=ret="";if(n>m)m=n;rfix(n,m);for(j=n;j<=m;j++){if(ret)break;stotar(wordbf(j),itmz,"#");
+               for(k in itmz){if(k in omoidb[wl][iwrd]){ret=1;ffn=j;FFn=k;break};};}; return ret }
+function fba(n,m,wl,     itmz,k, ret) {              # нахождение НАЗАД базовых форм из массива omoidb[wl] в диапазоне n-m -- только 1 строка-идентификатор! из массивов BASE
+               fbn=FBn=ret="";if(n>m)n=m;rfix(n,m);for(j=m;j>=n;j--){if(ret)break;stotar(wordbf(j),itmz,"#");
+               for(k in itmz){if(k in omoidb[wl][iwrd]){ret=1;fbn=j;FBn=k;break};};}; return ret }
+function fw(n,wl,     k, ret) {                     # является ли слово(n) из массива ancfarr[wl][iwrd] указанную функцию wl FLAT
+                k=lc(n); if(k in omoidf[wl][iwrd]){ret=1} else {ret=0}; return ret }
 function qm(n, isclass, wl,    ret) {               # обертка для нескольких функций и ba
                 if ( q(n,isclass) && bam(n,wl) ) {ret=1} else {ret=0}; return ret}
 function qq(n, m,    ret) {                         # слово m равно слово n?
@@ -783,7 +781,6 @@ function preph_ro(n,                                                            
                           qxw(n,"до","выяснения глубины завершения истечения конца наступления начала прихода окончания середины") ||
                           qxw(n,"за","вычетом границами границы исключением неимением пределами пределы счет место") ||
                           qxw(n,"из","расчета среды числа") ||
-                          qxw(n,"именем имени конец конца конце концу начало начала начале началу середина середине середину несть") ||
                           qxw(n,"исходя","из") ||
                           qxw(n,"к","довершению завершению исходу концу краю началу окончанию помощи прибытию приезду приходу расцвету середине чести числу") ||
                           qxw(n,"ко","времени") ||
@@ -815,8 +812,12 @@ function preph_tv(n,                                                            
                           qxw(n,"о","бок","с со") ||
                           qxw(n,"вдогонку вслед далеко следом","за") ||
                           qxw(n,"вместе наравне наряду рядом совместно совокупно согласно сообразно сообща соответственно соразмерно сравнительно","с со") )
-                                                                                                                                               {ret=1} else {ret=0}; return ret}
-function preph_any(n,   ret) { if ( preph_vi(n)||preph_da(n)||preph_ro(n)||preph_tv(n) )                                                       {ret=1} else {ret=0}; return ret }
+                                                                                                                                                {ret=1} else {ret=0}; return ret}
+function preph_any(n,   ret) { if ( preph_vi(n)||preph_da(n)||preph_ro(n)||preph_tv(n) )                                                        {ret=1} else {ret=0}; return ret }
+
+function prew_ro(n,                                                                                                                             ret) {
+                     if ( qxw(n,"именем имени конец конца конце концу начало начала начале началу середина середине середину несть") )          {ret=1} else {ret=0}; return ret}
+
                                                                                                                                                 
 # прилагательные                                                                                                                                
 function prl_kred_mu(n,   wd,ret) { if(!wd)wd=lc(n); if (wd in pl_kred_mu)                                                                      {ret=1} else {ret=0}; return ret}
@@ -2267,6 +2268,18 @@ function suw_edne(n,                                                            
                           wd in sgn_edsr_ne||wd in swn_edze_ne||wd in aon_edze_ne||wd in agn_edze_ne||wd in son_edze_ne||wd in sgn_edze_ne||
                           wd in swo_edmu_ne||wd in sio_edmu_ne||wd in sfo_edmu_ne||wd in swo_edob_ne||wd in swo_edze_ne||wd in sio_edze_ne||
                           wd in sfo_edze_ne||wd in swo_edsr_ne)                                                                                 {ret=1} else {ret=0}; return ret}
+function suw_edmune(n,                                                                                                                          wd,ret) { if(!wd)wd=lc(n);
+                      if (wd in sw_edmu_ne||wd in sw_edob_ne||wd in swn_edmu_ne||wd in aon_edmu_ne||wd in agn_edmu_ne||wd in son_edmu_ne||
+                          wd in sgn_edmu_ne||wd in swn_edob_ne||wd in swo_edmu_ne||wd in sio_edmu_ne||wd in sfo_edmu_ne||wd in swo_edob_ne)     {ret=1} else {ret=0}; return ret}
+function suw_edsrne(n,                                                                                                                          wd,ret) { if(!wd)wd=lc(n);
+                      if (wd in sw_edob_ne||wd in swn_edob_ne||wd in swn_edsr_ne||wd in aon_edsr_ne||wd in agn_edsr_ne||wd in son_edsr_ne||
+                          wd in sgn_edsr_ne||wd in swo_edob_ne||wd in swo_edsr_ne)                                                              {ret=1} else {ret=0}; return ret}
+function suw_edzene(n,                                                                                                                          wd,ret) { if(!wd)wd=lc(n);
+                      if (wd in swn_edze_ne||wd in aon_edze_ne||wd in agn_edze_ne||wd in son_edze_ne||wd in sgn_edze_ne||wd in swo_edze_ne||
+                          wd in sio_edze_ne||wd in sfo_edze_ne||wd in sw_edob_ne||wd in swn_edob_ne)                                            {ret=1} else {ret=0}; return ret}
+function suw_mnne(n,                                                                                                                            wd,ret) { if(!wd)wd=lc(n);
+                      if (wd in sw_mn_ne||wd in swn_mn_ne||wd in agn_mn_ne||wd in son_mn_ne||wd in sgn_mn_ne||wd in swo_mn_ne||
+                          wd in sio_mn_ne||wd in sfo_mn_ne)                                                                                     {ret=1} else {ret=0}; return ret}
 function suw_noedne(n,                                                                                                                           wd,ret) { if(!wd)wd=lc(n);
                       if (wd in sw_edmu_ne||wd in sw_edob_ne||wd in swn_edmu_ne||wd in aon_edmu_ne||wd in agn_edmu_ne||wd in son_edmu_ne||
                           wd in sgn_edmu_ne||wd in swn_edob_ne||wd in swn_edsr_ne||wd in aon_edsr_ne||wd in agn_edsr_ne||wd in son_edsr_ne||
@@ -2274,12 +2287,6 @@ function suw_noedne(n,                                                          
 function suw_odedne(n,                                                                                                                          wd,ret) { if(!wd)wd=lc(n);
                       if (wd in swo_edmu_ne||wd in sio_edmu_ne||wd in sfo_edmu_ne||wd in swo_edob_ne||wd in swo_edze_ne||wd in sio_edze_ne||
                           wd in sfo_edze_ne||wd in swo_edsr_ne)                                                                                 {ret=1} else {ret=0}; return ret}
-function suw_edzene(n,                                                                                                                          wd,ret) { if(!wd)wd=lc(n);
-                      if (wd in swn_edze_ne||wd in aon_edze_ne||wd in agn_edze_ne||wd in son_edze_ne||wd in sgn_edze_ne||wd in swo_edze_ne||
-                          wd in sio_edze_ne||wd in sfo_edze_ne||wd in sw_edob_ne||wd in swn_edob_ne)                                            {ret=1} else {ret=0}; return ret}
-function suw_mnne(n,                                                                                                                            wd,ret) { if(!wd)wd=lc(n);
-                      if (wd in sw_mn_ne||wd in swn_mn_ne||wd in agn_mn_ne||wd in son_mn_ne||wd in sgn_mn_ne||wd in swo_mn_ne||
-                          wd in sio_mn_ne||wd in sfo_mn_ne)                                                                                     {ret=1} else {ret=0}; return ret}
 function suw_mnsq(n,      wd,ret) { if(!wd)wd=lc(n); if (wd in swn_mn_sq||wd in swo_mn_sq)                                                      {ret=1} else {ret=0}; return ret}
 function suw_ed(n,                                                                                                                              wd,ret) { if(!wd)wd=lc(n);
                       if (wd in sw_edmu_da||wd in sw_edmu_im||wd in sw_edmu_ne||wd in sw_edmu_pr||wd in sw_edmu_ro||wd in sw_edmu_tv||
@@ -3011,6 +3018,9 @@ function org_any(n,                                                             
                           wd in aon_edze_ne||wd in son_edze_ne||wd in son_edze_pr||wd in son_edze_ro||wd in son_edze_tv||wd in son_edze_vi||
                           wd in son_mn_da||wd in son_mn_im||wd in son_mn_ne||wd in son_mn_pr||wd in son_mn_ro||wd in son_mn_tv)                 {ret=1} else {ret=0}; return ret}
 
+
+# Все омографы списком
+function isomo(n,       wd,ret) { if(!wd)wd=lc(n); if (wd in omosall)                                                                           {ret=1} else {ret=0}; return ret}
 
 # Омографы-партитивы: все, абстрактные, газы, еда, жидкости=питьё, сыпучие, твёрдные
 function ipa_any(n,       wd,ret) { if(!wd)wd=lc(n); if (wd in ispa_any)                                                                        {ret=1} else {ret=0}; return ret}

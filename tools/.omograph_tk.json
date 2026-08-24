@@ -16,7 +16,7 @@
     "occurrences": ["DejaVu Sans", 14],
     "context": ["DejaVu Sans", 16],
     "omograph": ["DejaVu Sans", 16, "bold"],
-    "variant_bar": ["DejaVu Sans", 16]
+    "variant_bar": ["DejaVu Sans", 14]
   },
   "colors": {
     "bg_main": "#2D2D2D",

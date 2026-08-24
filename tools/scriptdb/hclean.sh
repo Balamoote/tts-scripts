@@ -3,7 +3,6 @@
 # Служебная утилита
 # key:
 #  ord        перенумеровать все правила во всех рабочих скриптах и отсортировать строки
-#  omoid      сгенерировать базы omoid_auto.gz из omoid_ini.gz и omoid_pa_ini.gz
 #  spell_flat все слова словарей без ё и ударений -- словарь ударений для vim
 #  spell_all  все слова словарей с именами, ё, ударениями и служебными символами -- словарь ударений для vim
 #  ddic       поиск в dic_*.gz дублей с разной основой (предотвратить затирание в памяти первой формы)
@@ -30,10 +29,9 @@ unxs=$(printf "\xe2\x80\xa4\xe2\x80\xa7")
 # Массив со списком обязательных файлов
 pack="automo.gz awx/beautify.awk class.list.gz classes.awk cstauto.awk cstring.awk defunct.awk deomo.awk demorphy.awk dic_cust.gz \
       dic_gl.gz dic_prl.gz dic_prq.gz dic_rest.gz dic_suw.gz fb2 functions.awk awx/gw_caplists.awk hclean.sh ist.gz \
-      main.awk mano-lc.gz mano-uc.gz namebase.gz namedef.awk omo_list.phy.gz yoyo.gz yoyo_alt.gz \
-      omoid.me omoid_auto.gz omoid_flat.gz omoid_ini.gz omoid_pa_ini.gz preview.awk ruac.py rulg_all.py rulg_omo.py settings.ini \
-      ext/vsevso.awk unistress.gz unistrehy.gz yodef.awk yodef.gz yodhy.gz yolc.gz yomo-lc.gz yomo-uc.gz ext/x4707.awk ext/x4709.awk \
-      dic_prop.gz awx/rules_sort.awk cstrings.gz awx/sort_gzstrings.awk awx/gen_prq.awk dix_prq.gz awx/parser.awk"
+      main.awk mano-lc.gz mano-uc.gz namebase.gz namedef.awk omo_list.phy.gz yoyo.gz yoyo_alt.gz preview.awk pye/ruac.py pye/rulg_all.py \
+      pye/rulg_omo.py settings.ini ext/vsevso.awk unistress.gz unistrehy.gz yodef.awk yodef.gz yodhy.gz yolc.gz yomo-lc.gz yomo-uc.gz \
+      ext/x4707.awk ext/x4709.awk dic_prop.gz awx/rules_sort.awk cstrings.gz awx/sort_gzstrings.awk awx/gen_prq.awk dix_prq.gz awx/parser.awk"
 read -a minpack <<< $pack
 
 # Проверка не потерялось ли чего
@@ -69,16 +67,6 @@ case $key in
 
        awk -f awx/parser.awk deomo.awk defunct.awk ext/vsevso.awk yodef.awk ext/x4707.awk ext/x4709.awk ext/x1111.awk;
 
-       zcat omoid_ini.gz | awk '{delete chars; ret="";for(i=3;i<=NF;i++){chars[$i]=$i}; chnum = asort(chars);
-                                ret = $1 " " $2; for(j=1;j<=chnum;j++){ret=ret " " chars[j]}; print ret }' |\
-                         sort -u | $zipper > omoid_ini_ord.gz; mv omoid_ini_ord.gz omoid_ini.gz
-       zcat omoid_pa_ini.gz | awk '{delete chars; ret="";for(i=3;i<=NF;i++){chars[$i]=$i}; chnum = asort(chars);
-                                ret = $1 " " $2; for(j=1;j<=chnum;j++){ret=ret " " chars[j]}; print ret }' |\
-                         sort -u | $zipper > omoid_pa_ini_ord.gz; mv omoid_pa_ini_ord.gz omoid_pa_ini.gz
-       zcat omoid_flat.gz | awk '{delete chars; ret="";for(i=3;i<=NF;i++){chars[$i]=$i}; chnum = asort(chars);
-                                ret = $1 " " $2; for(j=1;j<=chnum;j++){ret=ret " " chars[j]}; print ret }' |\
-                         sort -u | $zipper > omoid_flat_ord.gz; mv omoid_flat_ord.gz omoid_flat.gz
-
        # сортировка cstrings.gz
        zcat cstrings.gz | awk -f awx/sort_gzstrings.awk | $zipper > cstrings_ord.gz; mv cstrings_ord.gz cstrings.gz
        # gen_prq -- генерируем полный словарь причастий
@@ -88,43 +76,6 @@ case $key in
          awk '{ if ( f1 == $1 && f2 == $2 )  {printf("\033[91m%s\n\033[0m", $0); fnd=1}; f1=$1; f2=$2; }
                 END { if(!fnd) printf("\033[32m%s\n\033[0m", "ord: дублей с разной основой не надено.")}' ;
        exit 1; ;;
-
-    omoid ) # сгенерировать базы omoid_auto.gz из omoid_ini.gz и omoid_pa_ini.gz
-
-       awk 'BEGIN {
-               cmd = "zcat omoid_ini.gz";
-               while ((cmd|getline) > 0) {
-                     if ($2== "hsw4edro" ) { for (i=3; i<=NF; i++) hsw4edro[$1][$i]; continue };
-                     if ($2== "hsw4mnro" ) { for (i=3; i<=NF; i++) hsw4mnro[$1][$i]; continue };
-               }; close(cmd);
-
-               cmd = "zcat dic_suw.gz";
-               while ((cmd|getline) > 0) {gsub(/ё/,"е",$3); split($3,bf,"#");for(i in bf) { BF[bf[i]][$1] } }; close(cmd);
-
-               for (i in hsw4edro)  {for (j in hsw4edro[i] ) {if(j in BF) {for (k in BF[j]) hsw4edro_[i][k]};};}
-               for (i in hsw4mnro)  {for (j in hsw4mnro[i] ) {if(j in BF) {for (k in BF[j]) hsw4mnro_[i][k]};};}
-
-               for (i in hsw4edro_) {for (j in hsw4edro_[i]) {print i, "hsw4edro", j } }
-               for (i in hsw4mnro_) {for (j in hsw4mnro_[i]) {print i, "hsw4mnro", j } }
-             }' > omoid_auto
-
-       awk 'BEGIN {
-
-               cmd = "zcat omoid_pa_ini.gz";
-               while ((cmd|getline) > 0) {
-                     if ($2== "gl4pa" ) { for (i=3; i<=NF; i++) gl4pa[$1][$i]; continue };
-               }; close(cmd);
-
-               cmd = "zcat dic_gl.gz dic_prq.gz";
-               while ((cmd|getline) > 0) {gsub(/ё/,"е",$3); split($3,bf,"#");for(i in bf) { BF[bf[i]][$1] } }; close(cmd);
-
-               for (i in gl4pa)  {for (j in gl4pa[i] ) {if(j in BF) {for (k in BF[j]) gl4pa_[i][k]};};}
-
-               for (i in gl4pa_) {for (j in gl4pa_[i]) {print i, "gl4pa", j } }
-
-                }' >> omoid_auto; sort -u omoid_auto | $zipper > omoid_auto.gz; rm omoid_auto
-
-        exit 1; ;;
 
     spell_flat ) # все слова словарей без ё и ударений
                zcat dic_*.gz | awk '{print $1}' > ru.txt
