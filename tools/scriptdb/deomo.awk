@@ -243,14 +243,14 @@ xgrp="x1020";for(wrd in omap[xgrp]){omakevars(xgrp);for(y=1;y<=wln;y++)        #
  #
  if(iwrd=="ага") {
    if ( sR(0,"-") )
-   { l[i]=omo2; R[38]++; if(dbg){print "R38"}; continue };
+   { l[i]=omo1; R[38]++; if(dbg){print "R38"}; continue };
+   if ( p(-1) && cap(0) && p(0) )
+   { l[i]=omo1; R[38]++; if(dbg){print "R38"}; continue };
  };
 
  #
  if ( sc(-1,"-") )
  { l[i]=omo1; R[39]++; if(dbg){print "R39"}; continue };
-
- # l[i]=omo2; R[40]++; if(dbg){print "R40"}; continue
 
  }; book[b]=joinpat(l,sep,nf) };};                                ##_footer
 
@@ -1679,6 +1679,9 @@ xgrp="x2029";for(wrd in omap[xgrp]){omakevars(xgrp);for(y=1;y<=wln;y++)        #
  if(iwrd=="подать") {
    if ( w(-1,"рукой") && s(-1) )
    { l[i]=omo1; R[320]++; if(dbg){print "R320"}; continue };
+ };
+ if(iwrd=="помочь") {
+   l[i]=omo1; R[320]++; if(dbg){print "R320"}; continue;
  };
  #
  if ( gl_inf_f() )
@@ -6973,7 +6976,13 @@ xgrp="x2316";for(wrd in omap[xgrp]){omakevars(xgrp);for(y=1;y<=wln;y++)        #
  cst="быть стать являться";
  if ( bw(-1,cst) && s(-1) )
  { l[i]=omo1; R[1498]++; if(dbg){print "R1498"}; continue };
- if ( q(-1,"nar_step") && s(-1) )
+ if ( q(-1,"nar_step nar_mest nar_vrem") && s(-1) )
+ { l[i]=omo1; R[1499]++; if(dbg){print "R1499"}; continue };
+ if ( q(1,"nar_step nar_mest nar_vrem") && s(0) )
+ { l[i]=omo1; R[1499]++; if(dbg){print "R1499"}; continue };
+ if ( w(1,"за на до не от еще") && s(0) )
+ { l[i]=omo1; R[1499]++; if(dbg){print "R1499"}; continue };
+ if ( w(-1,"так как не еще") && s(-1) )
  { l[i]=omo1; R[1499]++; if(dbg){print "R1499"}; continue };
 
  }; book[b]=joinpat(l,sep,nf) };};                                           ##_footer
@@ -7075,15 +7084,25 @@ xgrp="x2324";for(wrd in omap[xgrp]){omakevars(xgrp);for(y=1;y<=wln;y++)        #
 xgrp="x2325";for(wrd in omap[xgrp]){omakevars(xgrp);for(y=1;y<=wln;y++)        # header1
 {makebookvars();for(i in wpos){makewposvars();if(tolower(l[i])!=iwrd)continue; # header2
  #
- if ( qf(1,4,"suw_mnvi") && s(0,qfn-1) &&
-     qir(1,qfn-1,"prl_mnvi mest_mnvi mest_3e prq_mnvi") )
+ if ( qf(1,4,"suw_mnim") && s(0,qfn-1) &&
+     qir(1,qfn-1,"prl_mnim mest_mnim mest_3e prq_mnim") )
  { l[i]=omo1; R[1515]++; if(dbg){print "R1515"}; continue };
  if ( w(1,"же") && s(0) )
  { l[i]=omo1; R[1516]++; if(dbg){print "R1516"}; continue };
- if ( w(1,"что которые которым которыми которых кто кого кому") && z(0) )
+ if ( w(1,"что которые которым которыми которых кто кого кому какими каких какие") && z(0) )
  { l[i]=omo1; R[1517]++; if(dbg){print "R1517"}; continue };
  if ( q(1,"prl_mnim mest_mnim qis_im qik_im") && s(0) )
  { l[i]=omo1; R[1518]++; if(dbg){print "R1518"}; continue };
+ }; book[b]=joinpat(l,sep,nf) };};                                ##_footer
+
+###   x2326 !_#_! ==> souz_		sw_mn_iv_  дабы  дабы́  да́бы
+xgrp="x2326";for(wrd in omap[xgrp]){omakevars(xgrp);for(y=1;y<=wln;y++)        # header1
+{makebookvars();for(i in wpos){makewposvars();if(tolower(l[i])!=iwrd)continue; # header2
+ #
+ if ( q(1,"gl_in") && s(0) )
+ { l[i]=omo1; R[1515]++; if(dbg){print "R1515"}; continue };
+ if ( p(-1) && s(0) )
+ { l[i]=omo1; R[1516]++; if(dbg){print "R1516"}; continue };
  }; book[b]=joinpat(l,sep,nf) };};                                ##_footer
 
 ###   x3001 !_#_! ==> gl_paedze_    sw_em_r_   sw_mn_iv_

@@ -31,7 +31,7 @@ sdb="scriptdb"
 #repper="grep"
  repper="rg"
 
-debug=0       # Если 1, то сделать отладку скриптов омографов: поиск искажений текста в "пастеризованных" версиях исходника и результата 
+debug=1       # Если 1, то сделать отладку скриптов омографов: поиск искажений текста в "пастеризованных" версиях исходника и результата 
 nocaps=0      # Если 1, то при debug=1 капсов в "пастеризованных" не будет
 locdic=1      # Создавать локальные словари для каждой книги из фактически найденной лексики
 sed_do=0      # 1 = постобработка sed, мелочи для выделения инициалов и пр. работает только для [gtts] + [ttslexx] + [словарь расшифровки условных обоззначений]
@@ -155,15 +155,22 @@ esac
 if [[ ! -d "$bookwrkdir" ]]; then mkdir "$bookwrkdir"
 else printf '\e[35m%s \e[93m%s \e[35m%s \e[93m%s\e[0m\n' "Директория для дискретных скриптов" "$bookwrkdir" "существует. Удалите ее или запустите скрипт с ключом" "-f"; exit 1; fi
 
-printf '\e[36m%s \e[93m%s\e[36m%s \e[93m%s\e[0m ' "В словаре Омографов:" $(zgrep -c ^ $sdb/mano-uc.gz) ", омографов:" $(zgrep -c ^ $sdb/mano-lc.gz)
-if [[ ! -d $aux ]]; then mkdir $aux; fi
-if [[ -s $aux/zaomo.md5 ]] && md5sum -c --status $aux/zaomo.md5 >/dev/null 2>&1; then
-     printf '\e[36m%s \e[33m%-8s \e[32m%s\e[0m\n' "Файлы" $aux/zaomo.md5 "OK!";
-else printf '\n'; clxx=1; fi
+if [[ -s $aux/zaomo.md5   ]] && md5sum -c --status $aux/zaomo.md5   >/dev/null 2>&1; then clxx=0; else clxx=1; fi
+if [[ -s $aux/zjofik.md5  ]] && md5sum -c --status $aux/zjofik.md5  >/dev/null 2>&1; then clxx=0; else clxx=1; fi
+if [[ -s $aux/zndb.md5    ]] && md5sum -c --status $aux/zndb.md5    >/dev/null 2>&1; then clxx=0; else clxx=1; fi
+if [[ -s $aux/zstu.md5    ]] && md5sum -c --status $aux/zstu.md5    >/dev/null 2>&1; then clxx=0; else clxx=1; fi
+if [[ -s $aux/zuni.md5    ]] && md5sum -c --status $aux/zuni.md5    >/dev/null 2>&1; then clxx=0; else clxx=1; fi
+if [[ -s $aux/zdic.md5    ]] && md5sum -c --status $aux/zdic.md5    >/dev/null 2>&1; then clxx=0; else clxx=1; fi
+if [[ -s $aux/yodef.md5   ]] && md5sum -c --status $aux/yodef.md5   >/dev/null 2>&1; then clxx=0; else clxx=1; fi
+if [[ -s $aux/zdix.md5    ]] && md5sum -c --status $aux/zdix.md5    >/dev/null 2>&1; then clxx=0; else clxx=1; fi
+if [[ -s $aux/classes.md5 ]] && md5sum -c --status $aux/classes.md5 >/dev/null 2>&1; then clxx=0; else clxx=1; fi
 
 if [[ $clxx -eq "1" ]]; then
-	if ./check-all.sh fg; then printf '\e[32m%s\e[0m\n' "Проверка файлов завершена успешно…";
+	if ./check-all.sh ; then printf '\e[32m%s\e[0m\n' "Проверка файлов завершена успешно…";
+    if [[ -d "$bookstadir" ]]; then rm -rf "$bookstadir"; fi;
 	else printf '\e[1;31m%s \e[93m%s \e[1;31m%s\e[0m\n' "Выполнение скрипта" "./momo.sh" "прервано! Исправьте ошибки в базах и повторите действие!"; exit 1; fi; fi
+
+printf '\e[36m%s \e[93m%s\e[36m%s \e[93m%s\e[0m ' "В словаре Омографов:" $(zgrep -c ^ $sdb/mano-uc.gz) ", омографов:" $(zgrep -c ^ $sdb/mano-lc.gz)
 
 # Конвертация в UTF-8, если нужно
 #$edi -c "set nobomb | set fenc=utf8 | x" "$book"
@@ -382,13 +389,23 @@ if [[ $fixomo == "1" ]]; then
    grep -Ff "$bookstadir"/bookwords.list <(zcat $sdb/dic_rest.gz | sed -r "s/^([^ ]+)/_\1=/") | sed -r "s/^_([^=]+)=/\1/" | $zipper > "$bookstadir"/dic_rest.gz
    grep -Ff "$bookstadir"/bookwords.list <(zcat $sdb/dic_suw.gz  | sed -r "s/^([^ ]+)/_\1=/") | sed -r "s/^_([^=]+)=/\1/" | $zipper > "$bookstadir"/dic_suw.gz
    grep -Ff "$bookstadir"/bookwords.list <(zcat $sdb/dic_prop.gz | sed -r "s/^([^ ]+)/_\1=/") | sed -r "s/^_([^=]+)=/\1/" | $zipper > "$bookstadir"/dic_prop.gz
+   grep -Ff "$bookstadir"/bookwords.list <(zcat $sdb/namebase.gz)                                                         | $zipper > "$bookstadir"/namebase.gz
   
-     md5sum "$bookstadir"/bookwords.list "$bookwrkdir"/text-book.txt $sdb/dic_gl.gz $sdb/dic_prl.gz $sdb/dic_prq.gz $sdb/dic_rest.gz $sdb/dic_suw.gz $sdb/dic_prop.gz \
-            "$bookstadir"/dic_gl.gz "$bookstadir"/dic_prl.gz "$bookstadir"/dic_prq.gz "$bookstadir"/dic_rest.gz "$bookstadir"/dic_suw.gz "$bookstadir"/dic_prop.gz $sdb/dix_prq.gz \
-            > "$bookstadir"/locdic.md5
+     md5sum "$bookstadir"/bookwords.list "$bookwrkdir"/text-book.txt $sdb/dic_gl.gz $sdb/dic_prl.gz $sdb/dic_prq.gz $sdb/dic_rest.gz $sdb/dic_suw.gz \
+             $sdb/dic_prop.gz "$bookstadir"/dic_gl.gz "$bookstadir"/dic_prl.gz "$bookstadir"/dic_prq.gz "$bookstadir"/dic_rest.gz "$bookstadir"/dic_suw.gz \
+             "$bookstadir"/dic_prop.gz $sdb/dix_prq.gz $sdb/namebase.gz > "$bookstadir"/locdic.md5
   
      mo_cur=$(date +%s.%N); duration=$( echo $mo_cur - $mo_prev | bc ); mo_prev=$mo_cur; durhum=$(ms2sec);
      LC_ALL="en_US.UTF-8" printf '\e[36m%s \e[93m%s \e[36m%s \e[36m%s \e[93m%s\e[0m\n' "Подготовка локальных словарей из словоформ в книге:" $durhum "Словоформ:" $locdicsize;
+   fi;
+
+   if [[ -s "$bookstadir"/classes.bin ]] && md5sum -c --status "$bookstadir"/classes.md5 >/dev/null 2>&1; then
+       printf '\e[36m%s\n' "OK: база classes.bin создана.";
+   else 
+     echo "" | awk -vindb="$sdb/" -vinax="$aux/" -vbkphydir="$bookstadir/" -vlocdic="$bookstadir/" -vmorphy_on="$morphy" -vmorphy_yo="$morphy_yo" -vvso="$vso" \
+            -f "$sdb/"main.awk 2>&1 > /dev/null;
+     mo_cur=$(date +%s.%N); duration=$( echo $mo_cur - $mo_prev | bc ); mo_prev=$mo_cur; durhum=$(ms2sec);
+     LC_ALL="en_US.UTF-8" printf '\e[36m%s \e[93m%s \e[36m%s\n' "Создание базы AWK:" $durhum;
    fi;
   fi; # << Конец блока создания локальных словарей
   

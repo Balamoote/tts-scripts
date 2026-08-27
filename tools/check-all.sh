@@ -26,9 +26,8 @@ case "$1" in
 	fy | --fyofik ) # Перепроверить вспомогательные файлы yofik.sh
 		if [[ -s $aux/zjofik.md5 ]]; then rm $aux/zjofik.md5; fi ;;
 	fm | --fmomo ) # Перепроверить вспомогательные файлы momo.sh
-		if [[ -s $aux/zaomo.md5 ]]; then rm $aux/zaomo.md5; fi ;;
-	fu | --fmomo ) # Перепроверить вспомогательные файлы momo.sh
-		if [[ -s $aux/zuni.md5 ]]; then rm $aux/zuni.md5; fi ;;
+		if [[ -s $aux/zaomo.md5 ]]; then rm $aux/zaomo.md5; fi; 
+		if [[ -s $aux/zuni.md5  ]]; then rm $aux/zuni.md5; fi ;;
 	*) # Проверить, существует ли файл книги
 		if [[ -s "$1" ]]; then book="$1"
 		else printf '\e[35m%s \e[93m%s \e[35m%s \e[93m%s \e[93m%s \e[35m%s\e[0m\n' \
@@ -60,6 +59,7 @@ if [[ -s $aux/zdix.md5    ]] && md5sum -c --status $aux/zdix.md5    >/dev/null 2
 if [[ -s $aux/classes.md5 ]] && md5sum -c --status $aux/classes.md5 >/dev/null 2>&1; then tst=1;   else tst=0   ; fi
 
 
+
 ### Выполняем проверку вспомогательных файлов из ./momo.sh
 
 if [[ $aomo -eq 1 && $tst -eq 1 ]]; then
@@ -74,8 +74,6 @@ else
 
   # Формируем в $aux/ файлы mano-lc.pat.gz mano-uc.pat.gz mano-cc.pat.gz mano-ca.pat.gz
   awk -vomtype="mano" -f $sdb/awx/omopat.awk
-
-   ./testrule.sh > /dev/null # создать awk-базу для testrule.sh
 
   md5sum $sdb/mano-uc.gz $aux/mano-uc.pat.gz $sdb/mano-lc.gz $aux/mano-lc.pat.gz $sdb/malc.gz \
          $aux/mano-cc.pat.gz $aux/mano-ca.pat.gz $aux/malc.pat.gz > $aux/zaomo.md5
@@ -151,6 +149,12 @@ else
   zcat $sdb/dic_*.gz | awk '{ print "_" $1 "=" }' | sort -u | $zipper > $aux/dic.pat.gz
   md5sum $aux/dic.pat.gz $sdb/dic_prq.gz $sdb/dix_prq.gz $sdb/dic_gl.gz $sdb/dic_prl.gz $sdb/dic_suw.gz $sdb/dic_prop.gz $sdb/dic_cust.gz $sdb/dic_rest.gz > $aux/zdic.md5
   printf '\e[36m%s \e[93m%s ' "DIC:" "новые"
+fi
+
+if [[ $dic -eq 0 || $aomo -eq 0 || $dix -eq 0 || $tst -eq 0  ]]; then
+      	printf '\e[36m%s \e[32m%s ' "AWK:" "создание базы..."
+   ./testrule.sh > /dev/null # создать awk-базу для testrule.sh
+# printf '\e[36m%s \e[93m%s ' "DIC:" "новые"
 fi
 
 printf '\e[32;4;1m%s\e[0m\n' "Всё ОК!"
