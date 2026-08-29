@@ -1,20 +1,23 @@
 {
   "settings": {
-    "context_length": 60,
+    "context_length": 70,
     "context_factor": 1.00,
     "cache_size": 200,
     "auto_cache_size": 50,
     "auto_cache": false,
     "allow_context_edit": false,
     "font_scale": 1.0,
+    "context_spacing1": 2,
+    "context_spacing2": 2,
+    "context_spacing3": 0,
     "book_reader": "crqt"
   },
   "fonts": {
     "ui": ["TkDefaultFont", 12],
     "scripts": ["DejaVu Sans", 14],
     "occurrences": ["DejaVu Sans", 14],
-    "context": ["DejaVu Sans", 16],
-    "omograph": ["DejaVu Sans", 16, "bold"],
+    "context": ["DejaVu Sans", 14],
+    "omograph": ["DejaVu Sans", 14, "bold"],
     "variant_bar": ["DejaVu Sans", 14]
   },
   "colors": {

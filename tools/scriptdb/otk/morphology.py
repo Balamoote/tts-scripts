@@ -204,3 +204,175 @@ class MorphologyAnalyzer:
             grammar["transitivity"] = "непер"
         
         return grammar
+
+    def get_short_notation(self, morph_func):
+        """Возвращает сокращенную нотацию морфологической функции"""
+        grammar = self.get_grammar(morph_func)
+        
+        # Часть речи
+        pos_map = {
+            "глагол": "gl",
+            "существительное": "suw",
+            "прилагательное": "prl",
+            "причастие": "prq",
+            "деепричастие": "deep",
+            "наречие": "nar",
+            "местоимение": "mest",
+            "числительное": "qik",  # по умолчанию количественное
+            "предлог": "pre",
+            "союз": "souz",
+            "частица": "qast",
+            "междометие": "mezd",
+            "имя_собственное": "ima",
+            "отчество": "otq",
+            "фамилия": "fam",
+            "гео_название": "geo",
+            "организация": "org",
+            "предикатив": "pred",
+            "вводное": "vvod",
+            "неизвестно": "?",
+        }
+        
+        pos = pos_map.get(grammar["pos"], "?")
+        
+        # Для числительных определяем подтип
+        if pos == "qik":
+            if "поряд" in morph_func:
+                pos = "qip"
+            elif "собир" in morph_func:
+                pos = "qis"
+        
+        # Число
+        number_map = {
+            "ед": "ed",
+            "мн": "mn",
+        }
+        number = number_map.get(grammar["number"], "")
+        
+        # Падеж
+        case_map = {
+            "им": "im",
+            "род": "ro",
+            "дат": "da",
+            "вин": "vi",
+            "тв": "tv",
+            "пр": "pr",
+            "зват": "zv",
+            "мест": "me",
+            "парт": "pa",
+        }
+        case = case_map.get(grammar["case"], "")
+        
+        # Род
+        gender_map = {
+            "муж": "mu",
+            "жен": "ze",
+            "ср": "sr",
+            "общ": "ob",
+        }
+        gender = gender_map.get(grammar["gender"], "")
+        
+        # Лицо
+        person_map = {
+            "1е": "1e",
+            "2е": "2e",
+            "3е": "3e",
+        }
+        person = person_map.get(grammar["person"], "")
+        
+        # Время
+        tense_map = {
+            "наст": "na",
+            "прош": "pa",
+            "буд": "bu",
+        }
+        tense = tense_map.get(grammar["tense"], "")
+        
+        # Одушевленность
+        animacy_map = {
+            "одуш": "od",
+            "неод": "ne",
+        }
+        animacy = animacy_map.get(grammar["animacy"], "")
+        
+        # Переходность
+        trans_map = {
+            "перех": "pe",
+            "непер": "ne",
+            "перне": "pn",
+        }
+        trans = trans_map.get(grammar["transitivity"], "")
+        
+        # Возвратность
+        is_reflexive = "воз" in morph_func
+        # Повелительное
+        is_imperative = "пов" in morph_func
+        
+        # Собираем нотацию
+        parts = [pos]
+        
+        # Для глаголов: переходность + время + число + род/лицо
+        if pos == "gl":
+            if trans:
+                parts.append(trans)
+            if is_reflexive:
+                parts.append("vz")
+            if is_imperative:
+                parts.append("po")
+            if tense:
+                parts.append(tense)
+            if number:
+                parts.append(number)
+            if gender:
+                parts.append(gender)
+            elif person:
+                parts.append(person)
+        
+        # Для существительных, прилагательных, причастий: 
+        # одушевленность + число + род + падеж
+        elif pos in ("suw", "prl", "prq", "ima", "otq", "fam", "geo", "org"):
+            if animacy:
+                parts.append(animacy)
+            if number:
+                parts.append(number)
+            if gender:
+                parts.append(gender)
+            if case:
+                parts.append(case)
+        
+        # Для местоимений: число + падеж
+        elif pos == "mest":
+            if number:
+                parts.append(number)
+            if case:
+                parts.append(case)
+        
+        # Для наречий: подтип
+        elif pos == "nar":
+            if "обст_врем" in morph_func:
+                parts.append("vrem")
+            elif "обст_места" in morph_func:
+                parts.append("mest")
+            elif "обст_напр" in morph_func:
+                parts.append("napr")
+            elif "обст_причин" in morph_func:
+                parts.append("pric")
+            elif "обст_цель" in morph_func:
+                parts.append("cel")
+            elif "опред_кач" in morph_func:
+                parts.append("kac")
+            elif "опред_спос" in morph_func:
+                parts.append("spos")
+            elif "опред_степ" in morph_func:
+                parts.append("step")
+        
+        # Для предлогов: падеж
+        elif pos == "pre":
+            if case:
+                parts.append(case)
+        
+        # Часть речи отделяется через _, остальные признаки слитно
+        if len(parts) > 1:
+            return parts[0] + "_" + "".join(parts[1:])
+        else:
+            return parts[0]

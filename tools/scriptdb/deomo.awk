@@ -2,7 +2,7 @@ END { FS = savefs
 
 ### все !_#_!
 
-VSEVSO_F() # если подключена "новая" функция "все", то выйти
+x1111_f() # если подключена "новая" функция "все", то выйти
                                                                        # правила находятся в файле vsevso.awk (старая функция)
 ###   x0300 !_#_! ==> phrases
 xgrp="x0300";for(wrd in omap[xgrp]){iwrd=tolower(wrd);wln=split(omap[xgrp][wrd],omlin," ");for(y=1;y<=wln;y++)         # header1
@@ -7664,15 +7664,29 @@ xgrp="x4718";for(wrd in omap[xgrp]){omakevars(xgrp);for(y=1;y<=wln;y++)        #
    if ( q(-1,"pre_pr") && qf(1,3,"suw_edmupr suw_edsrpr") && s(-1,qfn-1) &&
       qir(1,qfn-1,"prl_edmupr prq_edmupr mest_3e") )
    { l[i]=omo2; R[1633]++; if(dbg){print "R1633"}; continue };
-   if ( q(-1,"pre_pr") && w(1,"из") && s(-1,0) )
+   if ( q(-1,"pre_pr") && s(-1) )
    { l[i]=omo2; R[1634]++; if(dbg){print "R1634"}; continue };
  };
 
+ if(iwrd=="любому") {
+   if ( qf(1,3,"suw_edmuda suw_edsrda") && s(0,qfn-1) &&
+       qir(1,qfn-1,"prl_edmuda prq_edmuda mest_edmuda mest_3e") )
+   { l[i]=omo2; R[1635]++; if(dbg){print "R1635"}; continue };
+   if ( q(-1,"pre_da") && s(-1) )
+   { l[i]=omo2; R[1636]++; if(dbg){print "R1636"}; continue };
+ };
  if(iwrd=="любое") {
    if ( qf(1,3,"suw_edsrvi") && s(0,qfn-1) &&
        qir(1,qfn-1,"prl_edsrvi prq_edsrvi mest_edsrvi mest_3e") )
    { l[i]=omo2; R[1635]++; if(dbg){print "R1635"}; continue };
    if ( q(-1,"pre_vi") && s(-1) )
+   { l[i]=omo2; R[1636]++; if(dbg){print "R1636"}; continue };
+ };
+ if(iwrd=="любого") {
+   if ( qf(1,3,"suw_edsrro suw_edmuro suw_odedro suw_odedvi") && s(0,qfn-1) &&
+       qir(1,qfn-1,"prl_edsrvi prq_edsrvi mest_edsrvi prl_edmuro prq_edmuro mest_edmuro mest_3e") )
+   { l[i]=omo2; R[1635]++; if(dbg){print "R1635"}; continue };
+   if ( q(-1,"pre_vi pre_ro") && s(-1) )
    { l[i]=omo2; R[1636]++; if(dbg){print "R1636"}; continue };
  };
  if(iwrd=="любую") {
@@ -7726,7 +7740,6 @@ xgrp="x4719";for(wrd in omap[xgrp]){omakevars(xgrp);for(y=1;y<=wln;y++)        #
 #l[i]=omo1; R[1647]++; if(dbg){print "R1647"}; continue;
 
 #}; book[b]=joinpat(l,sep,nf) };};                                ##_footer
-
 
 ### THE_x_END !_#_!
 

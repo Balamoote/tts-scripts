@@ -4,10 +4,6 @@ IN="$@"
 aux="scriptaux"
 sdb="scriptdb"
 
-#vso="x1111"  # Использовать для "все" функцию x1111_f()
- vso="vsevso" # Использовать для "все" функцию xVSEVSO_F()
-
-
 if [[ ! -n "$IN" ]]; then
   clip_IN="$(xsel -o)"
   IN="$clip_IN"

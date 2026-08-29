@@ -30,7 +30,7 @@ unxs=$(printf "\xe2\x80\xa4\xe2\x80\xa7")
 pack="automo.gz awx/beautify.awk class.list.gz classes.awk cstauto.awk cstring.awk defunct.awk deomo.awk demorphy.awk dic_cust.gz \
       dic_gl.gz dic_prl.gz dic_prq.gz dic_rest.gz dic_suw.gz fb2 functions.awk awx/gw_caplists.awk hclean.sh ist.gz \
       main.awk mano-lc.gz mano-uc.gz namebase.gz namedef.awk omo_list.phy.gz yoyo.gz yoyo_alt.gz preview.awk pye/ruac.py pye/rulg_all.py \
-      pye/rulg_omo.py settings.ini ext/vsevso.awk unistress.gz unistrehy.gz yodef.awk yodef.gz yodhy.gz yolc.gz yomo-lc.gz yomo-uc.gz \
+      pye/rulg_omo.py settings.ini unistress.gz unistrehy.gz yodef.awk yodef.gz yodhy.gz yolc.gz yomo-lc.gz yomo-uc.gz \
       ext/x4707.awk ext/x4709.awk dic_prop.gz awx/rules_sort.awk cstrings.gz awx/sort_gzstrings.awk awx/gen_prq.awk dix_prq.gz awx/parser.awk"
 read -a minpack <<< $pack
 
@@ -57,7 +57,6 @@ case $key in
        awky="ext/x1111.awk";   awk -vLETT="V" -f awx/rules_sort.awk $awky | awk -f awx/beautify.awk > $awky"_ord"; mv $awky"_ord" $awky;
        awky="ext/x4707.awk";   awk -vLETT="Z" -f awx/rules_sort.awk $awky | awk -f awx/beautify.awk > $awky"_ord"; mv $awky"_ord" $awky;
        awky="ext/x4709.awk";   awk -vLETT="X" -f awx/rules_sort.awk $awky | awk -f awx/beautify.awk > $awky"_ord"; mv $awky"_ord" $awky;
-       awky="ext/vsevso.awk";  awk -vLETT="V" -f awx/rules_sort.awk $awky | awk -f awx/beautify.awk > $awky"_ord"; mv $awky"_ord" $awky;
 
        awky="cstring.awk";     awk -f awx/beautify.awk $awky > $awky"_ord"; mv $awky"_ord" $awky;
        awky="cstauto.awk";     awk -f awx/beautify.awk $awky > $awky"_ord"; mv $awky"_ord" $awky;
@@ -65,7 +64,7 @@ case $key in
        awky="awx/parser.awk";  awk -f awx/beautify.awk $awky > $awky"_ord"; mv $awky"_ord" $awky;
        awky="awx/gen_prq.awk"; awk -f awx/beautify.awk $awky > $awky"_ord"; mv $awky"_ord" $awky;
 
-       awk -f awx/parser.awk deomo.awk defunct.awk ext/vsevso.awk yodef.awk ext/x4707.awk ext/x4709.awk ext/x1111.awk;
+       awk -f awx/parser.awk deomo.awk defunct.awk yodef.awk ext/x4707.awk ext/x4709.awk ext/x1111.awk;
 
        # сортировка cstrings.gz
        zcat cstrings.gz | awk -f awx/sort_gzstrings.awk | $zipper > cstrings_ord.gz; mv cstrings_ord.gz cstrings.gz

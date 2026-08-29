@@ -649,13 +649,13 @@ class OmographManager:
                     real_start = 0
                 prefix = full_prefix[real_start:om_start]
                 if real_start > 0:
-                    prefix = "›" + prefix
+                    prefix = "◊" + prefix
                 om_text = line_str[om_start:om_end]
                 # Суффикс: от омографа до конца строки (или 150 символов для экономии)
                 suffix_end = min(len(line_str), om_end + 150)
                 suffix = line_str[om_end:suffix_end]
                 if suffix_end < len(line_str):
-                    suffix += "›"
+                    suffix += "◊"
                 line_num = li + 1
                 is_accented = not self._is_unaccented(t["text"])
                 batch.append((line_num, li, ti, prefix, om_text, suffix, is_accented))
@@ -674,14 +674,29 @@ class OmographManager:
         self.occurrences_tree.update_idletasks()
         total_width = self.occurrences_tree.winfo_width()
         line_width = getattr(self, "_max_line_width", 80)
-        # Вычитаем ширину скроллбара (обычно 15-20px)
-        scrollbar_width = 20
-        total_width = max(0, total_width - scrollbar_width)
+        # Измеряем реальную ширину скроллбара
+        scrollbar_width = 0
+        for child in self.occurrences_tree.master.winfo_children():
+            if isinstance(child, ttk.Scrollbar):
+                scrollbar_width = child.winfo_width()
+                break
+        if scrollbar_width == 0:
+            scrollbar_width = 20
+        # Добавляем запас на padding Treeview
+        total_width = max(0, total_width - scrollbar_width + 10)
         available = max(0, total_width - line_width)
         # Центр колонки омографа должен быть в центре доступного пространства
         # prefix_width + om_width/2 = available/2
         prefix_width = max(50, available // 2 - om_width // 2)
-        suffix_width = max(50, available - prefix_width - om_width)
+        suffix_width = available - prefix_width - om_width
+        if suffix_width < 50:
+            suffix_width = 50
+            # Если не хватает места, уменьшаем префикс
+            prefix_width = available - suffix_width - om_width
+        # Растягиваем суффикс на всю оставшуюся ширину
+        actual_total = prefix_width + om_width + suffix_width
+        if actual_total < available:
+            suffix_width += available - actual_total
         self.occurrences_tree.column("prefix", width=prefix_width, stretch=False)
         self.occurrences_tree.column("suffix", width=suffix_width, stretch=False)
         self.occurrences_tree.column(
@@ -826,16 +841,47 @@ class OmographManager:
         if li < 0 or li >= len(self.lines):
             return
         
-        # Используем шрифт occurrences для паттернов
-        self.context_text.configure(font=cfg.DEFAULT_FONTS["occurrences"])
+        # Создаем или обновляем отдельное окно паттернов
+        if not hasattr(self, '_pattern_window') or not self._pattern_window.winfo_exists():
+            self._pattern_window = tk.Toplevel(self.root)
+            self._pattern_window.title("Паттерны")
+            self._pattern_window.geometry("1000x600")
+            self._pattern_window.configure(bg=cfg.DEFAULT_COLORS["bg_main"])
+            
+            # Текстовое поле
+            self._pattern_text = tk.Text(
+                self._pattern_window,
+                wrap=tk.NONE,
+                bg=cfg.DEFAULT_COLORS["bg_text"],
+                fg=cfg.DEFAULT_COLORS["fg_text"],
+                font=cfg.DEFAULT_FONTS["occurrences"],
+            )
+            pattern_scrollbar_y = ttk.Scrollbar(
+                self._pattern_window,
+                orient=tk.VERTICAL,
+                command=self._pattern_text.yview,
+            )
+            pattern_scrollbar_x = ttk.Scrollbar(
+                self._pattern_window,
+                orient=tk.HORIZONTAL,
+                command=self._pattern_text.xview,
+            )
+            self._pattern_text.configure(
+                yscrollcommand=pattern_scrollbar_y.set,
+                xscrollcommand=pattern_scrollbar_x.set,
+            )
+            
+            # Копирование по правой кнопке мыши
+            self._pattern_text.bind("<Button-3>", self._copy_pattern_selection)
+            
+            # Правильное размещение: text слева, y-скроллбар справа, x-скроллбар внизу
+            pattern_scrollbar_y.pack(side=tk.RIGHT, fill=tk.Y)
+            pattern_scrollbar_x.pack(side=tk.BOTTOM, fill=tk.X)
+            self._pattern_text.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         
-        # Увеличиваем высоту окна до 1/3 высоты колонки вхождений
-        occ_height = self.occurrences_tree.winfo_height()
-        new_pixel_height = max(100, occ_height // 3)
-        self.context_text.master.config(height=new_pixel_height)
-        
-        self.context_text.configure(state=tk.NORMAL)
-        self.context_text.delete(1.0, tk.END)
+        # Очищаем и заполняем
+        self._pattern_text.configure(state=tk.NORMAL)
+        self._pattern_text.delete(1.0, tk.END)
         
         # Используем текущие паттерны
         if self._current_patterns:
@@ -844,50 +890,96 @@ class OmographManager:
             description = "Паттерны не найдены"
         
         if description:
-            self.context_text.insert(tk.END, description, "context_line")
-        else:
-            self.context_text.insert(tk.END, "Паттерны не найдены", "context_line")
+            self._pattern_text.insert(tk.END, description)
         
-        self.context_text.configure(state=tk.DISABLED)
+        self._pattern_text.configure(state=tk.DISABLED)
 
     def _format_patterns(self, patterns, li, ti):
         """Форматирует паттерны для отображения"""
         lines_out = []
         
-        # Описание целевого токена
-        tokens = self.lines[li]
-        if ti is not None and 0 <= ti < len(tokens):
-            target = tokens[ti]
-            target_clean = self._clean_accents(target["text"])
-            
-            # Морфология целевого слова
-            morph_info = self._morphology.analyze(target_clean) if self._morphology else []
-            if morph_info:
-                target_desc = []
-                for morph_func, lemma in morph_info:
-                    target_desc.append(f"{morph_func} → {lemma}")
-                lines_out.append(f"ЦЕЛЬ: {target_clean} | {'; '.join(target_desc)}")
-            else:
-                lines_out.append(f"ЦЕЛЬ: {target_clean} | нет морфологии")
+        # Последовательность токенов с сокращенной нотацией
+        lines_out.append("---")
         
-        # Описание паттернов
-        for pattern in patterns:
-            pattern_type = pattern["type"]
+        tokens = self.lines[li]
+        
+        # Собираем последовательность токенов в окне
+        window_size = cfg.DEFAULT_SETTINGS.get("pattern_window_size", 8)
+        left = max(0, ti - window_size)
+        right = min(len(tokens), ti + window_size + 1)
+        
+        # Строка 1: сами токены
+        token_texts = []
+        for i in range(left, right):
+            t = tokens[i]
+            if t["type"] == "word":
+                clean = self._clean_accents(t["text"])
+                if i == ti:
+                    token_texts.append(f"<{clean}>")  # целевое слово
+                else:
+                    token_texts.append(clean)
+            else:
+                gap = t["text"].strip()
+                if gap:
+                    token_texts.append(gap)
+        lines_out.append(" ".join(token_texts))
+        
+        # Строка 2: сокращенная нотация
+        notations = []
+        for i in range(left, right):
+            t = tokens[i]
+            if t["type"] == "word":
+                clean = self._clean_accents(t["text"])
+                morph_info = self._morphology.analyze(clean) if self._morphology else []
+                
+                if i == ti:
+                    notations.append(f"<{clean}>")  # целевое слово
+                else:
+                    # Собираем все варианты нотаций
+                    variants = []
+                    for morph_func, lemma in morph_info:
+                        short = self._morphology.get_short_notation(morph_func)
+                        if short not in variants:
+                            variants.append(short)
+                    
+                    if variants:
+                        if len(variants) == 1:
+                            notations.append(variants[0])
+                        else:
+                            # Несколько вариантов — объединяем в {}
+                            notations.append("{" + ",".join(variants) + "}")
+                    else:
+                        notations.append("?")
+            else:
+                gap = t["text"].strip()
+                if gap:
+                    notations.append(gap)
+        
+        lines_out.append(" ".join(notations))
+        
+        # Ищем вхождения с такими же паттернами
+        if self._pattern_finder and self._morphology:
+            from scriptdb.otk.pattern_schema import PatternSchemaBuilder
+            schema_builder = PatternSchemaBuilder(self._morphology)
             
-            if pattern_type == "case_agreement":
-                cases = ", ".join(pattern.get("cases", []))
-                lines_out.append(f"ПАТТЕРН: согласование падежей [{cases}]")
-            elif pattern_type == "gender_agreement":
-                genders = ", ".join(pattern.get("genders", []))
-                lines_out.append(f"ПАТТЕРН: согласование родов [{genders}]")
-            elif pattern_type == "number_agreement":
-                numbers = ", ".join(pattern.get("numbers", []))
-                lines_out.append(f"ПАТТЕРН: согласование чисел [{numbers}]")
-            elif pattern_type == "tense_agreement":
-                tenses = ", ".join(pattern.get("tenses", []))
-                lines_out.append(f"ПАТТЕРН: согласование времен [{tenses}]")
-            elif pattern_type == "lexical_context":
-                lines_out.append(f"ПАТТЕРН: лексическое окружение [{pattern.get('word', '')}]")
+            # Находим целевое слово
+            target_clean = self._clean_accents(tokens[ti]["text"])
+            
+            matching = schema_builder.find_matching_occurrences(
+                self.lines,
+                li,
+                ti,
+                getattr(self, "_word_index", {}),
+                target_clean,
+                window_size,
+            )
+            
+            if matching:
+                lines_out.append(f"--- Совпадения: {len(matching)} ---")
+                for match_li, match_ti, schema in matching[:10]:
+                    lines_out.append(f"  Строка {match_li + 1}: {schema}")
+            else:
+                lines_out.append("--- Совпадений нет ---")
         
         return "\n".join(lines_out)
 
@@ -897,6 +989,16 @@ class OmographManager:
             self.root.clipboard_clear()
             self.root.clipboard_append(sel)
             self.progress_var.set("Выделенный текст скопирован")
+        except tk.TclError:
+            pass
+
+    def _copy_pattern_selection(self, event):
+        """Копирует выделенный текст из окна паттернов"""
+        try:
+            sel = self._pattern_text.selection_get()
+            self.root.clipboard_clear()
+            self.root.clipboard_append(sel)
+            self.progress_var.set("Паттерн скопирован")
         except tk.TclError:
             pass
 
@@ -1138,7 +1240,7 @@ class OmographManager:
             occ_toolbar,
             textvariable=self.occ_search_var,
             font=cfg.DEFAULT_FONTS["ui"],
-            width=21,
+            width=25,
             bg=cfg.DEFAULT_COLORS["bg_text"],
             fg=cfg.DEFAULT_COLORS["fg_text"],
             insertbackground=cfg.DEFAULT_COLORS["fg_text"],
@@ -1290,7 +1392,11 @@ class OmographManager:
             weight=of_weight,
         )
         max_linespace = max(cf.metrics()["linespace"], of.metrics()["linespace"])
-        context_pixel_h = max_linespace * 5 + 18
+        # Учитываем spacing1 и spacing3 из context_text
+        spacing1 = cfg.DEFAULT_SETTINGS.get("context_spacing1", 0)
+        spacing3 = cfg.DEFAULT_SETTINGS.get("context_spacing3", 0)
+        line_height = max_linespace + spacing1 + spacing3
+        context_pixel_h = line_height * 5 + 18
         context_frame.config(height=context_pixel_h)
         context_frame.pack_propagate(False)
 
@@ -1307,6 +1413,9 @@ class OmographManager:
             undo=False,
             maxundo=0,
             takefocus=0,
+            spacing1=cfg.DEFAULT_SETTINGS.get("context_spacing1", 0),
+            spacing2=cfg.DEFAULT_SETTINGS.get("context_spacing2", 0),
+            spacing3=cfg.DEFAULT_SETTINGS.get("context_spacing3", 0),
             state=tk.DISABLED if not cfg.DEFAULT_SETTINGS.get("allow_context_edit", False) else tk.NORMAL,
         )
 
@@ -1760,6 +1869,10 @@ class OmographManager:
         else:
             self.patterns_btn.configure(text="🔍 Паттерны")
             self.progress_var.set("✓ Поиск паттернов выключен")
+            # Закрываем окно паттернов, если оно открыто
+            if hasattr(self, '_pattern_window') and self._pattern_window.winfo_exists():
+                self._pattern_window.destroy()
+            
             # Обновляем список без подсветки
             if self.current_word:
                 self.populate_occurrences(self.current_word)
@@ -2256,11 +2369,23 @@ class OmographManager:
         search_term = self.occ_search_var.get()
         if hasattr(self, "_occ_cache") and self._occ_cache:
             show_all = self.show_all_var.get()
-            self.occurrences = [(b[0], b[1], b[2]) for b in self._occ_cache
-                                if (show_all or not b[6]) and self._match_occurrence(b, search_term)]
+            
+            # Проверяем, является ли поиск числом (номер строки)
+            is_line_search = search_term.isdigit()
+            
+            if is_line_search:
+                line_num = int(search_term)
+                self.occurrences = [(b[0], b[1], b[2]) for b in self._occ_cache
+                                    if (show_all or not b[6]) and b[0] == line_num]
+                self._occ_batch = [b for b in self._occ_cache
+                                   if (show_all or not b[6]) and b[0] == line_num]
+            else:
+                self.occurrences = [(b[0], b[1], b[2]) for b in self._occ_cache
+                                    if (show_all or not b[6]) and self._match_occurrence(b, search_term)]
+                self._occ_batch = [b for b in self._occ_cache
+                                   if (show_all or not b[6]) and self._match_occurrence(b, search_term)]
+            
             self.occurrences_tree.delete(*self.occurrences_tree.get_children())
-            self._occ_batch = [b for b in self._occ_cache
-                               if (show_all or not b[6]) and self._match_occurrence(b, search_term)]
             self._occ_batch_idx = 0
             self.occurrences_tree.unbind("<<TreeviewSelect>>")
             self._insert_occ_batch()

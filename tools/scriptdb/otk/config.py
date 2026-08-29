@@ -57,6 +57,9 @@ DEFAULT_SETTINGS = {
     "font_scale": 1.0,
     "book_reader": "",
     "pattern_window_size": 8,
+    "context_spacing1": 3,
+    "context_spacing2": 0,
+    "context_spacing3": 3,
 }
 
 def load_config():

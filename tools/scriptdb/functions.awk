@@ -1951,28 +1951,23 @@ function gl_bumn(n,                                                             
 # существительные
 function suw_edmuim(n,                                                                                                                          wd,ret) { if(!wd)wd=lc(n);
                       if (wd in sw_edmu_im||wd in sw_edob_im||wd in swn_edmu_im||wd in son_edmu_im||wd in sgn_edmu_im||wd in swn_edob_im||
-                          wd in swo_edmu_im||wd in sqo_edmu_im||wd in sio_edmu_im||wd in sfo_edmu_im||wd in swo_edob_im||
-                          wd in sio_edob_im)                                                                                                    {ret=1} else {ret=0}; return ret}
+                          wd in swo_edmu_im||wd in sqo_edmu_im||wd in sio_edmu_im||wd in sfo_edmu_im||wd in swo_edob_im||wd in sio_edob_im)     {ret=1} else {ret=0}; return ret}
 function suw_edmuvi(n,                                                                                                                          wd,ret) { if(!wd)wd=lc(n);
                       if (wd in sw_edmu_vi||wd in sw_edmu_vi||wd in sw_edob_vi||wd in swn_edmu_im||wd in son_edmu_im||wd in sgn_edmu_im||
                           wd in swn_edob_vi||wd in swo_edmu_vi||wd in sqo_edmu_vi||wd in sio_edmu_vi||wd in sfo_edmu_vi||wd in swo_edob_vi||
-                          wd in sio_edob_vi)                                                                                 {ret=1} else {ret=0}; return ret}
+                          wd in sio_edob_vi)                                                                                                    {ret=1} else {ret=0}; return ret}
 function suw_edmuda(n,                                                                                                                          wd,ret) { if(!wd)wd=lc(n);
                       if (wd in sw_edmu_da||wd in sw_edob_da||wd in swn_edmu_da||wd in son_edmu_da||wd in sgn_edmu_da||wd in swn_edob_da||
-                          wd in swo_edmu_da||wd in sqo_edmu_da||wd in sio_edmu_da||wd in sfo_edmu_da||wd in swo_edob_da||
-                          wd in sio_edob_da)                                                                                                    {ret=1} else {ret=0}; return ret}
+                          wd in swo_edmu_da||wd in sqo_edmu_da||wd in sio_edmu_da||wd in sfo_edmu_da||wd in swo_edob_da||wd in sio_edob_da)     {ret=1} else {ret=0}; return ret}
 function suw_edmuro(n,                                                                                                                          wd,ret) { if(!wd)wd=lc(n);
                       if (wd in sw_edmu_ro||wd in sw_edob_ro||wd in swn_edmu_ro||wd in son_edmu_ro||wd in sgn_edmu_ro||wd in swn_edob_ro||
-                          wd in swo_edmu_ro||wd in sqo_edmu_ro||wd in sio_edmu_ro||wd in sfo_edmu_ro||wd in swo_edob_ro||
-                          wd in sio_edob_ro)                                                                                                    {ret=1} else {ret=0}; return ret}
+                          wd in swo_edmu_ro||wd in sqo_edmu_ro||wd in sio_edmu_ro||wd in sfo_edmu_ro||wd in swo_edob_ro||wd in sio_edob_ro)     {ret=1} else {ret=0}; return ret}
 function suw_edmutv(n,                                                                                                                          wd,ret) { if(!wd)wd=lc(n);
                       if (wd in sw_edmu_tv||wd in sw_edob_tv||wd in swn_edmu_tv||wd in son_edmu_tv||wd in sgn_edmu_tv||wd in swn_edob_tv||
-                          wd in swo_edmu_tv||wd in sqo_edmu_tv||wd in sio_edmu_tv||wd in sfo_edmu_tv||wd in swo_edob_tv||
-                          wd in sio_edob_tv)                                                                                                    {ret=1} else {ret=0}; return ret}
+                          wd in swo_edmu_tv||wd in sqo_edmu_tv||wd in sio_edmu_tv||wd in sfo_edmu_tv||wd in swo_edob_tv||wd in sio_edob_tv)     {ret=1} else {ret=0}; return ret}
 function suw_edmupr(n,                                                                                                                          wd,ret) { if(!wd)wd=lc(n);
                       if (wd in sw_edmu_pr||wd in sw_edob_pr||wd in swn_edmu_pr||wd in son_edmu_pr||wd in sgn_edmu_pr||wd in swn_edob_pr||
-                          wd in swo_edmu_pr||wd in sqo_edmu_pr||wd in sio_edmu_pr||wd in sfo_edmu_pr||wd in swo_edob_pr||
-                          wd in sio_edob_pr)                                                                                                    {ret=1} else {ret=0}; return ret}
+                          wd in swo_edmu_pr||wd in sqo_edmu_pr||wd in sio_edmu_pr||wd in sfo_edmu_pr||wd in swo_edob_pr||wd in sio_edob_pr)     {ret=1} else {ret=0}; return ret}
 
 function suw_edsrim(n,                                                                                                                          wd,ret) { if(!wd)wd=lc(n);
                       if (wd in sw_edsr_im||wd in swn_edsr_im||wd in son_edsr_im||wd in sgn_edsr_im||wd in swo_edsr_im)                         {ret=1} else {ret=0}; return ret}
@@ -1980,13 +1975,13 @@ function suw_edsrvi(n,                                                          
                       if (wd in sw_edsr_vi||wd in swn_edsr_vi||wd in son_edsr_vi||wd in sgn_edsr_vi||wd in swo_edsr_vi)                         {ret=1} else {ret=0}; return ret}
 function suw_edsrda(n,                                                                                                                          wd,ret) { if(!wd)wd=lc(n);
                       if (wd in sw_edob_da||wd in sw_edsr_da||wd in swn_edob_da||wd in swn_edsr_da||wd in son_edsr_da||wd in sgn_edsr_da||
-                          wd in swo_edob_da||wd in sio_edob_da||wd in swo_edsr_da)                                           {ret=1} else {ret=0}; return ret}
+                          wd in swo_edob_da||wd in sio_edob_da||wd in swo_edsr_da)                                                              {ret=1} else {ret=0}; return ret}
 function suw_edsrro(n,                                                                                                                          wd,ret) { if(!wd)wd=lc(n);
                       if (wd in sw_edob_ro||wd in sw_edsr_ro||wd in swn_edob_ro||wd in swn_edsr_ro||wd in son_edsr_ro||wd in sgn_edsr_ro||
-                          wd in swo_edob_ro||wd in sio_edob_ro||wd in swo_edsr_ro)                                           {ret=1} else {ret=0}; return ret}
+                          wd in swo_edob_ro||wd in sio_edob_ro||wd in swo_edsr_ro)                                                              {ret=1} else {ret=0}; return ret}
 function suw_edsrpr(n,                                                                                                                          wd,ret) { if(!wd)wd=lc(n);
                       if (wd in sw_edob_pr||wd in sw_edsr_pr||wd in swn_edob_pr||wd in swn_edsr_pr||wd in son_edsr_pr||wd in sgn_edsr_pr||
-                          wd in swo_edob_pr||wd in sio_edob_pr||wd in swo_edsr_pr)                                           {ret=1} else {ret=0}; return ret}
+                          wd in swo_edob_pr||wd in sio_edob_pr||wd in swo_edsr_pr)                                                              {ret=1} else {ret=0}; return ret}
 
 function suw_edzeim(n,                                                                                                                          wd,ret) { if(!wd)wd=lc(n);
                       if (wd in swn_edze_im||wd in son_edze_im||wd in sgn_edze_im||wd in swo_edze_im||wd in sqo_edze_im||wd in sio_edze_im||
@@ -2010,38 +2005,38 @@ function suw_edim(n,                                                            
                       if (wd in sw_edmu_im||wd in sw_edob_im||wd in sw_edsr_im||wd in sw_edze_im||wd in swn_edmu_im||wd in son_edmu_im||
                           wd in sgn_edmu_im||wd in swn_edob_im||wd in swn_edsr_im||wd in son_edsr_im||wd in sgn_edsr_im||wd in swn_edze_im||
                           wd in son_edze_im||wd in sgn_edze_im||wd in swo_edmu_im||wd in sqo_edmu_im||wd in sio_edmu_im||wd in sfo_edmu_im||
-                          wd in swo_edob_im||wd in sio_edob_im||wd in swo_edsr_im||wd in swo_edze_im||wd in sqo_edze_im||
-                          wd in sio_edze_im||wd in sfo_edze_im)                                                                                 {ret=1} else {ret=0}; return ret}
+                          wd in swo_edob_im||wd in sio_edob_im||wd in swo_edsr_im||wd in swo_edze_im||wd in sqo_edze_im||wd in sio_edze_im||
+                          wd in sfo_edze_im)                                                                                                    {ret=1} else {ret=0}; return ret}
 function suw_edvi(n,                                                                                                                            wd,ret) { if(!wd)wd=lc(n);
                       if (wd in sw_edmu_vi||wd in sw_edob_vi||wd in sw_edsr_vi||wd in sw_edze_vi||wd in swn_edmu_im||wd in son_edmu_im||
                           wd in sgn_edmu_im||wd in swn_edob_vi||wd in swn_edsr_vi||wd in son_edsr_vi||wd in sgn_edsr_vi||wd in swn_edze_vi||
                           wd in son_edze_vi||wd in sgn_edze_vi||wd in swo_edmu_vi||wd in sqo_edmu_vi||wd in sio_edmu_vi||wd in sfo_edmu_vi||
-                          wd in swo_edob_vi||wd in sio_edob_vi||wd in swo_edsr_vi||wd in swo_edze_vi||wd in sqo_edze_vi||
-                          wd in sio_edze_vi||wd in sfo_edze_vi)                                                                                 {ret=1} else {ret=0}; return ret}
+                          wd in swo_edob_vi||wd in sio_edob_vi||wd in swo_edsr_vi||wd in swo_edze_vi||wd in sqo_edze_vi||wd in sio_edze_vi||
+                          wd in sfo_edze_vi)                                                                                                    {ret=1} else {ret=0}; return ret}
 function suw_edro(n,                                                                                                                            wd,ret) { if(!wd)wd=lc(n);
                       if (wd in sw_edmu_ro||wd in sw_edob_ro||wd in sw_edsr_ro||wd in sw_edze_ro||wd in swn_edmu_ro||wd in son_edmu_ro||
                           wd in sgn_edmu_ro||wd in swn_edob_ro||wd in swn_edsr_ro||wd in son_edsr_ro||wd in sgn_edsr_ro||wd in swn_edze_ro||
                           wd in son_edze_ro||wd in sgn_edze_ro||wd in swo_edmu_ro||wd in sqo_edmu_ro||wd in sio_edmu_ro||wd in sfo_edmu_ro||
-                          wd in swo_edob_ro||wd in sio_edob_ro||wd in swo_edsr_ro||wd in swo_edze_ro||wd in sqo_edze_ro||
-                          wd in sio_edze_ro||wd in sfo_edze_ro)                                                                                 {ret=1} else {ret=0}; return ret}
+                          wd in swo_edob_ro||wd in sio_edob_ro||wd in swo_edsr_ro||wd in swo_edze_ro||wd in sqo_edze_ro||wd in sio_edze_ro||
+                          wd in sfo_edze_ro)                                                                                                    {ret=1} else {ret=0}; return ret}
 function suw_edda(n,                                                                                                                            wd,ret) { if(!wd)wd=lc(n);
                       if (wd in sw_edmu_da||wd in sw_edob_da||wd in sw_edsr_da||wd in sw_edze_da||wd in swn_edmu_da||wd in son_edmu_da||
                           wd in sgn_edmu_da||wd in swn_edob_da||wd in swn_edsr_da||wd in son_edsr_da||wd in sgn_edsr_da||wd in swn_edze_da||
                           wd in son_edze_da||wd in sgn_edze_da||wd in swo_edmu_da||wd in sqo_edmu_da||wd in sio_edmu_da||wd in sfo_edmu_da||
-                          wd in swo_edob_da||wd in sio_edob_da||wd in swo_edsr_da||wd in swo_edze_da||wd in sqo_edze_da||
-                          wd in sio_edze_da||wd in sfo_edze_da)                                                                                 {ret=1} else {ret=0}; return ret}
+                          wd in swo_edob_da||wd in sio_edob_da||wd in swo_edsr_da||wd in swo_edze_da||wd in sqo_edze_da||wd in sio_edze_da||
+                          wd in sfo_edze_da)                                                                                                    {ret=1} else {ret=0}; return ret}
 function suw_edtv(n,                                                                                                                            wd,ret) { if(!wd)wd=lc(n);
                       if (wd in sw_edmu_tv||wd in sw_edob_tv||wd in sw_edsr_tv||wd in sw_edze_tv||wd in swn_edmu_tv||wd in son_edmu_tv||
                           wd in sgn_edmu_tv||wd in swn_edob_tv||wd in swn_edsr_tv||wd in son_edsr_tv||wd in sgn_edsr_tv||wd in swn_edze_tv||
                           wd in son_edze_tv||wd in sgn_edze_tv||wd in swo_edmu_tv||wd in sqo_edmu_tv||wd in sio_edmu_tv||wd in sfo_edmu_tv||
-                          wd in swo_edob_tv||wd in sio_edob_tv||wd in swo_edsr_tv||wd in swo_edze_tv||wd in sqo_edze_tv||
-                          wd in sio_edze_tv||wd in sfo_edze_tv)                                                                                 {ret=1} else {ret=0}; return ret}
+                          wd in swo_edob_tv||wd in sio_edob_tv||wd in swo_edsr_tv||wd in swo_edze_tv||wd in sqo_edze_tv||wd in sio_edze_tv||
+                          wd in sfo_edze_tv)                                                                                                    {ret=1} else {ret=0}; return ret}
 function suw_edpr(n,                                                                                                                            wd,ret) { if(!wd)wd=lc(n);
                       if (wd in sw_edmu_pr||wd in sw_edob_pr||wd in sw_edsr_pr||wd in sw_edze_pr||wd in swn_edmu_pr||wd in son_edmu_pr||
                           wd in sgn_edmu_pr||wd in swn_edob_pr||wd in swn_edsr_pr||wd in son_edsr_pr||wd in sgn_edsr_pr||wd in swn_edze_pr||
                           wd in son_edze_pr||wd in sgn_edze_pr||wd in swo_edmu_pr||wd in sqo_edmu_pr||wd in sio_edmu_pr||wd in sfo_edmu_pr||
-                          wd in swo_edob_pr||wd in sio_edob_pr||wd in swo_edsr_pr||wd in swo_edze_pr||wd in sqo_edze_pr||
-                          wd in sio_edze_pr||wd in sfo_edze_pr)                                                                                 {ret=1} else {ret=0}; return ret}
+                          wd in swo_edob_pr||wd in sio_edob_pr||wd in swo_edsr_pr||wd in swo_edze_pr||wd in sqo_edze_pr||wd in sio_edze_pr||
+                          wd in sfo_edze_pr)                                                                                                    {ret=1} else {ret=0}; return ret}
 function suw_mnim(n,                                                                                                                            wd,ret) { if(!wd)wd=lc(n);
                       if (wd in swn_mn_im||wd in son_mn_im||wd in sgn_mn_im||wd in swo_mn_im||wd in sqo_mn_im||wd in sio_mn_im||                
                           wd in sfo_mn_im||wd in sw_mn_im)                                                                                      {ret=1} else {ret=0}; return ret}
@@ -2064,154 +2059,138 @@ function suw_im(n,                                                              
                       if (wd in sw_edmu_im||wd in sw_edob_im||wd in sw_edsr_im||wd in sw_edze_im||wd in swn_edmu_im||wd in son_edmu_im||        
                           wd in sgn_edmu_im||wd in swn_edob_im||wd in swn_edsr_im||wd in son_edsr_im||wd in sgn_edsr_im||wd in swn_edze_im||    
                           wd in son_edze_im||wd in sgn_edze_im||wd in swo_edmu_im||wd in sqo_edmu_im||wd in sio_edmu_im||wd in sfo_edmu_im||    
-                          wd in swo_edob_im||wd in sio_edob_im||wd in swo_edsr_im||wd in swo_edze_im||wd in sqo_edze_im||
-                          wd in sio_edze_im||wd in sfo_edze_im||wd in swn_mn_im||wd in son_mn_im||wd in sgn_mn_im||wd in swo_mn_im||
-                          wd in sqo_mn_im||wd in sio_mn_im||wd in sfo_mn_im||wd in sw_mn_im)                                                    {ret=1} else {ret=0}; return ret}
+                          wd in swo_edob_im||wd in sio_edob_im||wd in swo_edsr_im||wd in swo_edze_im||wd in sqo_edze_im||wd in sio_edze_im||
+                          wd in sfo_edze_im||wd in swn_mn_im||wd in son_mn_im||wd in sgn_mn_im||wd in swo_mn_im||wd in sqo_mn_im||
+                          wd in sio_mn_im||wd in sfo_mn_im||wd in sw_mn_im)                                                                     {ret=1} else {ret=0}; return ret}
 function suw_vi(n,                                                                                                                              wd,ret) { if(!wd)wd=lc(n);
                       if (wd in sw_edmu_vi||wd in sw_edob_vi||wd in sw_edsr_vi||wd in sw_edze_vi||wd in swn_edmu_im||wd in son_edmu_im||
                           wd in sgn_edmu_im||wd in swn_edob_vi||wd in swn_edsr_vi||wd in son_edsr_vi||wd in sgn_edsr_vi||wd in swn_edze_vi||
                           wd in son_edze_vi||wd in sgn_edze_vi||wd in swo_edmu_vi||wd in sqo_edmu_vi||wd in sio_edmu_vi||wd in sfo_edmu_vi||
-                          wd in swo_edob_vi||wd in sio_edob_vi||wd in swo_edsr_vi||wd in swo_edze_vi||wd in sqo_edze_vi||
-                          wd in sio_edze_vi||wd in sfo_edze_vi||wd in sw_mn_vi||wd in swn_mn_im||wd in son_mn_im||wd in sgn_mn_im||
-                          wd in swo_mn_ro||wd in sqo_mn_ro||wd in sio_mn_ro||wd in sfo_mn_ro)                                                   {ret=1} else {ret=0}; return ret}
+                          wd in swo_edob_vi||wd in sio_edob_vi||wd in swo_edsr_vi||wd in swo_edze_vi||wd in sqo_edze_vi||wd in sio_edze_vi||
+                          wd in sfo_edze_vi||wd in sw_mn_vi||wd in swn_mn_im||wd in son_mn_im||wd in sgn_mn_im||wd in swo_mn_ro||
+                          wd in sqo_mn_ro||wd in sio_mn_ro||wd in sfo_mn_ro)                                                                    {ret=1} else {ret=0}; return ret}
 function suw_ro(n,                                                                                                                              wd,ret) { if(!wd)wd=lc(n);
                       if (wd in sw_edmu_ro||wd in sw_edob_ro||wd in sw_edsr_ro||wd in sw_edze_ro||wd in swn_edmu_ro||wd in son_edmu_ro||
                           wd in sgn_edmu_ro||wd in swn_edob_ro||wd in swn_edsr_ro||wd in son_edsr_ro||wd in sgn_edsr_ro||wd in swn_edze_ro||
                           wd in son_edze_ro||wd in sgn_edze_ro||wd in swo_edmu_ro||wd in sqo_edmu_ro||wd in sio_edmu_ro||wd in sfo_edmu_ro||
-                          wd in swo_edob_ro||wd in sio_edob_ro||wd in swo_edsr_ro||wd in swo_edze_ro||wd in sqo_edze_ro||
-                          wd in sio_edze_ro||wd in sfo_edze_ro||wd in sw_mn_ro||wd in swn_mn_ro||wd in son_mn_ro||wd in sgn_mn_ro||
-                          wd in swo_mn_ro||wd in sqo_mn_ro||wd in sio_mn_ro||wd in sfo_mn_ro)                                                   {ret=1} else {ret=0}; return ret}
+                          wd in swo_edob_ro||wd in sio_edob_ro||wd in swo_edsr_ro||wd in swo_edze_ro||wd in sqo_edze_ro||wd in sio_edze_ro||
+                          wd in sfo_edze_ro||wd in sw_mn_ro||wd in swn_mn_ro||wd in son_mn_ro||wd in sgn_mn_ro||wd in swo_mn_ro||
+                          wd in sqo_mn_ro||wd in sio_mn_ro||wd in sfo_mn_ro)                                                                    {ret=1} else {ret=0}; return ret}
 function suw_da(n,                                                                                                                              wd,ret) { if(!wd)wd=lc(n);
                       if (wd in sw_edmu_da||wd in sw_edob_da||wd in sw_edsr_da||wd in sw_edze_da||wd in swn_edmu_da||wd in son_edmu_da||
                           wd in sgn_edmu_da||wd in swn_edob_da||wd in swn_edsr_da||wd in son_edsr_da||wd in sgn_edsr_da||wd in swn_edze_da||
                           wd in son_edze_da||wd in sgn_edze_da||wd in swo_edmu_da||wd in sqo_edmu_da||wd in sio_edmu_da||wd in sfo_edmu_da||
-                          wd in swo_edob_da||wd in sio_edob_da||wd in swo_edsr_da||wd in swo_edze_da||wd in sqo_edze_da||
-                          wd in sio_edze_da||wd in sfo_edze_da||wd in sw_mn_da||wd in swn_mn_da||wd in son_mn_da||wd in sgn_mn_da||
-                          wd in swo_mn_da||wd in sqo_mn_da||wd in sio_mn_da||wd in sfo_mn_da)                                                   {ret=1} else {ret=0}; return ret}
+                          wd in swo_edob_da||wd in sio_edob_da||wd in swo_edsr_da||wd in swo_edze_da||wd in sqo_edze_da||wd in sio_edze_da||
+                          wd in sfo_edze_da||wd in sw_mn_da||wd in swn_mn_da||wd in son_mn_da||wd in sgn_mn_da||wd in swo_mn_da||
+                          wd in sqo_mn_da||wd in sio_mn_da||wd in sfo_mn_da)                                                                    {ret=1} else {ret=0}; return ret}
 function suw_tv(n,                                                                                                                              wd,ret) { if(!wd)wd=lc(n);
                       if (wd in sw_edmu_tv||wd in sw_edob_tv||wd in sw_edsr_tv||wd in sw_edze_tv||wd in swn_edmu_tv||wd in son_edmu_tv||
                           wd in sgn_edmu_tv||wd in swn_edob_tv||wd in swn_edsr_tv||wd in son_edsr_tv||wd in sgn_edsr_tv||wd in swn_edze_tv||
                           wd in son_edze_tv||wd in sgn_edze_tv||wd in swo_edmu_tv||wd in sqo_edmu_tv||wd in sio_edmu_tv||wd in sfo_edmu_tv||
-                          wd in swo_edob_tv||wd in sio_edob_tv||wd in swo_edsr_tv||wd in swo_edze_tv||wd in sqo_edze_tv||
-                          wd in sio_edze_tv||wd in sfo_edze_tv||wd in sw_mn_tv||wd in swn_mn_tv||wd in son_mn_tv||wd in sgn_mn_tv||
-                          wd in swo_mn_tv||wd in sqo_mn_tv||wd in sio_mn_tv||wd in sfo_mn_tv)                                                   {ret=1} else {ret=0}; return ret}
+                          wd in swo_edob_tv||wd in sio_edob_tv||wd in swo_edsr_tv||wd in swo_edze_tv||wd in sqo_edze_tv||wd in sio_edze_tv||
+                          wd in sfo_edze_tv||wd in sw_mn_tv||wd in swn_mn_tv||wd in son_mn_tv||wd in sgn_mn_tv||wd in swo_mn_tv||
+                          wd in sqo_mn_tv||wd in sio_mn_tv||wd in sfo_mn_tv)                                                                    {ret=1} else {ret=0}; return ret}
 function suw_pr(n,                                                                                                                              wd,ret) { if(!wd)wd=lc(n);
                       if (wd in sw_edmu_pr||wd in sw_edob_pr||wd in sw_edsr_pr||wd in sw_edze_pr||wd in swn_edmu_pr||wd in son_edmu_pr||
                           wd in sgn_edmu_pr||wd in swn_edob_pr||wd in swn_edsr_pr||wd in son_edsr_pr||wd in sgn_edsr_pr||wd in swn_edze_pr||
                           wd in son_edze_pr||wd in sgn_edze_pr||wd in swo_edmu_pr||wd in sqo_edmu_pr||wd in sio_edmu_pr||wd in sfo_edmu_pr||
-                          wd in swo_edob_pr||wd in sio_edob_pr||wd in swo_edsr_pr||wd in swo_edze_pr||wd in sqo_edze_pr||
-                          wd in sio_edze_pr||wd in sfo_edze_pr||wd in sw_mn_pr||wd in swn_mn_pr||wd in son_mn_pr||wd in sgn_mn_pr||
-                          wd in swo_mn_pr||wd in sqo_mn_pr||wd in sio_mn_pr||wd in sfo_mn_pr)                                                   {ret=1} else {ret=0}; return ret}
+                          wd in swo_edob_pr||wd in sio_edob_pr||wd in swo_edsr_pr||wd in swo_edze_pr||wd in sqo_edze_pr||wd in sio_edze_pr||
+                          wd in sfo_edze_pr||wd in sw_mn_pr||wd in swn_mn_pr||wd in son_mn_pr||wd in sgn_mn_pr||wd in swo_mn_pr||
+                          wd in sqo_mn_pr||wd in sio_mn_pr||wd in sfo_mn_pr)                                                                    {ret=1} else {ret=0}; return ret}
 function suw_oded(n,                                                                                                                            wd,ret) { if(!wd)wd=lc(n);
                       if (wd in swo_edmu_da||wd in sqo_edmu_da||wd in sio_edmu_da||wd in sfo_edmu_da||wd in swo_edmu_im||wd in sqo_edmu_im||
                           wd in sio_edmu_im||wd in sfo_edmu_im||wd in swo_edmu_ne||wd in sio_edmu_ne||wd in sfo_edmu_ne||wd in swo_edmu_pr||
                           wd in sqo_edmu_pr||wd in sio_edmu_pr||wd in sfo_edmu_pr||wd in swo_edmu_ro||wd in sqo_edmu_ro||wd in sio_edmu_ro||
                           wd in sfo_edmu_ro||wd in swo_edmu_tv||wd in sqo_edmu_tv||wd in sio_edmu_tv||wd in sfo_edmu_tv||wd in swo_edmu_vi||
                           wd in sqo_edmu_vi||wd in sio_edmu_vi||wd in sfo_edmu_vi||wd in swo_edmu_zv||wd in sio_edmu_zv||wd in swo_edob_da||
-                          wd in sio_edob_da||wd in swo_edob_im||wd in sio_edob_im||wd in swo_edob_ne||
-                          wd in swo_edob_pr||wd in sio_edob_pr||wd in swo_edob_ro||wd in sio_edob_ro||
-                          wd in swo_edob_tv||wd in sio_edob_tv||wd in swo_edob_vi||wd in sio_edob_vi||
+                          wd in sio_edob_da||wd in swo_edob_im||wd in sio_edob_im||wd in swo_edob_ne||wd in sio_edze_zv||wd in swo_edsr_ne||
+                          wd in swo_edob_pr||wd in sio_edob_pr||wd in swo_edob_ro||wd in sio_edob_ro||wd in sfo_edze_vi||wd in swo_edze_zv||
+                          wd in swo_edob_tv||wd in sio_edob_tv||wd in swo_edob_vi||wd in sio_edob_vi||wd in sqo_edze_vi||wd in sio_edze_vi||
                           wd in swo_edsr_da||wd in swo_edsr_im||wd in swo_edsr_pr||wd in swo_edsr_ro||wd in swo_edsr_tv||wd in swo_edsr_vi||
                           wd in swo_edze_da||wd in sqo_edze_da||wd in sio_edze_da||wd in sfo_edze_da||wd in swo_edze_im||wd in sqo_edze_im||
                           wd in sio_edze_im||wd in sfo_edze_im||wd in swo_edze_ne||wd in sio_edze_ne||wd in sfo_edze_ne||wd in swo_edze_pr||
                           wd in sqo_edze_pr||wd in sio_edze_pr||wd in sfo_edze_pr||wd in swo_edze_ro||wd in sqo_edze_ro||wd in sio_edze_ro||
                           wd in sfo_edze_ro||wd in swo_edze_tv||wd in sqo_edze_tv||wd in sio_edze_tv||wd in sfo_edze_tv||wd in swo_edze_vi||
-                          wd in sqo_edze_vi||wd in sio_edze_vi||wd in sfo_edze_vi||wd in swo_edze_zv||wd in sio_edze_zv||wd in swo_edsr_ne||
                           wd in swo_edob_zv||wd in sio_edob_zv)                                                                                 {ret=1} else {ret=0}; return ret}
 function suw_odim(n,                                                                                                                            wd,ret) { if(!wd)wd=lc(n);
                       if (wd in swo_edmu_im||wd in sqo_edmu_im||wd in sio_edmu_im||wd in sfo_edmu_im||wd in swo_edmu_ne||wd in sio_edmu_ne||
-                          wd in sfo_edmu_ne||wd in swo_edob_im||wd in sio_edob_im||wd in swo_edob_ne||wd in swo_edsr_im||
+                          wd in sfo_edmu_ne||wd in swo_edob_im||wd in sio_edob_im||wd in swo_edob_ne||wd in swo_edsr_im||wd in sfo_edze_ne||
                           wd in swo_edze_im||wd in sqo_edze_im||wd in sio_edze_im||wd in sfo_edze_im||wd in swo_edze_ne||wd in sio_edze_ne||
-                          wd in sfo_edze_ne||wd in swo_mn_im||wd in sqo_mn_im||wd in sio_mn_im||wd in sfo_mn_im||wd in swo_mn_ne||
-                          wd in sio_mn_ne||wd in sfo_mn_ne||wd in swo_edsr_ne)                                                                  {ret=1} else {ret=0}; return ret}
+                          wd in swo_mn_im||wd in sqo_mn_im||wd in sio_mn_im||wd in sfo_mn_im||wd in swo_mn_ne||wd in sio_mn_ne||
+                          wd in sfo_mn_ne||wd in swo_edsr_ne)                                                                                   {ret=1} else {ret=0}; return ret}
 function suw_odvi(n,                                                                                                                            wd,ret) { if(!wd)wd=lc(n);
                       if (wd in swo_edmu_ne||wd in sio_edmu_ne||wd in sfo_edmu_ne||wd in swo_edmu_vi||wd in sqo_edmu_vi||wd in sio_edmu_vi||
-                          wd in sfo_edmu_vi||wd in swo_edob_ne||wd in swo_edob_vi||wd in sio_edob_vi||wd in swo_edsr_vi||
+                          wd in sfo_edmu_vi||wd in swo_edob_ne||wd in swo_edob_vi||wd in sio_edob_vi||wd in swo_edsr_vi||wd in sfo_edze_vi||
                           wd in swo_edze_ne||wd in sio_edze_ne||wd in sfo_edze_ne||wd in swo_edze_vi||wd in sqo_edze_vi||wd in sio_edze_vi||
-                          wd in sfo_edze_vi||wd in swo_mn_im||wd in sqo_mn_im||wd in sio_mn_im||wd in sfo_mn_im||wd in swo_mn_ne||
-                          wd in sio_mn_ne||wd in sfo_mn_ne||wd in swo_edsr_ne)                                                                  {ret=1} else {ret=0}; return ret}
+                          wd in swo_mn_im||wd in sqo_mn_im||wd in sio_mn_im||wd in sfo_mn_im||wd in swo_mn_ne||wd in sio_mn_ne||
+                          wd in sfo_mn_ne||wd in swo_edsr_ne)                                                                                   {ret=1} else {ret=0}; return ret}
 function suw_odro(n,                                                                                                                            wd,ret) { if(!wd)wd=lc(n);
-                      if (wd in swo_edmu_ne||wd in sio_edmu_ne||wd in sfo_edmu_ne||wd in swo_edmu_ro||wd in sqo_edmu_ro||
-                          wd in sio_edmu_ro||wd in sfo_edmu_ro||wd in swo_edob_ne||
-                          wd in swo_edob_ro||wd in sio_edob_ro||wd in swo_edsr_ro||wd in swo_edze_ne||
-                          wd in sio_edze_ne||wd in sfo_edze_ne||wd in swo_edze_ro||wd in sqo_edze_ro||wd in sio_edze_ro||
-                          wd in sfo_edze_ro||wd in swo_mn_ro||wd in sqo_mn_ro||wd in sio_mn_ro||wd in sfo_mn_ro||wd in swo_mn_ne||
-                          wd in sio_mn_ne||wd in sfo_mn_ne||wd in swo_edsr_ne)                                                 {ret=1} else {ret=0}; return ret}
+                      if (wd in swo_edmu_ne||wd in sio_edmu_ne||wd in sfo_edmu_ne||wd in swo_edmu_ro||wd in sqo_edmu_ro||wd in sio_edmu_ro||
+                          wd in sfo_edmu_ro||wd in swo_edob_ne||wd in swo_edob_ro||wd in sio_edob_ro||wd in swo_edsr_ro||wd in swo_edze_ne||
+                          wd in sio_edze_ne||wd in sfo_edze_ne||wd in swo_edze_ro||wd in sqo_edze_ro||wd in sio_edze_ro||wd in sfo_edze_ro||
+                          wd in swo_mn_ro||wd in sqo_mn_ro||wd in sio_mn_ro||wd in sfo_mn_ro||wd in swo_mn_ne||wd in sio_mn_ne||
+                          wd in sfo_mn_ne||wd in swo_edsr_ne)                                                                                   {ret=1} else {ret=0}; return ret}
 function suw_odda(n,                                                                                                                            wd,ret) { if(!wd)wd=lc(n);
-                      if (wd in swo_edmu_da||wd in sqo_edmu_da||wd in sio_edmu_da||wd in sfo_edmu_da||wd in swo_edmu_ne||
-                          wd in sio_edmu_ne||wd in sfo_edmu_ne||wd in swo_edob_da||wd in sio_edob_da||
-                          wd in swo_edob_ne||wd in swo_edsr_da||wd in swo_edze_da||
-                          wd in sqo_edze_da||wd in sio_edze_da||wd in sfo_edze_da||wd in swo_edze_ne||wd in sio_edze_ne||
-                          wd in sfo_edze_ne||wd in swo_mn_da||wd in sqo_mn_da||wd in sio_mn_da||wd in sfo_mn_da||wd in swo_mn_ne||
-                          wd in sio_mn_ne||wd in sfo_mn_ne||wd in swo_edsr_ne||wd in swo_edsr_ne)                              {ret=1} else {ret=0}; return ret}
+                      if (wd in swo_edmu_da||wd in sqo_edmu_da||wd in sio_edmu_da||wd in sfo_edmu_da||wd in swo_edmu_ne||wd in sio_edmu_ne||
+                          wd in sfo_edmu_ne||wd in swo_edob_da||wd in sio_edob_da||wd in swo_edob_ne||wd in swo_edsr_da||wd in swo_edze_da||
+                          wd in sqo_edze_da||wd in sio_edze_da||wd in sfo_edze_da||wd in swo_edze_ne||wd in sio_edze_ne||wd in sfo_edze_ne||
+                          wd in swo_mn_da||wd in sqo_mn_da||wd in sio_mn_da||wd in sfo_mn_da||wd in swo_mn_ne||wd in sio_mn_ne||
+                          wd in sfo_mn_ne||wd in swo_edsr_ne||wd in swo_edsr_ne)                                                                {ret=1} else {ret=0}; return ret}
 function suw_odtv(n,                                                                                                                            wd,ret) { if(!wd)wd=lc(n);
-                      if (wd in swo_edmu_ne||wd in sio_edmu_ne||wd in sfo_edmu_ne||wd in swo_edmu_tv||wd in sqo_edmu_tv||
-                          wd in sio_edmu_tv||wd in sfo_edmu_tv||wd in swo_edob_ne||
-                          wd in swo_edob_tv||wd in sio_edob_tv||wd in swo_edsr_tv||wd in swo_edze_ne||
-                          wd in sio_edze_ne||wd in sfo_edze_ne||wd in swo_edze_tv||wd in sqo_edze_tv||wd in sio_edze_tv||
-                          wd in sfo_edze_tv||wd in swo_mn_tv||wd in sqo_mn_tv||wd in sio_mn_tv||wd in sfo_mn_tv||wd in swo_mn_ne||
-                          wd in sio_mn_ne||wd in sfo_mn_ne||wd in swo_edsr_ne)                                                 {ret=1} else {ret=0}; return ret}
+                      if (wd in swo_edmu_ne||wd in sio_edmu_ne||wd in sfo_edmu_ne||wd in swo_edmu_tv||wd in sqo_edmu_tv||wd in sio_edmu_tv||
+                          wd in sfo_edmu_tv||wd in swo_edob_ne||wd in swo_edob_tv||wd in sio_edob_tv||wd in swo_edsr_tv||wd in swo_edze_ne||
+                          wd in sio_edze_ne||wd in sfo_edze_ne||wd in swo_edze_tv||wd in sqo_edze_tv||wd in sio_edze_tv||wd in sfo_edze_tv||
+                          wd in swo_mn_tv||wd in sqo_mn_tv||wd in sio_mn_tv||wd in sfo_mn_tv||wd in swo_mn_ne||wd in sio_mn_ne||
+                          wd in sfo_mn_ne||wd in swo_edsr_ne)                                                                                   {ret=1} else {ret=0}; return ret}
 function suw_odpr(n,                                                                                                                            wd,ret) { if(!wd)wd=lc(n);
-                      if (wd in swo_edmu_ne||wd in sio_edmu_ne||wd in sfo_edmu_ne||wd in swo_edmu_pr||wd in sqo_edmu_pr||
-                          wd in sio_edmu_pr||wd in sfo_edmu_pr||wd in swo_edob_ne||
-                          wd in swo_edob_pr||wd in sio_edob_pr||wd in swo_edsr_pr||wd in swo_edze_ne||
-                          wd in sio_edze_ne||wd in sfo_edze_ne||wd in swo_edze_pr||wd in sqo_edze_pr||wd in sio_edze_pr||
-                          wd in sfo_edze_pr||wd in swo_mn_pr||wd in sqo_mn_pr||wd in sio_mn_pr||wd in sfo_mn_pr||wd in swo_mn_ne||
-                          wd in sio_mn_ne||wd in sfo_mn_ne||wd in swo_edsr_ne)                                                 {ret=1} else {ret=0}; return ret}
+                      if (wd in swo_edmu_ne||wd in sio_edmu_ne||wd in sfo_edmu_ne||wd in swo_edmu_pr||wd in sqo_edmu_pr||wd in sio_edmu_pr||
+                          wd in sfo_edmu_pr||wd in swo_edob_ne||wd in swo_edob_pr||wd in sio_edob_pr||wd in swo_edsr_pr||wd in swo_edze_ne||
+                          wd in sio_edze_ne||wd in sfo_edze_ne||wd in swo_edze_pr||wd in sqo_edze_pr||wd in sio_edze_pr||wd in sfo_edze_pr||
+                          wd in swo_mn_pr||wd in sqo_mn_pr||wd in sio_mn_pr||wd in sfo_mn_pr||wd in swo_mn_ne||wd in sio_mn_ne||
+                          wd in sfo_mn_ne||wd in swo_edsr_ne)                                                                                   {ret=1} else {ret=0}; return ret}
 function suw_odzv(n,                                                                                                                            wd,ret) { if(!wd)wd=lc(n);
-                      if (wd in swo_edmu_ne||wd in sio_edmu_ne||wd in sfo_edmu_ne||wd in swo_edmu_zv||
-                          wd in sio_edmu_zv||wd in swo_edob_ne||
-                          wd in swo_edze_ne||wd in sio_edze_ne||wd in sfo_edze_ne||wd in swo_edze_zv||
-                          wd in sio_edze_zv||wd in swo_edsr_ne||wd in swo_edob_zv||wd in sio_edob_zv)                                           {ret=1} else {ret=0}; return ret}
+                      if (wd in swo_edmu_ne||wd in sio_edmu_ne||wd in sfo_edmu_ne||wd in swo_edmu_zv||wd in sio_edmu_zv||wd in swo_edob_ne||
+                          wd in swo_edze_ne||wd in sio_edze_ne||wd in sfo_edze_ne||wd in swo_edze_zv||wd in sio_edze_zv||wd in swo_edsr_ne||
+                          wd in swo_edob_zv||wd in sio_edob_zv)                                                                                 {ret=1} else {ret=0}; return ret}
 function suw_odedim(n,                                                                                                                          wd,ret) { if(!wd)wd=lc(n);
-                      if (wd in swo_edmu_im||wd in sqo_edmu_im||wd in sio_edmu_im||wd in sfo_edmu_im||wd in swo_edob_im||
-                          wd in sio_edob_im||wd in swo_edsr_im||wd in swo_edze_im||wd in sqo_edze_im||wd in sio_edze_im||
-                          wd in sfo_edze_im)                                                                                                    {ret=1} else {ret=0}; return ret}
+                      if (wd in swo_edmu_im||wd in sqo_edmu_im||wd in sio_edmu_im||wd in sfo_edmu_im||wd in swo_edob_im||wd in sio_edob_im||
+                          wd in swo_edsr_im||wd in swo_edze_im||wd in sqo_edze_im||wd in sio_edze_im||wd in sfo_edze_im)                        {ret=1} else {ret=0}; return ret}
 function suw_odedvi(n,                                                                                                                          wd,ret) { if(!wd)wd=lc(n);
-                      if (wd in swo_edob_vi||wd in sio_edob_vi||wd in swo_edsr_vi||wd in swo_edze_vi||
-                          wd in sqo_edze_vi||wd in sio_edze_vi||wd in sfo_edze_vi||wd in swo_edmu_vi||wd in sqo_edmu_vi||wd in sio_edmu_vi||
-                          wd in sfo_edmu_vi||wd in swo_edob_ro||wd in sio_edob_ro||wd in swo_edsr_ro)     {ret=1} else {ret=0}; return ret}
+                      if (wd in swo_edob_vi||wd in sio_edob_vi||wd in swo_edsr_vi||wd in swo_edze_vi||wd in sqo_edze_vi||wd in sio_edze_vi||
+                          wd in sfo_edze_vi||wd in swo_edmu_vi||wd in sqo_edmu_vi||wd in sio_edmu_vi||wd in sfo_edmu_vi||wd in swo_edob_ro||
+                          wd in sio_edob_ro||wd in swo_edsr_ro)                                                                                 {ret=1} else {ret=0}; return ret}
 function suw_odedro(n,                                                                                                                          wd,ret) { if(!wd)wd=lc(n);
-                      if (wd in swo_edmu_ro||wd in sqo_edmu_ro||wd in sio_edmu_ro||wd in sfo_edmu_ro||wd in swo_edob_ro||
-                          wd in sio_edob_ro||wd in swo_edsr_ro||wd in swo_edze_ro||wd in sqo_edze_ro||wd in sio_edze_ro||
-                          wd in sfo_edze_ro)                                                                                                    {ret=1} else {ret=0}; return ret}
+                      if (wd in swo_edmu_ro||wd in sqo_edmu_ro||wd in sio_edmu_ro||wd in sfo_edmu_ro||wd in swo_edob_ro||wd in sio_edob_ro||
+                          wd in swo_edsr_ro||wd in swo_edze_ro||wd in sqo_edze_ro||wd in sio_edze_ro||wd in sfo_edze_ro)                        {ret=1} else {ret=0}; return ret}
 function suw_odedda(n,                                                                                                                          wd,ret) { if(!wd)wd=lc(n);
-                      if (wd in swo_edmu_da||wd in sqo_edmu_da||wd in sio_edmu_da||wd in sfo_edmu_da||wd in swo_edob_da||
-                          wd in sio_edob_da||wd in swo_edsr_da||wd in swo_edze_da||wd in sqo_edze_da||wd in sio_edze_da||
-                          wd in sfo_edze_da)                                                                                                    {ret=1} else {ret=0}; return ret}
+                      if (wd in swo_edmu_da||wd in sqo_edmu_da||wd in sio_edmu_da||wd in sfo_edmu_da||wd in swo_edob_da||wd in sio_edob_da||
+                          wd in swo_edsr_da||wd in swo_edze_da||wd in sqo_edze_da||wd in sio_edze_da||wd in sfo_edze_da)                        {ret=1} else {ret=0}; return ret}
 function suw_odedmuda(n,                                                                                                                        wd,ret) { if(!wd)wd=lc(n);
-                      if (wd in swo_edmu_da||wd in sqo_edmu_da||wd in sio_edmu_da||wd in sfo_edmu_da||wd in swo_edob_da||
-                          wd in sio_edob_da)                                                                                 {ret=1} else {ret=0}; return ret}
+                      if (wd in swo_edmu_da||wd in sqo_edmu_da||wd in sio_edmu_da||wd in sfo_edmu_da||wd in swo_edob_da||wd in sio_edob_da)     {ret=1} else {ret=0}; return ret}
 function suw_odedsrda(n,                                                                                                                        wd,ret) { if(!wd)wd=lc(n);
-                      if (wd in swo_edob_da||wd in sio_edob_da||wd in swo_edsr_da)                        {ret=1} else {ret=0}; return ret}
+                      if (wd in swo_edob_da||wd in sio_edob_da||wd in swo_edsr_da)                                                              {ret=1} else {ret=0}; return ret}
 function suw_odedtv(n,                                                                                                                          wd,ret) { if(!wd)wd=lc(n);
-                      if (wd in swo_edmu_tv||wd in sqo_edmu_tv||wd in sio_edmu_tv||wd in sfo_edmu_tv||wd in swo_edob_tv||
-                          wd in sio_edob_tv||wd in swo_edsr_tv||wd in swo_edze_tv||wd in sqo_edze_tv||wd in sio_edze_tv||
-                          wd in sfo_edze_tv)                                                                                                    {ret=1} else {ret=0}; return ret}
+                      if (wd in swo_edmu_tv||wd in sqo_edmu_tv||wd in sio_edmu_tv||wd in sfo_edmu_tv||wd in swo_edob_tv||wd in sio_edob_tv||
+                          wd in swo_edsr_tv||wd in swo_edze_tv||wd in sqo_edze_tv||wd in sio_edze_tv||wd in sfo_edze_tv)                        {ret=1} else {ret=0}; return ret}
 function suw_odedpr(n,                                                                                                                          wd,ret) { if(!wd)wd=lc(n);
-                      if (wd in swo_edmu_pr||wd in sqo_edmu_pr||wd in sio_edmu_pr||wd in sfo_edmu_pr||wd in swo_edob_pr||
-                          wd in sio_edob_pr||wd in swo_edsr_pr||wd in swo_edze_pr||wd in sqo_edze_pr||wd in sio_edze_pr||
-                          wd in sfo_edze_pr)                                                                                                    {ret=1} else {ret=0}; return ret}
+                      if (wd in swo_edmu_pr||wd in sqo_edmu_pr||wd in sio_edmu_pr||wd in sfo_edmu_pr||wd in swo_edob_pr||wd in sio_edob_pr||
+                          wd in swo_edsr_pr||wd in swo_edze_pr||wd in sqo_edze_pr||wd in sio_edze_pr||wd in sfo_edze_pr)                        {ret=1} else {ret=0}; return ret}
 function suw_odmnvi(n,                                                                                                                          wd,ret) { if(!wd)wd=lc(n);
                       if (wd in swo_mn_ro||wd in sqo_mn_ro||wd in sio_mn_ro||wd in sfo_mn_ro)                                                   {ret=1} else {ret=0}; return ret}
 function suw_odmnim(n,                                                                                                                          wd,ret) { if(!wd)wd=lc(n);
-                      if (wd in swo_mn_im||wd in sqo_mn_im||wd in sio_mn_im||wd in sfo_mn_im||wd in swo_mn_ne||
-                          wd in sio_mn_ne||wd in sfo_mn_ne)                                                                                     {ret=1} else {ret=0}; return ret}
+                      if (wd in swo_mn_im||wd in sqo_mn_im||wd in sio_mn_im||wd in sfo_mn_im||wd in swo_mn_ne||wd in sio_mn_ne||wd in sfo_mn_ne){ret=1} else {ret=0}; return ret}
 function suw_odmn(n,                                                                                                                            wd,ret) { if(!wd)wd=lc(n);
                       if (wd in swo_mn_da||wd in sqo_mn_da||wd in sio_mn_da||wd in sfo_mn_da||wd in swo_mn_im||wd in sqo_mn_im||
-                          wd in sio_mn_im||wd in sfo_mn_im||wd in swo_mn_ne||wd in sio_mn_ne||wd in sfo_mn_ne||
-                          wd in swo_mn_pr||wd in sqo_mn_pr||wd in sio_mn_pr||wd in sfo_mn_pr||wd in swo_mn_ro||wd in sqo_mn_ro||
-                          wd in sio_mn_ro||wd in sfo_mn_ro||wd in swo_mn_sq||wd in swo_mn_tv||wd in sqo_mn_tv||wd in sio_mn_tv||
-                          wd in sfo_mn_tv)                                                                                                      {ret=1} else {ret=0}; return ret}
+                          wd in sio_mn_im||wd in sfo_mn_im||wd in swo_mn_ne||wd in sio_mn_ne||wd in sfo_mn_ne||wd in swo_mn_pr||
+                          wd in sqo_mn_pr||wd in sio_mn_pr||wd in sfo_mn_pr||wd in swo_mn_ro||wd in sqo_mn_ro||wd in sio_mn_ro||
+                          wd in sfo_mn_ro||wd in swo_mn_sq||wd in swo_mn_tv||wd in sqo_mn_tv||wd in sio_mn_tv||wd in sfo_mn_tv)                 {ret=1} else {ret=0}; return ret}
 function suw_odmnro(n,                                                                                                                          wd,ret) { if(!wd)wd=lc(n);
-                      if (wd in swo_mn_ne||wd in sio_mn_ne||wd in sfo_mn_ne||wd in swo_mn_ro||wd in sqo_mn_ro||
-                          wd in sio_mn_ro||wd in sfo_mn_ro)                                                                                     {ret=1} else {ret=0}; return ret}
+                      if (wd in swo_mn_ne||wd in sio_mn_ne||wd in sfo_mn_ne||wd in swo_mn_ro||wd in sqo_mn_ro||wd in sio_mn_ro||wd in sfo_mn_ro){ret=1} else {ret=0}; return ret}
 function suw_odmnda(n,                                                                                                                          wd,ret) { if(!wd)wd=lc(n);
-                      if (wd in swo_mn_da||wd in sqo_mn_da||wd in sio_mn_da||wd in sfo_mn_da||wd in swo_mn_ne||
-                          wd in sio_mn_ne||wd in sfo_mn_ne)                                                                                     {ret=1} else {ret=0}; return ret}
+                      if (wd in swo_mn_da||wd in sqo_mn_da||wd in sio_mn_da||wd in sfo_mn_da||wd in swo_mn_ne||wd in sio_mn_ne||wd in sfo_mn_ne){ret=1} else {ret=0}; return ret}
 function suw_noed(n,                                                                                                                            wd,ret) { if(!wd)wd=lc(n);
                       if (wd in swn_edmu_da||wd in son_edmu_da||wd in sgn_edmu_da||wd in swn_edmu_im||wd in son_edmu_im||wd in sgn_edmu_im||
-                          wd in swn_edmu_me||wd in sgn_edmu_me||wd in swn_edmu_ne||wd in aon_edmu_ne||wd in agn_edmu_ne||
+                          wd in swn_edmu_me||wd in sgn_edmu_me||wd in swn_edmu_ne||wd in aon_edmu_ne||wd in agn_edmu_ne||wd in agn_edze_ne||
                           wd in swn_edmu_pr||wd in son_edmu_pr||wd in sgn_edmu_pr||wd in swn_edmu_pt||wd in swn_edmu_ro||wd in son_edmu_ro||
                           wd in sgn_edmu_ro||wd in swn_edmu_sq||wd in swn_edmu_tv||wd in son_edmu_tv||wd in sgn_edmu_tv||wd in swn_edob_da||
                           wd in swn_edob_im||wd in swn_edob_ne||wd in swn_edob_pr||wd in swn_edob_ro||wd in swn_edob_tv||wd in swn_edob_vi||
@@ -2222,8 +2201,7 @@ function suw_noed(n,                                                            
                           wd in swn_edze_im||wd in son_edze_im||wd in sgn_edze_im||wd in swn_edze_me||wd in swn_edze_ne||wd in aon_edze_ne||
                           wd in son_edze_ne||wd in sgn_edze_ne||wd in swn_edze_pr||wd in son_edze_pr||wd in sgn_edze_pr||wd in swn_edze_ro||
                           wd in son_edze_ro||wd in sgn_edze_ro||wd in swn_edze_tv||wd in son_edze_tv||wd in sgn_edze_tv||wd in swn_edze_vi||
-                          wd in son_edze_vi||wd in sgn_edze_vi||wd in son_edmu_ne||wd in son_edsr_pr||wd in sgn_edsr_pr||wd in agn_edze_ne||
-                          wd in sgn_edmu_ne)                                                                                                    {ret=1} else {ret=0}; return ret}
+                          wd in son_edze_vi||wd in sgn_edze_vi||wd in son_edmu_ne||wd in son_edsr_pr||wd in sgn_edsr_pr||wd in sgn_edmu_ne)     {ret=1} else {ret=0}; return ret}
 function suw_noedim(n,                                                                                                                          wd,ret) { if(!wd)wd=lc(n);
                       if (wd in swn_edmu_im||wd in son_edmu_im||wd in sgn_edmu_im||wd in swn_edob_im||wd in swn_edsr_im||wd in son_edsr_im||
                           wd in sgn_edsr_im||wd in swn_edze_im||wd in son_edze_im||wd in sgn_edze_im)                                           {ret=1} else {ret=0}; return ret}
@@ -2259,8 +2237,8 @@ function suw_nomnvi(n,                                                          
 function suw_nomnro(n,    wd,ret) { if(!wd)wd=lc(n); if (wd in sw_mn_ro||wd in swn_mn_ro||wd in son_mn_ro||wd in sgn_mn_ro)                     {ret=1} else {ret=0}; return ret}
 function suw_nomntv(n,    wd,ret) { if(!wd)wd=lc(n); if (wd in swn_mn_tv||wd in son_mn_tv||wd in sgn_mn_tv)                                     {ret=1} else {ret=0}; return ret}
 function suw_nomnpr(n,    wd,ret) { if(!wd)wd=lc(n); if (wd in swn_mn_pr||wd in son_mn_pr||wd in sgn_mn_pr)                                     {ret=1} else {ret=0}; return ret}
-function suw_edme(n,      wd,ret) { if(!wd)wd=lc(n); if (wd in swn_edmu_me||wd in sgn_edmu_me||wd in swn_edze_me)            {ret=1} else {ret=0}; return ret}
-function suw_edmume(n,    wd,ret) { if(!wd)wd=lc(n); if (wd in swn_edmu_me||wd in sgn_edmu_me)                               {ret=1} else {ret=0}; return ret}
+function suw_edme(n,      wd,ret) { if(!wd)wd=lc(n); if (wd in swn_edmu_me||wd in sgn_edmu_me||wd in swn_edze_me)                               {ret=1} else {ret=0}; return ret}
+function suw_edmume(n,    wd,ret) { if(!wd)wd=lc(n); if (wd in swn_edmu_me||wd in sgn_edmu_me)                                                  {ret=1} else {ret=0}; return ret}
 function suw_edzeme(n,    wd,ret) { if(!wd)wd=lc(n); if (wd in swn_edze_me)                                                                     {ret=1} else {ret=0}; return ret}
 function suw_edne(n,                                                                                                                            wd,ret) { if(!wd)wd=lc(n);
                       if (wd in sw_edmu_ne||wd in sw_edob_ne||wd in swn_edmu_ne||wd in aon_edmu_ne||wd in agn_edmu_ne||wd in son_edmu_ne||
@@ -2311,16 +2289,15 @@ function suw_ed(n,                                                              
                           wd in sio_edmu_pr||wd in sfo_edmu_pr||wd in swo_edmu_ro||wd in sqo_edmu_ro||wd in sio_edmu_ro||wd in sfo_edmu_ro||
                           wd in swo_edmu_tv||wd in sqo_edmu_tv||wd in sio_edmu_tv||wd in sfo_edmu_tv||wd in swo_edmu_vi||wd in sqo_edmu_vi||
                           wd in sio_edmu_vi||wd in sfo_edmu_vi||wd in swo_edmu_zv||wd in sio_edmu_zv||wd in sgn_edsr_ne||wd in swn_edsr_pr||
-                          wd in swo_edob_da||wd in sio_edob_da||wd in swo_edob_im||wd in sio_edob_im||
-                          wd in swo_edob_pr||wd in sio_edob_pr||wd in swo_edob_ro||wd in swo_edob_ne||
-                          wd in sio_edob_ro||wd in swo_edob_tv||wd in sio_edob_tv||wd in swo_edsr_ne||wd in swo_edob_zv||
-                          wd in swo_edob_vi||wd in sio_edob_vi||wd in swo_edsr_da||wd in swn_edze_pr||wd in son_edze_pr||
+                          wd in swo_edob_da||wd in sio_edob_da||wd in swo_edob_im||wd in sio_edob_im||wd in sio_edze_vi||wd in sfo_edze_vi||
+                          wd in swo_edob_pr||wd in sio_edob_pr||wd in swo_edob_ro||wd in swo_edob_ne||wd in swo_edze_zv||wd in sio_edze_zv||
+                          wd in sio_edob_ro||wd in swo_edob_tv||wd in sio_edob_tv||wd in swo_edsr_ne||wd in swo_edob_zv||wd in sio_edob_zv||
+                          wd in swo_edob_vi||wd in sio_edob_vi||wd in swo_edsr_da||wd in swn_edze_pr||wd in son_edze_pr||wd in sqo_edze_vi||
                           wd in swo_edsr_im||wd in swo_edsr_pr||wd in swo_edsr_ro||wd in swo_edsr_tv||wd in swo_edsr_vi||wd in swo_edze_da||
                           wd in sqo_edze_da||wd in sio_edze_da||wd in sfo_edze_da||wd in swo_edze_im||wd in sqo_edze_im||wd in sio_edze_im||
                           wd in sfo_edze_im||wd in swo_edze_ne||wd in sio_edze_ne||wd in sfo_edze_ne||wd in swo_edze_pr||wd in swo_edze_vi||
                           wd in sqo_edze_pr||wd in sio_edze_pr||wd in sfo_edze_pr||wd in swo_edze_ro||wd in sqo_edze_ro||wd in sio_edze_ro||
-                          wd in sfo_edze_ro||wd in swo_edze_tv||wd in sqo_edze_tv||wd in sio_edze_tv||wd in sfo_edze_tv||wd in sqo_edze_vi||
-                          wd in sio_edze_vi||wd in sfo_edze_vi||wd in swo_edze_zv||wd in sio_edze_zv||wd in sio_edob_zv)                       {ret=1} else {ret=0}; return ret}
+                          wd in sfo_edze_ro||wd in swo_edze_tv||wd in sqo_edze_tv||wd in sio_edze_tv||wd in sfo_edze_tv)                       {ret=1} else {ret=0}; return ret}
 function suw_mu(n,                                                                                                                             wd,ret) { if(!wd)wd=lc(n);
                       if (wd in sw_edmu_da||wd in sw_edmu_im||wd in sw_edmu_ne||wd in sw_edmu_pr||wd in sw_edmu_ro||wd in sw_edmu_tv||
                           wd in sw_edmu_vi||wd in swn_edmu_da||wd in son_edmu_da||wd in sgn_edmu_da||wd in swn_edmu_im||wd in son_edmu_im||
@@ -2354,10 +2331,9 @@ function suw_sr(n,                                                              
 function suw_ob(n,                                                                                                                             wd,ret) { if(!wd)wd=lc(n);
                       if (wd in sw_edob_da||wd in sw_edob_im||wd in sw_edob_ne||wd in sw_edob_pr||wd in sw_edob_ro||wd in sw_edob_tv||
                           wd in sw_edob_vi||wd in swn_edob_da||wd in swn_edob_im||wd in swn_edob_ne||wd in swn_edob_pr||wd in swn_edob_ro||
-                          wd in swn_edob_tv||wd in swn_edob_vi||wd in swo_edob_da||wd in sio_edob_da||wd in swo_edob_im||
-                          wd in sio_edob_im||wd in swo_edob_ne||wd in swo_edob_pr||wd in sio_edob_pr||
-                          wd in swo_edob_ro||wd in sio_edob_ro||wd in swo_edob_tv||wd in sio_edob_tv||
-                          wd in swo_edob_vi||wd in sio_edob_vi)                                                             {ret=1} else {ret=0}; return ret}
+                          wd in swn_edob_tv||wd in swn_edob_vi||wd in swo_edob_da||wd in sio_edob_da||wd in swo_edob_im||wd in sio_edob_pr||
+                          wd in sio_edob_im||wd in swo_edob_ne||wd in swo_edob_pr||wd in swo_edob_ro||wd in sio_edob_ro||wd in swo_edob_tv||
+                          wd in sio_edob_tv||wd in swo_edob_vi||wd in sio_edob_vi)                                                             {ret=1} else {ret=0}; return ret}
 function suw_mn(n,                                                                                                                             wd,ret) { if(!wd)wd=lc(n);
                       if (wd in sw_mn_da||wd in sw_mn_im||wd in sw_mn_ne||wd in sw_mn_pr||wd in sw_mn_ro||wd in sw_mn_tv||wd in sw_mn_vi||
                           wd in swn_mn_da||wd in son_mn_da||wd in sgn_mn_da||wd in swn_mn_im||wd in son_mn_im||wd in sgn_mn_im||
@@ -2387,16 +2363,15 @@ function suw_any(n,                                                             
                           wd in swo_edmu_pr||wd in sqo_edmu_pr||wd in sio_edmu_pr||wd in sfo_edmu_pr||wd in swo_edmu_ro||wd in sqo_edmu_ro||
                           wd in sio_edmu_ro||wd in sfo_edmu_ro||wd in swo_edmu_tv||wd in sqo_edmu_tv||wd in sio_edmu_tv||wd in sfo_edmu_tv||
                           wd in swo_edmu_vi||wd in sqo_edmu_vi||wd in sio_edmu_vi||wd in sfo_edmu_vi||wd in swo_edmu_zv||wd in sio_edob_zv||
-                          wd in sio_edmu_zv||wd in swo_edob_da||wd in sio_edob_da||wd in sgn_edsr_ne||wd in swn_edsr_pr||
-                          wd in swo_edob_im||wd in sio_edob_im||wd in swo_edob_ne||wd in swo_edsr_ne||wd in swo_edob_zv||
-                          wd in swo_edob_pr||wd in sio_edob_pr||wd in swo_edob_tv||wd in sio_edob_vi||
-                          wd in swo_edob_ro||wd in sio_edob_ro||wd in swo_edsr_ro||wd in swo_edsr_tv||wd in swo_edsr_vi||
-                          wd in sio_edob_tv||wd in swo_edob_vi||wd in sfo_edze_da||wd in swo_edze_im||wd in sqo_edze_im||
-                          wd in swo_edsr_da||wd in swo_edsr_im||wd in swo_edsr_pr||wd in sio_edze_ne||wd in sfo_edze_ne||wd in sfo_edze_vi||
-                          wd in swo_edze_da||wd in sqo_edze_da||wd in sio_edze_da||wd in sfo_edze_pr||wd in swo_edze_ro||wd in sqo_edze_ro||
-                          wd in sio_edze_im||wd in sfo_edze_im||wd in swo_edze_ne||wd in sqo_edze_tv||wd in sio_edze_tv||wd in sfo_edze_tv||
-                          wd in swo_edze_pr||wd in sqo_edze_pr||wd in sio_edze_pr||wd in swo_edze_vi||wd in sqo_edze_vi||wd in sio_edze_vi||
-                          wd in sio_edze_ro||wd in sfo_edze_ro||wd in swo_edze_tv||
+                          wd in sio_edmu_zv||wd in swo_edob_da||wd in sio_edob_da||wd in sgn_edsr_ne||wd in swn_edsr_pr||wd in sfo_edze_vi||
+                          wd in swo_edob_im||wd in sio_edob_im||wd in swo_edob_ne||wd in swo_edsr_ne||wd in swo_edob_zv||wd in sqo_edze_ro||
+                          wd in swo_edob_pr||wd in sio_edob_pr||wd in swo_edob_tv||wd in sio_edob_vi||wd in swo_edze_tv||wd in sfo_edze_tv||
+                          wd in swo_edob_ro||wd in sio_edob_ro||wd in swo_edsr_ro||wd in swo_edsr_tv||wd in swo_edsr_vi||wd in sio_edze_vi||
+                          wd in sio_edob_tv||wd in swo_edob_vi||wd in sfo_edze_da||wd in swo_edze_im||wd in sqo_edze_im||wd in sfo_edze_ro||
+                          wd in swo_edsr_da||wd in swo_edsr_im||wd in swo_edsr_pr||wd in sio_edze_ne||wd in sfo_edze_ne||wd in sio_edze_ro||
+                          wd in swo_edze_da||wd in sqo_edze_da||wd in sio_edze_da||wd in sfo_edze_pr||wd in swo_edze_ro||wd in sqo_edze_vi||
+                          wd in sio_edze_im||wd in sfo_edze_im||wd in swo_edze_ne||wd in sqo_edze_tv||wd in sio_edze_tv||wd in swo_edze_vi||
+                          wd in swo_edze_pr||wd in sqo_edze_pr||wd in sio_edze_pr||
                           wd in swo_mn_da||wd in sqo_mn_da||wd in sio_mn_da||wd in sfo_mn_da||wd in sfo_mn_ro||wd in swo_mn_sq||wd in swo_mn_tv||
                           wd in son_mn_da||wd in sgn_mn_da||wd in swn_mn_im||wd in son_mn_im||wd in sgn_mn_im||wd in swn_mn_ne||wd in agn_mn_ne||
                           wd in son_mn_ne||wd in sgn_mn_ne||wd in swn_mn_pr||wd in son_mn_pr||wd in sgn_mn_pr||wd in swn_mn_ro||wd in swn_mn_da||
@@ -2413,23 +2388,17 @@ function suw_any(n,                                                             
 
 # существительные имена собственные, NE, все всесте: имя фамилия отчество география организации
 function nes_edmuim(n,                                                                                                                          wd,ret) { if(!wd)wd=lc(n);
-                      if (wd in son_edmu_im||wd in sgn_edmu_im||wd in sqo_edmu_im||wd in sio_edmu_im||wd in sfo_edmu_im||
-                          wd in sio_edob_im)                                                                                                    {ret=1} else {ret=0}; return ret}
+                      if (wd in son_edmu_im||wd in sgn_edmu_im||wd in sqo_edmu_im||wd in sio_edmu_im||wd in sfo_edmu_im||wd in sio_edob_im)     {ret=1} else {ret=0}; return ret}
 function nes_edmuvi(n,                                                                                                                          wd,ret) { if(!wd)wd=lc(n);
-                      if (wd in son_edmu_im||wd in sgn_edmu_im||wd in sqo_edmu_vi||wd in sio_edmu_vi||wd in sfo_edmu_vi||
-                          wd in sio_edob_vi)                                                                                                    {ret=1} else {ret=0}; return ret}
+                      if (wd in son_edmu_im||wd in sgn_edmu_im||wd in sqo_edmu_vi||wd in sio_edmu_vi||wd in sfo_edmu_vi||wd in sio_edob_vi)     {ret=1} else {ret=0}; return ret}
 function nes_edmuda(n,                                                                                                                          wd,ret) { if(!wd)wd=lc(n);
-                      if (wd in son_edmu_da||wd in sgn_edmu_da||wd in sqo_edmu_da||wd in sio_edmu_da||wd in sfo_edmu_da||
-                          wd in sio_edob_da)                                                                                                    {ret=1} else {ret=0}; return ret}
+                      if (wd in son_edmu_da||wd in sgn_edmu_da||wd in sqo_edmu_da||wd in sio_edmu_da||wd in sfo_edmu_da||wd in sio_edob_da)     {ret=1} else {ret=0}; return ret}
 function nes_edmuro(n,                                                                                                                          wd,ret) { if(!wd)wd=lc(n);
-                      if (wd in son_edmu_ro||wd in sgn_edmu_ro||wd in sqo_edmu_ro||wd in sio_edmu_ro||wd in sfo_edmu_ro||
-                          wd in sio_edob_ro)                                                                                                    {ret=1} else {ret=0}; return ret}
+                      if (wd in son_edmu_ro||wd in sgn_edmu_ro||wd in sqo_edmu_ro||wd in sio_edmu_ro||wd in sfo_edmu_ro||wd in sio_edob_ro)     {ret=1} else {ret=0}; return ret}
 function nes_edmutv(n,                                                                                                                          wd,ret) { if(!wd)wd=lc(n);
-                      if (wd in son_edmu_tv||wd in sgn_edmu_tv||wd in sqo_edmu_tv||wd in sio_edmu_tv||wd in sfo_edmu_tv||
-                          wd in sio_edob_tv)                                                                                                    {ret=1} else {ret=0}; return ret}
+                      if (wd in son_edmu_tv||wd in sgn_edmu_tv||wd in sqo_edmu_tv||wd in sio_edmu_tv||wd in sfo_edmu_tv||wd in sio_edob_tv)     {ret=1} else {ret=0}; return ret}
 function nes_edmupr(n,                                                                                                                          wd,ret) { if(!wd)wd=lc(n);
-                      if (wd in son_edmu_pr||wd in sgn_edmu_pr||wd in sqo_edmu_pr||wd in sio_edmu_pr||wd in sfo_edmu_pr||
-                          wd in sio_edob_pr)                                                                                                    {ret=1} else {ret=0}; return ret}
+                      if (wd in son_edmu_pr||wd in sgn_edmu_pr||wd in sqo_edmu_pr||wd in sio_edmu_pr||wd in sfo_edmu_pr||wd in sio_edob_pr)     {ret=1} else {ret=0}; return ret}
 
 function nes_edsrim(n,    wd,ret) { if(!wd)wd=lc(n); if (wd in son_edsr_im||wd in sgn_edsr_im)                                                  {ret=1} else {ret=0}; return ret}
 function nes_edsrvi(n,    wd,ret) { if(!wd)wd=lc(n); if (wd in son_edsr_vi||wd in sgn_edsr_vi)                                                  {ret=1} else {ret=0}; return ret}
@@ -2451,129 +2420,116 @@ function nes_edzepr(n,                                                          
                       if (wd in son_edze_pr||wd in sgn_edze_pr||wd in sqo_edze_pr||wd in sio_edze_pr||wd in sfo_edze_pr)                        {ret=1} else {ret=0}; return ret}
 function nes_edim(n,                                                                                                                            wd,ret) { if(!wd)wd=lc(n);
                       if (wd in son_edmu_im||wd in sgn_edmu_im||wd in son_edsr_im||wd in sgn_edsr_im||wd in son_edze_im||wd in sgn_edze_im||
-                          wd in sqo_edmu_im||wd in sio_edmu_im||wd in sfo_edmu_im||wd in sio_edob_im||wd in sqo_edze_im||
-                          wd in sio_edze_im||wd in sfo_edze_im)                                                                                 {ret=1} else {ret=0}; return ret}
+                          wd in sqo_edmu_im||wd in sio_edmu_im||wd in sfo_edmu_im||wd in sio_edob_im||wd in sqo_edze_im||wd in sio_edze_im||
+                          wd in sfo_edze_im)                                                                                                    {ret=1} else {ret=0}; return ret}
 function nes_edvi(n,                                                                                                                            wd,ret) { if(!wd)wd=lc(n);
                       if (wd in son_edmu_im||wd in sgn_edmu_im||wd in son_edsr_vi||wd in sgn_edsr_vi||wd in son_edze_vi||wd in sgn_edze_vi||
-                             wd in sqo_edmu_vi||wd in sio_edmu_vi||wd in sfo_edmu_vi||wd in sio_edob_vi||wd in sqo_edze_vi||
-                          wd in sio_edze_vi||wd in sfo_edze_vi)                                                                                 {ret=1} else {ret=0}; return ret}
+                          wd in sqo_edmu_vi||wd in sio_edmu_vi||wd in sfo_edmu_vi||wd in sio_edob_vi||wd in sqo_edze_vi||wd in sio_edze_vi||
+                          wd in sfo_edze_vi)                                                                                                    {ret=1} else {ret=0}; return ret}
 function nes_edro(n,                                                                                                                            wd,ret) { if(!wd)wd=lc(n);
                       if (wd in son_edmu_ro||wd in sgn_edmu_ro||wd in son_edsr_ro||wd in sgn_edsr_ro||wd in son_edze_ro||wd in sgn_edze_ro||
-                          wd in sqo_edmu_ro||wd in sio_edmu_ro||wd in sfo_edmu_ro||wd in sio_edob_ro||wd in sqo_edze_ro||
-                          wd in sio_edze_ro||wd in sfo_edze_ro)                                                                                 {ret=1} else {ret=0}; return ret}
+                          wd in sqo_edmu_ro||wd in sio_edmu_ro||wd in sfo_edmu_ro||wd in sio_edob_ro||wd in sqo_edze_ro||wd in sio_edze_ro||
+                          wd in sfo_edze_ro)                                                                                                    {ret=1} else {ret=0}; return ret}
 function nes_edda(n,                                                                                                                            wd,ret) { if(!wd)wd=lc(n);
                       if (wd in son_edmu_da||wd in sgn_edmu_da||wd in son_edsr_da||wd in sgn_edsr_da||wd in son_edze_da||wd in sgn_edze_da||
-                             wd in sqo_edmu_da||wd in sio_edmu_da||wd in sfo_edmu_da||wd in sio_edob_da||wd in sqo_edze_da||
-                          wd in sio_edze_da||wd in sfo_edze_da)                                                                                 {ret=1} else {ret=0}; return ret}
+                          wd in sqo_edmu_da||wd in sio_edmu_da||wd in sfo_edmu_da||wd in sio_edob_da||wd in sqo_edze_da||wd in sio_edze_da||
+                          wd in sfo_edze_da)                                                                                                    {ret=1} else {ret=0}; return ret}
 function nes_edtv(n,                                                                                                                            wd,ret) { if(!wd)wd=lc(n);
                       if (wd in son_edmu_tv||wd in sgn_edmu_tv||wd in son_edsr_tv||wd in sgn_edsr_tv||wd in son_edze_tv||wd in sgn_edze_tv||
-                             wd in sqo_edmu_tv||wd in sio_edmu_tv||wd in sfo_edmu_tv||wd in sio_edob_tv||wd in sqo_edze_tv||
-                          wd in sio_edze_tv||wd in sfo_edze_tv)                                                                                 {ret=1} else {ret=0}; return ret}
+                          wd in sqo_edmu_tv||wd in sio_edmu_tv||wd in sfo_edmu_tv||wd in sio_edob_tv||wd in sqo_edze_tv||wd in sio_edze_tv||
+                          wd in sfo_edze_tv)                                                                                                    {ret=1} else {ret=0}; return ret}
 function nes_edpr(n,                                                                                                                            wd,ret) { if(!wd)wd=lc(n);
                       if (wd in son_edmu_pr||wd in sgn_edmu_pr||wd in son_edsr_pr||wd in sgn_edsr_pr||wd in son_edze_pr||wd in sgn_edze_pr||
-                             wd in sqo_edmu_pr||wd in sio_edmu_pr||wd in sfo_edmu_pr||wd in sio_edob_pr||wd in sqo_edze_pr||
-                          wd in sio_edze_pr||wd in sfo_edze_pr)                                                                                 {ret=1} else {ret=0}; return ret}
-function nes_mnim(n,                                                                                                                            wd,ret) { if(!wd)wd=lc(n);
-                      if (wd in son_mn_im||wd in sgn_mn_im||wd in sqo_mn_im||wd in sio_mn_im||wd in sfo_mn_im)                                  {ret=1} else {ret=0}; return ret}
-function nes_mnvi(n,                                                                                                                            wd,ret) { if(!wd)wd=lc(n);
-                      if (wd in son_mn_im||wd in sgn_mn_im||wd in sqo_mn_ro||wd in sio_mn_ro||wd in sfo_mn_ro)                                  {ret=1} else {ret=0}; return ret}
-function nes_mnro(n,                                                                                                                            wd,ret) { if(!wd)wd=lc(n);
-                      if (wd in son_mn_ro||wd in sgn_mn_ro||wd in sqo_mn_ro||wd in sio_mn_ro||wd in sfo_mn_ro)                                  {ret=1} else {ret=0}; return ret}
-function nes_mnda(n,                                                                                                                            wd,ret) { if(!wd)wd=lc(n);
-                      if (wd in son_mn_da||wd in sgn_mn_da||wd in sqo_mn_da||wd in sio_mn_da||wd in sfo_mn_da)                                  {ret=1} else {ret=0}; return ret}
-function nes_mntv(n,                                                                                                                            wd,ret) { if(!wd)wd=lc(n);
-                      if (wd in son_mn_tv||wd in sgn_mn_tv||wd in sqo_mn_tv||wd in sio_mn_tv||wd in sfo_mn_tv)                                  {ret=1} else {ret=0}; return ret}
-function nes_mnpr(n,                                                                                                                            wd,ret) { if(!wd)wd=lc(n);
-                      if (wd in son_mn_pr||wd in sgn_mn_pr||wd in sqo_mn_pr||wd in sio_mn_pr||wd in sfo_mn_pr)                                  {ret=1} else {ret=0}; return ret}
+                          wd in sqo_edmu_pr||wd in sio_edmu_pr||wd in sfo_edmu_pr||wd in sio_edob_pr||wd in sqo_edze_pr||wd in sio_edze_pr||
+                          wd in sfo_edze_pr)                                                                                                    {ret=1} else {ret=0}; return ret}
+function nes_mnim(n,  wd,ret) { if(!wd)wd=lc(n); if (wd in son_mn_im||wd in sgn_mn_im||wd in sqo_mn_im||wd in sio_mn_im||wd in sfo_mn_im)       {ret=1} else {ret=0}; return ret}
+function nes_mnvi(n,  wd,ret) { if(!wd)wd=lc(n); if (wd in son_mn_im||wd in sgn_mn_im||wd in sqo_mn_ro||wd in sio_mn_ro||wd in sfo_mn_ro)       {ret=1} else {ret=0}; return ret}
+function nes_mnro(n,  wd,ret) { if(!wd)wd=lc(n); if (wd in son_mn_ro||wd in sgn_mn_ro||wd in sqo_mn_ro||wd in sio_mn_ro||wd in sfo_mn_ro)       {ret=1} else {ret=0}; return ret}
+function nes_mnda(n,  wd,ret) { if(!wd)wd=lc(n); if (wd in son_mn_da||wd in sgn_mn_da||wd in sqo_mn_da||wd in sio_mn_da||wd in sfo_mn_da)       {ret=1} else {ret=0}; return ret}
+function nes_mntv(n,  wd,ret) { if(!wd)wd=lc(n); if (wd in son_mn_tv||wd in sgn_mn_tv||wd in sqo_mn_tv||wd in sio_mn_tv||wd in sfo_mn_tv)       {ret=1} else {ret=0}; return ret}
+function nes_mnpr(n,  wd,ret) { if(!wd)wd=lc(n); if (wd in son_mn_pr||wd in sgn_mn_pr||wd in sqo_mn_pr||wd in sio_mn_pr||wd in sfo_mn_pr)       {ret=1} else {ret=0}; return ret}
 function nes_im(n,                                                                                                                              wd,ret) { if(!wd)wd=lc(n);
                       if (wd in son_edmu_im||wd in sgn_edmu_im||wd in son_edsr_im||wd in sgn_edsr_im||wd in son_edze_im||wd in sgn_edze_im||
-                          wd in sqo_edmu_im||wd in sio_edmu_im||wd in sfo_edmu_im||wd in sio_edob_im||wd in sqo_edze_im||
-                          wd in sio_edze_im||wd in sfo_edze_im||wd in son_mn_im||wd in sgn_mn_im||wd in sqo_mn_im||wd in sio_mn_im||
-                          wd in sfo_mn_im)                                                                                                      {ret=1} else {ret=0}; return ret}
+                          wd in sqo_edmu_im||wd in sio_edmu_im||wd in sfo_edmu_im||wd in sio_edob_im||wd in sqo_edze_im||wd in sio_edze_im||
+                          wd in sfo_edze_im||wd in son_mn_im||wd in sgn_mn_im||wd in sqo_mn_im||wd in sio_mn_im||wd in sfo_mn_im)               {ret=1} else {ret=0}; return ret}
 function nes_vi(n,                                                                                                                              wd,ret) { if(!wd)wd=lc(n);
                       if (wd in son_edmu_im||wd in sgn_edmu_im||wd in son_edsr_vi||wd in sgn_edsr_vi||wd in son_edze_vi||wd in sgn_edze_vi||
-                          wd in sqo_edmu_vi||wd in sio_edmu_vi||wd in sfo_edmu_vi||wd in sio_edob_vi||wd in sqo_edze_vi||
-                          wd in sio_edze_vi||wd in sfo_edze_vi||wd in son_mn_im||wd in sgn_mn_im||wd in sqo_mn_ro||wd in sio_mn_ro||
-                          wd in sfo_mn_ro)                                                                                                      {ret=1} else {ret=0}; return ret}
+                          wd in sqo_edmu_vi||wd in sio_edmu_vi||wd in sfo_edmu_vi||wd in sio_edob_vi||wd in sqo_edze_vi||wd in sio_edze_vi||
+                          wd in sfo_edze_vi||wd in son_mn_im||wd in sgn_mn_im||wd in sqo_mn_ro||wd in sio_mn_ro||wd in sfo_mn_ro)               {ret=1} else {ret=0}; return ret}
 function nes_ro(n,                                                                                                                              wd,ret) { if(!wd)wd=lc(n);
                       if (wd in son_edmu_ro||wd in sgn_edmu_ro||wd in son_edsr_ro||wd in sgn_edsr_ro||wd in son_edze_ro||wd in sgn_edze_ro||
-                          wd in sqo_edmu_ro||wd in sio_edmu_ro||wd in sfo_edmu_ro||wd in sio_edob_ro||wd in sqo_edze_ro||
-                          wd in sio_edze_ro||wd in sfo_edze_ro||wd in son_mn_ro||wd in sgn_mn_ro||wd in sqo_mn_ro||wd in sio_mn_ro||
-                          wd in sfo_mn_ro)                                                                                                      {ret=1} else {ret=0}; return ret}
+                          wd in sqo_edmu_ro||wd in sio_edmu_ro||wd in sfo_edmu_ro||wd in sio_edob_ro||wd in sqo_edze_ro||wd in sio_edze_ro||
+                          wd in sfo_edze_ro||wd in son_mn_ro||wd in sgn_mn_ro||wd in sqo_mn_ro||wd in sio_mn_ro||wd in sfo_mn_ro)               {ret=1} else {ret=0}; return ret}
 function nes_da(n,                                                                                                                              wd,ret) { if(!wd)wd=lc(n);
                       if (wd in son_edmu_da||wd in sgn_edmu_da||wd in son_edsr_da||wd in sgn_edsr_da||wd in son_edze_da||wd in sgn_edze_da||
-                          wd in sqo_edmu_da||wd in sio_edmu_da||wd in sfo_edmu_da||wd in sio_edob_da||wd in sqo_edze_da||
-                          wd in sio_edze_da||wd in sfo_edze_da||wd in son_mn_da||wd in sgn_mn_da||wd in sqo_mn_da||wd in sio_mn_da||
-                          wd in sfo_mn_da)                                                                                                      {ret=1} else {ret=0}; return ret}
+                          wd in sqo_edmu_da||wd in sio_edmu_da||wd in sfo_edmu_da||wd in sio_edob_da||wd in sqo_edze_da||wd in sio_edze_da||
+                          wd in sfo_edze_da||wd in son_mn_da||wd in sgn_mn_da||wd in sqo_mn_da||wd in sio_mn_da||wd in sfo_mn_da)               {ret=1} else {ret=0}; return ret}
 function nes_tv(n,                                                                                                                              wd,ret) { if(!wd)wd=lc(n);
                       if (wd in son_edmu_tv||wd in sgn_edmu_tv||wd in son_edsr_tv||wd in sgn_edsr_tv||wd in son_edze_tv||wd in sgn_edze_tv||
-                          wd in sqo_edmu_tv||wd in sio_edmu_tv||wd in sfo_edmu_tv||wd in sio_edob_tv||wd in sqo_edze_tv||
-                          wd in sio_edze_tv||wd in sfo_edze_tv||wd in son_mn_tv||wd in sgn_mn_tv||wd in sqo_mn_tv||wd in sio_mn_tv||
-                          wd in sfo_mn_tv)                                                                                                      {ret=1} else {ret=0}; return ret}
+                          wd in sqo_edmu_tv||wd in sio_edmu_tv||wd in sfo_edmu_tv||wd in sio_edob_tv||wd in sqo_edze_tv||wd in sio_edze_tv||
+                          wd in sfo_edze_tv||wd in son_mn_tv||wd in sgn_mn_tv||wd in sqo_mn_tv||wd in sio_mn_tv||wd in sfo_mn_tv)               {ret=1} else {ret=0}; return ret}
 function nes_pr(n,                                                                                                                              wd,ret) { if(!wd)wd=lc(n);
                       if (wd in son_edmu_pr||wd in sgn_edmu_pr||wd in son_edsr_pr||wd in sgn_edsr_pr||wd in son_edze_pr||wd in sgn_edze_pr||
-                          wd in sqo_edmu_pr||wd in sio_edmu_pr||wd in sfo_edmu_pr||wd in sio_edob_pr||wd in sqo_edze_pr||
-                          wd in sio_edze_pr||wd in sfo_edze_pr||wd in son_mn_pr||wd in sgn_mn_pr||wd in sqo_mn_pr||wd in sio_mn_pr||
-                          wd in sfo_mn_pr)                                                                                                      {ret=1} else {ret=0}; return ret}
+                          wd in sqo_edmu_pr||wd in sio_edmu_pr||wd in sfo_edmu_pr||wd in sio_edob_pr||wd in sqo_edze_pr||wd in sio_edze_pr||
+                          wd in sfo_edze_pr||wd in son_mn_pr||wd in sgn_mn_pr||wd in sqo_mn_pr||wd in sio_mn_pr||wd in sfo_mn_pr)               {ret=1} else {ret=0}; return ret}
 function nes_oded(n,                                                                                                                            wd,ret) { if(!wd)wd=lc(n);
                       if (wd in sqo_edmu_da||wd in sio_edmu_da||wd in sfo_edmu_da||wd in sqo_edmu_im||wd in sio_edmu_im||wd in sfo_edmu_im||
                           wd in sio_edmu_ne||wd in sfo_edmu_ne||wd in sqo_edmu_pr||wd in sio_edmu_pr||wd in sfo_edmu_pr||wd in sqo_edmu_ro||
                           wd in sio_edmu_ro||wd in sfo_edmu_ro||wd in sqo_edmu_tv||wd in sio_edmu_tv||wd in sfo_edmu_tv||wd in sqo_edmu_vi||
-                          wd in sio_edmu_vi||wd in sfo_edmu_vi||wd in sio_edmu_zv||wd in sio_edob_da||
-                          wd in sio_edob_im||wd in sio_edob_pr||wd in sio_edob_ro||
-                          wd in sio_edob_tv||wd in sio_edob_vi||wd in sqo_edze_da||wd in sio_edze_da||wd in sfo_edze_da||
+                          wd in sio_edmu_vi||wd in sfo_edmu_vi||wd in sio_edmu_zv||wd in sio_edob_da||wd in sfo_edze_tv||wd in sqo_edze_vi||
+                          wd in sio_edob_im||wd in sio_edob_pr||wd in sio_edob_ro||wd in sio_edze_vi||wd in sfo_edze_vi||wd in sio_edze_zv||
+                          wd in sio_edob_tv||wd in sio_edob_vi||wd in sqo_edze_da||wd in sio_edze_da||wd in sfo_edze_da||wd in sio_edze_tv||
                           wd in sqo_edze_im||wd in sio_edze_im||wd in sfo_edze_im||wd in sio_edze_ne||wd in sfo_edze_ne||wd in sqo_edze_pr||
                           wd in sio_edze_pr||wd in sfo_edze_pr||wd in sqo_edze_ro||wd in sio_edze_ro||wd in sfo_edze_ro||wd in sqo_edze_tv||
-                          wd in sio_edze_tv||wd in sfo_edze_tv||wd in sqo_edze_vi||wd in sio_edze_vi||wd in sfo_edze_vi||wd in sio_edze_zv||
                           wd in sio_edob_zv)                                                                                                    {ret=1} else {ret=0}; return ret}
 function nes_odim(n,                                                                                                                            wd,ret) { if(!wd)wd=lc(n);
-                      if (wd in sqo_edmu_im||wd in sio_edmu_im||wd in sfo_edmu_im||wd in sio_edmu_ne||wd in sfo_edmu_ne||
-                          wd in sio_edob_im||wd in sqo_edze_im||wd in sio_edze_im||wd in sfo_edze_im||wd in sio_edze_ne||wd in sfo_edze_ne||
-                          wd in sqo_mn_im||wd in sio_mn_im||wd in sfo_mn_im||wd in sio_mn_ne||wd in sfo_mn_ne)                                  {ret=1} else {ret=0}; return ret}
+                      if (wd in sqo_edmu_im||wd in sio_edmu_im||wd in sfo_edmu_im||wd in sio_edmu_ne||wd in sfo_edmu_ne||wd in sfo_edze_ne||
+                          wd in sio_edob_im||wd in sqo_edze_im||wd in sio_edze_im||wd in sfo_edze_im||wd in sio_edze_ne||wd in sqo_mn_im||
+                          wd in sio_mn_im||wd in sfo_mn_im||wd in sio_mn_ne||wd in sfo_mn_ne)                                                   {ret=1} else {ret=0}; return ret}
 function nes_odvi(n,                                                                                                                            wd,ret) { if(!wd)wd=lc(n);
-                      if (wd in sio_edmu_ne||wd in sfo_edmu_ne||wd in sqo_edmu_vi||wd in sio_edmu_vi||wd in sfo_edmu_vi||
-                          wd in sio_edob_vi||wd in sio_edze_ne||wd in sfo_edze_ne||wd in sqo_edze_vi||wd in sio_edze_vi||wd in sfo_edze_vi||
-                          wd in sqo_mn_im||wd in sio_mn_im||wd in sfo_mn_im||wd in sio_mn_ne||wd in sfo_mn_ne)                                  {ret=1} else {ret=0}; return ret}
+                      if (wd in sio_edmu_ne||wd in sfo_edmu_ne||wd in sqo_edmu_vi||wd in sio_edmu_vi||wd in sfo_edmu_vi||wd in sfo_edze_vi||
+                          wd in sio_edob_vi||wd in sio_edze_ne||wd in sfo_edze_ne||wd in sqo_edze_vi||wd in sio_edze_vi||wd in sqo_mn_im||
+                          wd in sio_mn_im||wd in sfo_mn_im||wd in sio_mn_ne||wd in sfo_mn_ne)                                                   {ret=1} else {ret=0}; return ret}
 function nes_odro(n,                                                                                                                            wd,ret) { if(!wd)wd=lc(n);
-                      if (wd in sio_edmu_ne||wd in sfo_edmu_ne||wd in sqo_edmu_ro||wd in sio_edmu_ro||wd in sfo_edmu_ro||
-                          wd in sio_edob_ro||wd in sio_edze_ne||wd in sfo_edze_ne||wd in sqo_edze_ro||wd in sio_edze_ro||wd in sfo_edze_ro||
-                          wd in sqo_mn_ro||wd in sio_mn_ro||wd in sfo_mn_ro||wd in sio_mn_ne||wd in sfo_mn_ne)                                  {ret=1} else {ret=0}; return ret}
+                      if (wd in sio_edmu_ne||wd in sfo_edmu_ne||wd in sqo_edmu_ro||wd in sio_edmu_ro||wd in sfo_edmu_ro||wd in sfo_edze_ro||
+                          wd in sio_edob_ro||wd in sio_edze_ne||wd in sfo_edze_ne||wd in sqo_edze_ro||wd in sio_edze_ro||wd in sqo_mn_ro||
+                          wd in sio_mn_ro||wd in sfo_mn_ro||wd in sio_mn_ne||wd in sfo_mn_ne)                                                   {ret=1} else {ret=0}; return ret}
 function nes_odda(n,                                                                                                                            wd,ret) { if(!wd)wd=lc(n);
-                      if (wd in sqo_edmu_da||wd in sio_edmu_da||wd in sfo_edmu_da||wd in sio_edmu_ne||wd in sfo_edmu_ne||
-                          wd in sio_edob_da||wd in sqo_edze_da||wd in sio_edze_da||wd in sfo_edze_da||wd in sio_edze_ne||wd in sfo_edze_ne||
-                          wd in sqo_mn_da||wd in sio_mn_da||wd in sfo_mn_da||wd in sio_mn_ne||wd in sfo_mn_ne)                                  {ret=1} else {ret=0}; return ret}
+                      if (wd in sqo_edmu_da||wd in sio_edmu_da||wd in sfo_edmu_da||wd in sio_edmu_ne||wd in sfo_edmu_ne||wd in sfo_edze_ne||
+                          wd in sio_edob_da||wd in sqo_edze_da||wd in sio_edze_da||wd in sfo_edze_da||wd in sio_edze_ne||wd in sqo_mn_da||
+                          wd in sio_mn_da||wd in sfo_mn_da||wd in sio_mn_ne||wd in sfo_mn_ne)                                                   {ret=1} else {ret=0}; return ret}
 function nes_odtv(n,                                                                                                                            wd,ret) { if(!wd)wd=lc(n);
-                      if (wd in sio_edmu_ne||wd in sfo_edmu_ne||wd in sqo_edmu_tv||wd in sio_edmu_tv||wd in sfo_edmu_tv||
-                          wd in sio_edob_tv||wd in sio_edze_ne||wd in sfo_edze_ne||wd in sqo_edze_tv||wd in sio_edze_tv||wd in sfo_edze_tv||
-                          wd in sqo_mn_tv||wd in sio_mn_tv||wd in sfo_mn_tv||wd in sio_mn_ne||wd in sfo_mn_ne)                                  {ret=1} else {ret=0}; return ret}
+                      if (wd in sio_edmu_ne||wd in sfo_edmu_ne||wd in sqo_edmu_tv||wd in sio_edmu_tv||wd in sfo_edmu_tv||wd in sfo_edze_tv||
+                          wd in sio_edob_tv||wd in sio_edze_ne||wd in sfo_edze_ne||wd in sqo_edze_tv||wd in sio_edze_tv||wd in sqo_mn_tv||
+                          wd in sio_mn_tv||wd in sfo_mn_tv||wd in sio_mn_ne||wd in sfo_mn_ne)                                                   {ret=1} else {ret=0}; return ret}
 function nes_odpr(n,                                                                                                                            wd,ret) { if(!wd)wd=lc(n);
-                      if (wd in sio_edmu_ne||wd in sfo_edmu_ne||wd in sqo_edmu_pr||wd in sio_edmu_pr||wd in sfo_edmu_pr||
-                          wd in sio_edob_pr||wd in sio_edze_ne||wd in sfo_edze_ne||wd in sqo_edze_pr||wd in sio_edze_pr||wd in sfo_edze_pr||
-                          wd in sqo_mn_pr||wd in sio_mn_pr||wd in sfo_mn_pr||wd in sio_mn_ne||wd in sfo_mn_ne)                                  {ret=1} else {ret=0}; return ret}
+                      if (wd in sio_edmu_ne||wd in sfo_edmu_ne||wd in sqo_edmu_pr||wd in sio_edmu_pr||wd in sfo_edmu_pr||wd in sfo_edze_pr||
+                          wd in sio_edob_pr||wd in sio_edze_ne||wd in sfo_edze_ne||wd in sqo_edze_pr||wd in sio_edze_pr||wd in sqo_mn_pr||
+                          wd in sio_mn_pr||wd in sfo_mn_pr||wd in sio_mn_ne||wd in sfo_mn_ne)                                                   {ret=1} else {ret=0}; return ret}
 function nes_odzv(n,                                                                                                                            wd,ret) { if(!wd)wd=lc(n);
                       if (wd in sio_edmu_ne||wd in sfo_edmu_ne||wd in sio_edmu_zv||wd in sio_edze_ne||wd in sfo_edze_ne||wd in sio_edze_zv||
                           wd in sio_edob_zv)                                                                                                    {ret=1} else {ret=0}; return ret}
 function nes_odedim(n,                                                                                                                          wd,ret) { if(!wd)wd=lc(n);
-                      if (wd in sqo_edmu_im||wd in sio_edmu_im||wd in sfo_edmu_im||wd in sio_edob_im||wd in sqo_edze_im||
-                          wd in sio_edze_im||wd in sfo_edze_im)                                                                                 {ret=1} else {ret=0}; return ret}
+                      if (wd in sqo_edmu_im||wd in sio_edmu_im||wd in sfo_edmu_im||wd in sio_edob_im||wd in sqo_edze_im||wd in sio_edze_im||
+                          wd in sfo_edze_im)                                                                                                    {ret=1} else {ret=0}; return ret}
 function nes_odedvi(n,                                                                                                                          wd,ret) { if(!wd)wd=lc(n);
-                      if (wd in sio_edob_vi||wd in sqo_edze_vi||wd in sio_edze_vi||wd in sfo_edze_vi||wd in sqo_edmu_vi||
-                          wd in sio_edmu_vi||wd in sfo_edmu_vi||wd in sio_edob_ro)                                           {ret=1} else {ret=0}; return ret}
+                      if (wd in sio_edob_vi||wd in sqo_edze_vi||wd in sio_edze_vi||wd in sfo_edze_vi||wd in sqo_edmu_vi||wd in sio_edmu_vi||
+                          wd in sfo_edmu_vi||wd in sio_edob_ro)                                                                                 {ret=1} else {ret=0}; return ret}
 function nes_odedro(n,                                                                                                                          wd,ret) { if(!wd)wd=lc(n);
-                      if (wd in sqo_edmu_ro||wd in sio_edmu_ro||wd in sfo_edmu_ro||wd in sio_edob_ro||wd in sqo_edze_ro||
-                          wd in sio_edze_ro||wd in sfo_edze_ro)                                                                                 {ret=1} else {ret=0}; return ret}
+                      if (wd in sqo_edmu_ro||wd in sio_edmu_ro||wd in sfo_edmu_ro||wd in sio_edob_ro||wd in sqo_edze_ro||wd in sio_edze_ro||
+                          wd in sfo_edze_ro)                                                                                                    {ret=1} else {ret=0}; return ret}
 function nes_odedda(n,                                                                                                                          wd,ret) { if(!wd)wd=lc(n);
-                      if (wd in sqo_edmu_da||wd in sio_edmu_da||wd in sfo_edmu_da||wd in sio_edob_da||wd in sqo_edze_da||
-                          wd in sio_edze_da||wd in sfo_edze_da)                                                                                 {ret=1} else {ret=0}; return ret}
+                      if (wd in sqo_edmu_da||wd in sio_edmu_da||wd in sfo_edmu_da||wd in sio_edob_da||wd in sqo_edze_da||wd in sio_edze_da||
+                          wd in sfo_edze_da)                                                                                                    {ret=1} else {ret=0}; return ret}
 function nes_odedmuda(n,                                                                                                                        wd,ret) { if(!wd)wd=lc(n);
-                      if (wd in sqo_edmu_da||wd in sio_edmu_da||wd in sfo_edmu_da||wd in sio_edob_da)                        {ret=1} else {ret=0}; return ret}
-function nes_odedsrda(n,  wd,ret) { if(!wd)wd=lc(n); if (wd in sio_edob_da)                                                  {ret=1} else {ret=0}; return ret}
+                      if (wd in sqo_edmu_da||wd in sio_edmu_da||wd in sfo_edmu_da||wd in sio_edob_da)                                           {ret=1} else {ret=0}; return ret}
+function nes_odedsrda(n,  wd,ret) { if(!wd)wd=lc(n); if (wd in sio_edob_da)                                                                     {ret=1} else {ret=0}; return ret}
 function nes_odedtv(n,                                                                                                                          wd,ret) { if(!wd)wd=lc(n);
-                      if (wd in sqo_edmu_tv||wd in sio_edmu_tv||wd in sfo_edmu_tv||wd in sio_edob_tv||wd in sqo_edze_tv||
-                          wd in sio_edze_tv||wd in sfo_edze_tv)                                                                                 {ret=1} else {ret=0}; return ret}
+                      if (wd in sqo_edmu_tv||wd in sio_edmu_tv||wd in sfo_edmu_tv||wd in sio_edob_tv||wd in sqo_edze_tv||wd in sio_edze_tv||
+                          wd in sfo_edze_tv)                                                                                                    {ret=1} else {ret=0}; return ret}
 function nes_odedpr(n,                                                                                                                          wd,ret) { if(!wd)wd=lc(n);
-                      if (wd in sqo_edmu_pr||wd in sio_edmu_pr||wd in sfo_edmu_pr||wd in sio_edob_pr||wd in sqo_edze_pr||
-                          wd in sio_edze_pr||wd in sfo_edze_pr)                                                                                 {ret=1} else {ret=0}; return ret}
+                      if (wd in sqo_edmu_pr||wd in sio_edmu_pr||wd in sfo_edmu_pr||wd in sio_edob_pr||wd in sqo_edze_pr||wd in sio_edze_pr||
+                          wd in sfo_edze_pr)                                                                                                    {ret=1} else {ret=0}; return ret}
 function nes_odmnvi(n,    wd,ret) { if(!wd)wd=lc(n); if (wd in sqo_mn_ro||wd in sio_mn_ro||wd in sfo_mn_ro)                                     {ret=1} else {ret=0}; return ret}
 function nes_odmnim(n,                                                                                                                          wd,ret) { if(!wd)wd=lc(n);
                       if (wd in sqo_mn_im||wd in sio_mn_im||wd in sfo_mn_im||wd in sio_mn_ne||wd in sfo_mn_ne)                                  {ret=1} else {ret=0}; return ret}
@@ -2586,14 +2542,14 @@ function nes_odmnro(n,                                                          
 function nes_odmnda(n,                                                                                                                          wd,ret) { if(!wd)wd=lc(n);
                       if (wd in sqo_mn_da||wd in sio_mn_da||wd in sfo_mn_da||wd in sio_mn_ne||wd in sfo_mn_ne)                                  {ret=1} else {ret=0}; return ret}
 function nes_noed(n,                                                                                                                            wd,ret) { if(!wd)wd=lc(n);
-                      if (wd in son_edmu_da||wd in sgn_edmu_da||wd in son_edmu_im||wd in sgn_edmu_im||wd in sgn_edmu_me||
+                      if (wd in son_edmu_da||wd in sgn_edmu_da||wd in son_edmu_im||wd in sgn_edmu_im||wd in sgn_edmu_me||wd in agn_edze_ne||
                           wd in aon_edmu_ne||wd in agn_edmu_ne||wd in son_edmu_pr||wd in sgn_edmu_pr||wd in son_edmu_ro||wd in sgn_edmu_ro||
                           wd in son_edmu_tv||wd in sgn_edmu_tv||wd in son_edsr_da||wd in sgn_edsr_da||wd in son_edsr_im||wd in sgn_edsr_im||
                           wd in aon_edsr_ne||wd in agn_edsr_ne||wd in son_edsr_ne||wd in sgn_edsr_ne||wd in son_edsr_ro||wd in sgn_edsr_ro||
                           wd in son_edsr_tv||wd in sgn_edsr_tv||wd in son_edsr_vi||wd in sgn_edsr_vi||wd in son_edze_da||wd in sgn_edze_da||
                           wd in son_edze_im||wd in sgn_edze_im||wd in aon_edze_ne||wd in son_edze_ne||wd in sgn_edze_ne||wd in son_edze_pr||
                           wd in sgn_edze_pr||wd in son_edze_ro||wd in sgn_edze_ro||wd in son_edze_tv||wd in sgn_edze_tv||wd in son_edze_vi||
-                          wd in sgn_edze_vi||wd in son_edmu_ne||wd in son_edsr_pr||wd in sgn_edsr_pr||wd in agn_edze_ne||wd in sgn_edmu_ne)     {ret=1} else {ret=0}; return ret}
+                          wd in sgn_edze_vi||wd in son_edmu_ne||wd in son_edsr_pr||wd in sgn_edsr_pr||wd in sgn_edmu_ne)                        {ret=1} else {ret=0}; return ret}
 function nes_noedim(n,                                                                                                                          wd,ret) { if(!wd)wd=lc(n);
                       if (wd in son_edmu_im||wd in sgn_edmu_im||wd in son_edsr_im||wd in sgn_edsr_im||wd in son_edze_im||wd in sgn_edze_im)     {ret=1} else {ret=0}; return ret}
 function nes_noedmuim(n,  wd,ret) { if(!wd)wd=lc(n); if (wd in son_edmu_im||wd in sgn_edmu_im)                                                  {ret=1} else {ret=0}; return ret}
@@ -2617,8 +2573,8 @@ function nes_nomnvi(n,                                                          
 function nes_nomnro(n,    wd,ret) { if(!wd)wd=lc(n); if (wd in son_mn_ro||wd in sgn_mn_ro)                                                      {ret=1} else {ret=0}; return ret}
 function nes_nomntv(n,    wd,ret) { if(!wd)wd=lc(n); if (wd in son_mn_tv||wd in sgn_mn_tv)                                                      {ret=1} else {ret=0}; return ret}
 function nes_nomnpr(n,    wd,ret) { if(!wd)wd=lc(n); if (wd in son_mn_pr||wd in sgn_mn_pr)                                                      {ret=1} else {ret=0}; return ret}
-function nes_edme(n,      wd,ret) { if(!wd)wd=lc(n); if (wd in sgn_edmu_me)                                                  {ret=1} else {ret=0}; return ret}
-function nes_edmume(n,    wd,ret) { if(!wd)wd=lc(n); if (wd in sgn_edmu_me)                                                  {ret=1} else {ret=0}; return ret}
+function nes_edme(n,      wd,ret) { if(!wd)wd=lc(n); if (wd in sgn_edmu_me)                                                                     {ret=1} else {ret=0}; return ret}
+function nes_edmume(n,    wd,ret) { if(!wd)wd=lc(n); if (wd in sgn_edmu_me)                                                                     {ret=1} else {ret=0}; return ret}
 function nes_edne(n,                                                                                                                            wd,ret) { if(!wd)wd=lc(n);
                       if (wd in aon_edmu_ne||wd in agn_edmu_ne||wd in son_edmu_ne||wd in sgn_edmu_ne||wd in aon_edsr_ne||wd in agn_edsr_ne||
                           wd in son_edsr_ne||wd in sgn_edsr_ne||wd in aon_edze_ne||wd in agn_edze_ne||wd in son_edze_ne||wd in sgn_edze_ne||
@@ -2639,12 +2595,11 @@ function nes_ed(n,                                                              
                           wd in sqo_edmu_im||wd in sio_edmu_im||wd in sfo_edmu_im||wd in sio_edmu_ne||wd in sfo_edmu_ne||wd in sqo_edmu_pr||
                           wd in agn_edmu_ne||wd in sio_edmu_pr||wd in sfo_edmu_pr||wd in sqo_edmu_ro||wd in sio_edmu_ro||wd in sfo_edmu_ro||
                           wd in sqo_edmu_tv||wd in sio_edmu_tv||wd in sfo_edmu_tv||wd in sqo_edmu_vi||wd in sio_edmu_vi||wd in sfo_edmu_vi||
-                          wd in sio_edmu_zv||wd in sgn_edsr_ne||wd in sio_edob_da||wd in sio_edob_im||
-                          wd in sio_edob_ro||wd in sio_edob_tv||wd in sio_edob_pr||
-                          wd in sio_edob_vi||wd in son_edze_pr||wd in sqo_edze_da||wd in sio_edze_da||wd in sfo_edze_da||
+                          wd in sio_edmu_zv||wd in sgn_edsr_ne||wd in sio_edob_da||wd in sio_edob_im||wd in sfo_edze_tv||wd in sqo_edze_vi||
+                          wd in sio_edob_ro||wd in sio_edob_tv||wd in sio_edob_pr||wd in sio_edze_vi||wd in sfo_edze_vi||wd in sio_edze_zv||
+                          wd in sio_edob_vi||wd in son_edze_pr||wd in sqo_edze_da||wd in sio_edze_da||wd in sfo_edze_da||wd in sio_edze_tv||
                           wd in sqo_edze_im||wd in sio_edze_im||wd in sfo_edze_im||wd in sio_edze_ne||wd in sfo_edze_ne||wd in sqo_edze_pr||
                           wd in sio_edze_pr||wd in sfo_edze_pr||wd in sqo_edze_ro||wd in sio_edze_ro||wd in sfo_edze_ro||wd in sqo_edze_tv||
-                          wd in sio_edze_tv||wd in sfo_edze_tv||wd in sqo_edze_vi||wd in sio_edze_vi||wd in sfo_edze_vi||wd in sio_edze_zv||
                           wd in sio_edob_zv)                                                                                                   {ret=1} else {ret=0}; return ret}
 function nes_mu(n,                                                                                                                             wd,ret) { if(!wd)wd=lc(n);
                       if (wd in son_edmu_da||wd in sgn_edmu_da||wd in son_edmu_im||wd in sgn_edmu_im||wd in sgn_edmu_me||wd in aon_edmu_ne||
@@ -2666,8 +2621,8 @@ function nes_sr(n,                                                              
                           wd in son_edsr_ne||wd in sgn_edsr_ne||wd in son_edsr_ro||wd in sgn_edsr_ro||wd in son_edsr_tv||wd in sgn_edsr_tv||
                           wd in son_edsr_vi||wd in sgn_edsr_vi||wd in son_edsr_pr||wd in sgn_edsr_pr)                                          {ret=1} else {ret=0}; return ret}
 function nes_ob(n,                                                                                                                             wd,ret) { if(!wd)wd=lc(n);
-                      if (wd in sqo_edob_da||wd in sio_edob_da||wd in sio_edob_im||wd in sio_edob_pr||
-                          wd in sio_edob_ro||wd in sio_edob_tv||wd in sio_edob_vi)    {ret=1} else {ret=0}; return ret}
+                      if (wd in sqo_edob_da||wd in sio_edob_da||wd in sio_edob_im||wd in sio_edob_pr||wd in sio_edob_ro||wd in sio_edob_tv||
+                          wd in sio_edob_vi)                                                                                                   {ret=1} else {ret=0}; return ret}
 function nes_mn(n,                                                                                                                             wd,ret) { if(!wd)wd=lc(n);
                       if (wd in son_mn_da||wd in sgn_mn_da||wd in son_mn_im||wd in sgn_mn_im||wd in agn_mn_ne||wd in son_mn_ne||
                           wd in sgn_mn_ne||wd in son_mn_pr||wd in son_mn_ro||wd in sgn_mn_ro||wd in son_mn_tv||wd in sgn_mn_tv||
@@ -2679,19 +2634,18 @@ function nes_any(n,                                                             
                           wd in aon_edmu_ne||wd in son_edmu_ne||wd in sgn_edmu_ne||wd in son_edmu_pr||wd in sgn_edmu_pr||wd in sgn_edmu_tv||
                           wd in son_edsr_da||wd in sgn_edsr_da||wd in son_edmu_ro||wd in sgn_edmu_ro||wd in son_edmu_tv||wd in son_edsr_ne||
                           wd in son_edsr_im||wd in sgn_edsr_im||wd in aon_edsr_ne||wd in agn_edsr_ne||wd in sgn_edze_ne||wd in sfo_edze_vi||
-                          wd in son_edsr_pr||wd in sgn_edsr_pr||wd in son_edsr_ro||wd in sgn_edsr_ro||wd in sio_edob_im||
-                          wd in son_edsr_tv||wd in sgn_edsr_tv||wd in son_edsr_vi||wd in sgn_edsr_vi||wd in sio_edob_vi||
-                          wd in son_edze_da||wd in sgn_edze_da||wd in son_edze_im||wd in sgn_edze_im||wd in sio_edob_pr||
-                          wd in son_edze_me||wd in aon_edze_ne||wd in agn_edze_ne||wd in son_edze_ne||wd in sio_edob_ro||
+                          wd in son_edsr_pr||wd in sgn_edsr_pr||wd in son_edsr_ro||wd in sgn_edsr_ro||wd in sio_edob_im||wd in sfo_edze_ne||
+                          wd in son_edsr_tv||wd in sgn_edsr_tv||wd in son_edsr_vi||wd in sgn_edsr_vi||wd in sio_edob_vi||wd in sqo_edze_ro||
+                          wd in son_edze_da||wd in sgn_edze_da||wd in son_edze_im||wd in sgn_edze_im||wd in sio_edob_pr||wd in sio_edze_da||
+                          wd in son_edze_me||wd in aon_edze_ne||wd in agn_edze_ne||wd in son_edze_ne||wd in sio_edob_ro||wd in agn_edmu_ne||
                           wd in son_edze_pr||wd in sgn_edze_pr||wd in son_edze_ro||wd in sgn_edze_ro||wd in sfo_edze_da||wd in sqo_edze_im||
-                          wd in son_edze_tv||wd in sgn_edze_tv||wd in son_edze_vi||wd in sgn_edze_vi||wd in sio_edob_tv||
-                          wd in sqo_edmu_da||wd in sio_edmu_da||wd in sfo_edmu_da||wd in sqo_edmu_im||wd in sio_edze_ne||wd in sfo_edze_ne||
-                          wd in sio_edmu_im||wd in sfo_edmu_im||wd in sio_edmu_ne||wd in sfo_edmu_ne||wd in sfo_edze_pr||wd in sqo_edze_ro||
-                          wd in sqo_edmu_pr||wd in sio_edmu_pr||wd in sfo_edmu_pr||wd in sqo_edmu_ro||wd in sqo_edze_da||wd in sio_edze_da||
-                          wd in sio_edmu_ro||wd in sfo_edmu_ro||wd in sqo_edmu_tv||wd in sio_edmu_tv||wd in sfo_edmu_tv||wd in agn_edmu_ne||
-                          wd in sqo_edmu_vi||wd in sio_edmu_vi||wd in sfo_edmu_vi||wd in sio_edob_zv||wd in sio_edze_im||wd in sfo_edze_im||
-                          wd in sio_edmu_zv||wd in sio_edob_da||wd in sgn_edsr_ne||wd in sio_edze_tv||wd in sfo_edze_tv||
-                          wd in sqo_edze_pr||wd in sio_edze_pr||wd in sqo_edze_vi||wd in sio_edze_vi||wd in sqo_edze_tv||wd in sfo_edze_ro||
+                          wd in son_edze_tv||wd in sgn_edze_tv||wd in son_edze_vi||wd in sgn_edze_vi||wd in sio_edob_tv||wd in sfo_edze_im||
+                          wd in sqo_edmu_da||wd in sio_edmu_da||wd in sfo_edmu_da||wd in sqo_edmu_im||wd in sio_edze_ne||wd in sfo_edze_ro||
+                          wd in sio_edmu_im||wd in sfo_edmu_im||wd in sio_edmu_ne||wd in sfo_edmu_ne||wd in sfo_edze_pr||wd in sqo_edze_tv||
+                          wd in sqo_edmu_pr||wd in sio_edmu_pr||wd in sfo_edmu_pr||wd in sqo_edmu_ro||wd in sqo_edze_da||wd in sio_edze_vi||
+                          wd in sio_edmu_ro||wd in sfo_edmu_ro||wd in sqo_edmu_tv||wd in sio_edmu_tv||wd in sfo_edmu_tv||wd in sqo_edze_vi||
+                          wd in sqo_edmu_vi||wd in sio_edmu_vi||wd in sfo_edmu_vi||wd in sio_edob_zv||wd in sio_edze_im||wd in sio_edze_pr||
+                          wd in sio_edmu_zv||wd in sio_edob_da||wd in sgn_edsr_ne||wd in sio_edze_tv||wd in sfo_edze_tv||wd in sqo_edze_pr||
                           wd in sio_edze_ro||
                           wd in sqo_mn_da||wd in sio_mn_da||wd in sfo_mn_da||wd in sfo_mn_ro||wd in son_mn_da||wd in sgn_mn_da||
                           wd in son_mn_im||wd in sgn_mn_im||wd in agn_mn_ne||wd in son_mn_ne||wd in sgn_mn_ne||wd in son_mn_pr||
@@ -3154,9 +3108,9 @@ function titul(n,       wd,ret) { if(!wd)wd=lc(n); if (wd in titl)              
                                                                                                                                                 
 # Числительные                                                                                                                                  
 function qik_im(n,      wd,ret) { if(!wd)wd=lc(n); if (wd in qko_ed_ze_im||wd in qko_ed_mu_im||wd in qko_ed_sr_im||wd in qko_im||
-                                                         wd in qko_ze_im||wd in qko_mn_im)                                                      {ret=1} else {ret=0}; return ret}
+                                                       wd in qko_ze_im||wd in qko_mn_im)                                                        {ret=1} else {ret=0}; return ret}
 function qik_vi(n,      wd,ret) { if(!wd)wd=lc(n); if (wd in qko_ed_ze_vi||wd in qko_ed_mu_vi||wd in qko_ed_sr_vi||wd in qko_vi||
-                                                         wd in qko_ze_vi||wd in qko_mn_vi)                                                      {ret=1} else {ret=0}; return ret}
+                                                       wd in qko_ze_vi||wd in qko_mn_vi)                                                        {ret=1} else {ret=0}; return ret}
 function qik_ro(n,      wd,ret) { if(!wd)wd=lc(n); if (wd in qko_ed_ze_ro||wd in qko_ed_mu_ro||wd in qko_ed_sr_ro||wd in qko_ro||wd in qko_mn_ro){ret=1} else {ret=0}; return ret}
 function qik_da(n,      wd,ret) { if(!wd)wd=lc(n); if (wd in qko_ed_ze_da||wd in qko_ed_mu_da||wd in qko_ed_sr_da||wd in qko_da||wd in qko_mn_da){ret=1} else {ret=0}; return ret}
 function qik_tv(n,      wd,ret) { if(!wd)wd=lc(n); if (wd in qko_ed_ze_tv||wd in qko_ed_mu_tv||wd in qko_ed_sr_tv||wd in qko_tv||wd in qko_mn_tv){ret=1} else {ret=0}; return ret}
@@ -3175,7 +3129,7 @@ function qik_mntv(n,    wd,ret) { if(!wd)wd=lc(n); if (wd in qko_mn_tv)         
 function qik_mnpr(n,    wd,ret) { if(!wd)wd=lc(n); if (wd in qko_mn_pr)                                                                         {ret=1} else {ret=0}; return ret}
 function qip_im(n,      wd,ret) { if(!wd)wd=lc(n); if (wd in qpo_ed_ze_im||wd in qpo_ed_mu_im||wd in qpo_ed_sr_im||wd in qpo_mn_im)             {ret=1} else {ret=0}; return ret}
 function qip_vi(n,      wd,ret) { if(!wd)wd=lc(n); if (wd in qpo_ed_ze_vi||wd in qpo_ed_mu_im||wd in qpo_ed_mu_ro||wd in qpo_ed_sr_vi||
-                                                         wd in qpo_mn_im||wd in qpo_mn_ro)                                                      {ret=1} else {ret=0}; return ret}
+                                                       wd in qpo_mn_im||wd in qpo_mn_ro)                                                        {ret=1} else {ret=0}; return ret}
 function qip_ro(n,      wd,ret) { if(!wd)wd=lc(n); if (wd in qpo_ed_ze_ro||wd in qpo_ed_mu_ro||wd in qpo_ed_sr_ro||wd in qpo_mn_ro)             {ret=1} else {ret=0}; return ret}
 function qip_da(n,      wd,ret) { if(!wd)wd=lc(n); if (wd in qpo_ed_ze_da||wd in qpo_ed_mu_da||wd in qpo_ed_sr_da||wd in qpo_mn_da)             {ret=1} else {ret=0}; return ret}
 function qip_tv(n,      wd,ret) { if(!wd)wd=lc(n); if (wd in qpo_ed_ze_tv||wd in qpo_ed_mu_tv||wd in qpo_ed_sr_tv||wd in qpo_mn_tv)             {ret=1} else {ret=0}; return ret}

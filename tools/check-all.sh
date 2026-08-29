@@ -39,7 +39,7 @@ pack="$sdb/automo.gz $sdb/awx/beautify.awk $sdb/class.list.gz $sdb/classes.awk $
       $sdb/deomo.awk $sdb/demorphy.awk $sdb/dic_cust.gz $sdb/dic_gl.gz $sdb/dic_prl.gz $sdb/dic_prq.gz $sdb/dic_rest.gz \
       $sdb/dic_suw.gz $sdb/functions.awk $sdb/awx/gw_caplists.awk $sdb/hclean.sh $sdb/ist.gz $sdb/main.awk $sdb/mano-lc.gz \
       $sdb/mano-uc.gz $sdb/namebase.gz $sdb/namedef.awk $sdb/yoyo_alt.gz $sdb/omo_list.phy.gz $sdb/preview.awk $sdb/pye/ruac.py \
-      $sdb/pye/rulg_all.py $sdb/pye/rulg_omo.py $sdb/settings.ini $sdb/dix_prq.gz $sdb/ext/vsevso.awk $sdb/unistress.gz $sdb/unistrehy.gz \
+      $sdb/pye/rulg_all.py $sdb/pye/rulg_omo.py $sdb/settings.ini $sdb/dix_prq.gz $sdb/unistress.gz $sdb/unistrehy.gz \
       $sdb/yodef.awk $sdb/yodef.gz $sdb/ext/x4707.awk $sdb/ext/x4709.awk $sdb/dic_prop.gz $sdb/cstrings.gz"
 read -a minpack <<< $pack
 

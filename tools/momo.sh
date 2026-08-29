@@ -25,9 +25,6 @@ backup="$book".$suf
 aux="scriptaux"
 sdb="scriptdb"
 
- vso="x1111"  # Использовать для "все" функцию x1111_f()
-#vso="vsevso" # Использовать для "все" функцию xVSEVSO_F()
-
 #repper="grep"
  repper="rg"
 
@@ -36,7 +33,7 @@ nocaps=0      # Если 1, то при debug=1 капсов в "пастери�
 locdic=1      # Создавать локальные словари для каждой книги из фактически найденной лексики
 sed_do=0      # 1 = постобработка sed, мелочи для выделения инициалов и пр. работает только для [gtts] + [ttslexx] + [словарь расшифровки условных обоззначений]
 morphy_is=0   # 1 = SpaCy; 2 = Natasha; 3 = beta_1; 4 = RNNTagger; NOTE: только для исследовательских целей. На практике используем ruaccent.
-  morphy_yo=0 # 1 = скрипт vsevso.awk (или x1111.awk) использует только данные SpaCy или Natasha; 0 = сторонняя модель только "подбирает хвосты"
+  morphy_yo=0 # 1 = скрипт x1111.awk использует только данные SpaCy или Natasha; 0 = сторонняя модель только "подбирает хвосты"
   morphy_do=0 # 1 = некоторые скрипты могут использовать только данные SpaCy или Natasha; 0 = только "подбирает хвосты" (не сделано)
 main_do=1     # 1 = включить основную обработку, для возможности ее выключения, для -ruac, например.
 disc_do=1     # 1 = включить дискретные скрипты
@@ -100,7 +97,7 @@ ms2sec () { awk -vms=$duration 'BEGIN {
 rm_wdir () { if [[ -d "$bookwrkdir" ]]; then rm -rf "$bookwrkdir"; dir_rm=$(printf '\e[36m%s \e[33m%s \e[36m%s\e[0m\n' "Директория" "$bookwrkdir" "создана.");
                                       else dir_rm=$(printf "\n") ; fi }
 
-if [[ $somo == "все" ]] || [[ $key == "-se" ]]; then key="-sg"; somo="$vso"; fi # Заглушка для -se : == -sg book.fb2 x1111 / -sw book.fb2 все
+if [[ $somo == "все" ]] || [[ $key == "-se" ]]; then key="-sg"; somo="x1111"; fi # Заглушка для -se : == -sg book.fb2 x1111 / -sw book.fb2 все
 
 if [[ -s "$1" ]]; then book="$1"; backup="$book".$suf; key="-gg"; printf '\e[33m%s \e[93m%s\e[0m\n' "Ключи не заданы, но книга указана. Используем ключ:" "-gg"
   elif [[ -e "$2" ]]; then printf '\e[36m%s \e[33m%s\e[0m ' "Обрабатывается книга:" "$book"
@@ -167,17 +164,17 @@ if [[ -s $aux/classes.md5 ]] && md5sum -c --status $aux/classes.md5 >/dev/null 2
 
 if [[ $clxx -eq "1" ]]; then
 	if ./check-all.sh ; then printf '\e[32m%s\e[0m\n' "Проверка файлов завершена успешно…";
-    if [[ -d "$bookstadir" ]]; then rm -rf "$bookstadir"; fi;
-	else printf '\e[1;31m%s \e[93m%s \e[1;31m%s\e[0m\n' "Выполнение скрипта" "./momo.sh" "прервано! Исправьте ошибки в базах и повторите действие!"; exit 1; fi; fi
+    if [[ -d "$bookstadir" ]]; then rm -rf "$bookstadir"; fi; fi; fi;
+#else printf '\e[1;31m%s \e[93m%s \e[1;31m%s\e[0m\n' "Выполнение скрипта" "./momo.sh" "прервано! Исправьте ошибки в базах и повторите действие!"; exit 1; fi; fi
 
 printf '\e[36m%s \e[93m%s\e[36m%s \e[93m%s\e[0m ' "В словаре Омографов:" $(zgrep -c ^ $sdb/mano-uc.gz) ", омографов:" $(zgrep -c ^ $sdb/mano-lc.gz)
 
 # Конвертация в UTF-8, если нужно
 #$edi -c "set nobomb | set fenc=utf8 | x" "$book"
 
-sed -r  "/^\s*<binary/Q" "$book" | sed -r "s/\xc2\xa0/ /g" > "$bookwrkdir"/text-book.txt
-sed -rn '/^\s*<binary/,$p' "$book" > "$bookwrkdir"/binary-book.txt
-cp "$bookwrkdir"/binary-book.txt "$bookwrkdir"/text-book.bas
+sed -r  "/^\s*<binary/Q" "$book" | sed -r "s/\xc2\xa0/ /g" > "$bookwrkdir/"text-book.txt
+sed -rn '/^\s*<binary/,$p' "$book" > "$bookwrkdir/"binary-book.txt
+cp "$bookwrkdir/"text-book.txt "$bookwrkdir/"text-book.bas
 #booklico=$(wc -l < "$bookwrkdir"/binary-book.txt)
 
 # Замены однозначных
@@ -211,7 +208,7 @@ if [[ $fixomo == "1" ]]; then
               s/^(.+#_#_# all_omos !_#_!)$/#\1/g}' $sdb/main.awk > "$bookstadir/"main_esc.awk
   
       awk -vindb="$sdb/" -vinax="$aux/" -vbkphydir="$bookstadir/" -vlocdic="$bookstadir/" -vmorphy_on="$morphy" -vmorphy_yo="$morphy_yo" \
-          -vescan="$eSCAN" -vescap="$eSCAP" -vnoredix=1 -vvso="$vso" -f "$bookstadir/"main_esc.awk "$bookwrkdir"/text-book.txt > "$bookwrkdir"/text-book.bas
+          -vescan="$eSCAN" -vescap="$eSCAP" -vnoredix=1 -f "$bookstadir/"main_esc.awk "$bookwrkdir"/text-book.txt > "$bookwrkdir"/text-book.bas
   
       mo_cur=$(date +%s.%N); duration=$( echo $mo_cur - $mo_prev | bc ); mo_prev=$mo_cur; durhum=$(ms2sec);
       LC_ALL="en_US.UTF-8" printf '\e[36m%s \e[93m%s \e[36m%s\e[0m\n' "Обработка словаря исключений:" $durhum
@@ -402,7 +399,7 @@ if [[ $fixomo == "1" ]]; then
    if [[ -s "$bookstadir"/classes.bin ]] && md5sum -c --status "$bookstadir"/classes.md5 >/dev/null 2>&1; then
        printf '\e[36m%s\n' "OK: база classes.bin создана.";
    else 
-     echo "" | awk -vindb="$sdb/" -vinax="$aux/" -vbkphydir="$bookstadir/" -vlocdic="$bookstadir/" -vmorphy_on="$morphy" -vmorphy_yo="$morphy_yo" -vvso="$vso" \
+     echo "" | awk -vindb="$sdb/" -vinax="$aux/" -vbkphydir="$bookstadir/" -vlocdic="$bookstadir/" -vmorphy_on="$morphy" -vmorphy_yo="$morphy_yo" \
             -f "$sdb/"main.awk 2>&1 > /dev/null;
      mo_cur=$(date +%s.%N); duration=$( echo $mo_cur - $mo_prev | bc ); mo_prev=$mo_cur; durhum=$(ms2sec);
      LC_ALL="en_US.UTF-8" printf '\e[36m%s \e[93m%s \e[36m%s\n' "Создание базы AWK:" $durhum;
@@ -418,10 +415,10 @@ if [[ $fixomo == "1" ]]; then
       if [[ $do_parallel -eq 1 ]]; then
         printf '\e[32m%s \e[33m%s\e[0m\n' "GNU Parallel:" "$paraopts_awk"
         parallel --env $paraopts_awk "$bookwrkdir"/text-book.bas \
-        awk -vindb="$sdb/" -vinax="$aux/" -vbkphydir="$bookstadir/" -vlocdic="$bookstadir/" -vmorphy_on="$morphy" -vmorphy_yo="$morphy_yo" -vvso="$vso" \
+        awk -vindb="$sdb/" -vinax="$aux/" -vbkphydir="$bookstadir/" -vlocdic="$bookstadir/" -vmorphy_on="$morphy" -vmorphy_yo="$morphy_yo" \
             -f "$bookstadir"/main.awk > "$bookwrkdir"/text-book.awk.txt
       else
-        awk -vindb="$sdb/" -vinax="$aux/" -vbkphydir="$bookstadir/" -vlocdic="$bookstadir/" -vmorphy_on="$morphy" -vmorphy_yo="$morphy_yo" -vvso="$vso" \
+        awk -vindb="$sdb/" -vinax="$aux/" -vbkphydir="$bookstadir/" -vlocdic="$bookstadir/" -vmorphy_on="$morphy" -vmorphy_yo="$morphy_yo" \
             -f "$bookstadir"/main.awk "$bookwrkdir"/text-book.bas > "$bookwrkdir"/text-book.awk.txt
       fi # do_parallel
   
@@ -443,10 +440,10 @@ if [[ $fixomo == "1" ]]; then
       if [[ $do_parallel -eq 1 ]]; then
         printf '\e[32m%s \e[33m%s\e[0m\n' "GNU Parallel:" "$paraopts_awk"
         parallel --env $paraopts_awk "$bookwrkdir"/text-book.bas \
-        awk -vindb="$sdb/" -vinax="$aux/" -vbkphydir="$bookstadir/" -vlocdic="$bookstadir/" -vmorphy_on="$morphy" -vmorphy_yo="$morphy_yo" -vvso="$vso" \
+        awk -vindb="$sdb/" -vinax="$aux/" -vbkphydir="$bookstadir/" -vlocdic="$bookstadir/" -vmorphy_on="$morphy" -vmorphy_yo="$morphy_yo" \
             -f "$bookstadir"/main.awk > "$bookwrkdir"/text-book.awk.txt
       else
-        awk -vindb="$sdb/" -vinax="$aux/" -vbkphydir="$bookstadir/" -vlocdic="$bookstadir/" -vmorphy_on="$morphy" -vmorphy_yo="$morphy_yo" -vvso="$vso" \
+        awk -vindb="$sdb/" -vinax="$aux/" -vbkphydir="$bookstadir/" -vlocdic="$bookstadir/" -vmorphy_on="$morphy" -vmorphy_yo="$morphy_yo" \
             -f "$bookstadir"/main.awk "$bookwrkdir"/text-book.bas > "$bookwrkdir"/text-book.awk.txt
       fi # do_parallel
   
@@ -464,10 +461,10 @@ if [[ $fixomo == "1" ]]; then
       if [[ $do_parallel -eq 1 ]]; then
         printf '\e[32m%s \e[33m%s\e[0m\n' "GNU Parallel:" "$paraopts_awk"
         parallel --env $paraopts_awk "$bookwrkdir"/text-book.bas \
-        awk -vindb="$sdb/" -vinax="$aux/" -vbkphydir="$bookstadir/" -vlocdic="$bookstadir/" -vmorphy_on="$morphy" -vmorphy_yo="$morphy_yo" -vvso="$vso" \
+        awk -vindb="$sdb/" -vinax="$aux/" -vbkphydir="$bookstadir/" -vlocdic="$bookstadir/" -vmorphy_on="$morphy" -vmorphy_yo="$morphy_yo" \
             -f "$bookstadir"/main.awk > "$bookwrkdir"/text-book.awk.txt
       else
-        awk -vindb="$sdb/" -vinax="$aux/" -vbkphydir="$bookstadir/" -vlocdic="$bookstadir/" -vmorphy_on="$morphy" -vmorphy_yo="$morphy_yo" -vvso="$vso" \
+        awk -vindb="$sdb/" -vinax="$aux/" -vbkphydir="$bookstadir/" -vlocdic="$bookstadir/" -vmorphy_on="$morphy" -vmorphy_yo="$morphy_yo" \
             -f "$bookstadir"/main.awk "$bookwrkdir"/text-book.bas > "$bookwrkdir"/text-book.awk.txt
      fi # do_parallel
   
@@ -544,7 +541,7 @@ if [[ $main_do -eq 1 ]]; then # main_do
   	noomo=1
   	cat "$bookwrkdir"/text-book.txt "$bookwrkdir"/binary-book.txt > "$book"
   	printf '\e[36m%s \e[093m%s \e[36m%s\e[0m\n' "Однозначные обработаны, омографов для ручной обработки" "НЕ" "найдено."
-  	rm -rf "$bookwrkdir"
+# 	rm -rf "$bookwrkdir"
   fi # discretchk 0
 fi #main_do
 

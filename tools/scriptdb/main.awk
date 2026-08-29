@@ -29,7 +29,6 @@ BEGIN { PROCINFO["sorted_in"]="@ind_num_asc"
  # Сканируем текст на омографы.
  #   Для сканирования 1 омографа:       ./momo.sh -sw book.fb2 замок
  #   Для сканирования группы омографов: ./momo.sh -sg book.fb2 x4707
- #   Для "все" присутсвует "старая" vse и "новая" (группа x1111) функции. x1111 в разаработке
 #_#_#txtmppra
 #   if (num in eSCAN) { for (i=1; i<=NF; i++) { if($i in eOMO && num!=o03[$i]) {omap["x0300"][$i] = omap["x0300"][$i] num " "; o03[$i] = num};};}; #_#_# escomo !_#_!
 #   if (num in eSCAP) { for (i=1; i<=NF; i++) { if($i in cOMO && num!=o04[$i]) {omap["x0301"][$i] = omap["x0301"][$i] num " "; o04[$i] = num};};}; #_#_# escaps !_#_!
