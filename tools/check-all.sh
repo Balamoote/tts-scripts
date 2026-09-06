@@ -40,7 +40,7 @@ pack="$sdb/automo.gz $sdb/awx/beautify.awk $sdb/class.list.gz $sdb/classes.awk $
       $sdb/dic_suw.gz $sdb/functions.awk $sdb/awx/gw_caplists.awk $sdb/hclean.sh $sdb/ist.gz $sdb/main.awk $sdb/mano-lc.gz \
       $sdb/mano-uc.gz $sdb/namebase.gz $sdb/namedef.awk $sdb/yoyo_alt.gz $sdb/omo_list.phy.gz $sdb/preview.awk $sdb/pye/ruac.py \
       $sdb/pye/rulg_all.py $sdb/pye/rulg_omo.py $sdb/settings.ini $sdb/dix_prq.gz $sdb/unistress.gz $sdb/unistrehy.gz \
-      $sdb/yodef.awk $sdb/yodef.gz $sdb/ext/x4707.awk $sdb/ext/x4709.awk $sdb/dic_prop.gz $sdb/cstrings.gz"
+      $sdb/yodef.awk $sdb/yodef.gz $sdb/ext/x4707.awk $sdb/ext/x4709.awk $sdb/dic_prop.gz $sdb/cstrings.gz $sdb/xmd/xmods.py"
 read -a minpack <<< $pack
 
 # Проверка не потерялось ли чего

@@ -15,7 +15,8 @@ vimspelldir="$HOME/.config/nvim/spell"
 cdata=$(date)
 
 if command -v pigz >/dev/null 2>&1; then zipper="pigz -9"; else zipper="gzip -9"; fi
-grepper="rg"
+ grepper="rg"
+#grepper="grep"
 
 # Переменные алфавита и служебных
 RUUC=АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ
@@ -28,10 +29,10 @@ unxs=$(printf "\xe2\x80\xa4\xe2\x80\xa7")
 
 # Массив со списком обязательных файлов
 pack="automo.gz awx/beautify.awk class.list.gz classes.awk cstauto.awk cstring.awk defunct.awk deomo.awk demorphy.awk dic_cust.gz \
-      dic_gl.gz dic_prl.gz dic_prq.gz dic_rest.gz dic_suw.gz fb2 functions.awk awx/gw_caplists.awk hclean.sh ist.gz \
-      main.awk mano-lc.gz mano-uc.gz namebase.gz namedef.awk omo_list.phy.gz yoyo.gz yoyo_alt.gz preview.awk pye/ruac.py pye/rulg_all.py \
-      pye/rulg_omo.py settings.ini unistress.gz unistrehy.gz yodef.awk yodef.gz yodhy.gz yolc.gz yomo-lc.gz yomo-uc.gz \
-      ext/x4707.awk ext/x4709.awk dic_prop.gz awx/rules_sort.awk cstrings.gz awx/sort_gzstrings.awk awx/gen_prq.awk dix_prq.gz awx/parser.awk"
+      dic_gl.gz dic_prl.gz dic_prq.gz dic_rest.gz dic_suw.gz fb2 functions.awk awx/gw_caplists.awk hclean.sh ist.gz main.awk mano-lc.gz \
+      mano-uc.gz namebase.gz namedef.awk omo_list.phy.gz yoyo.gz yoyo_alt.gz preview.awk pye/ruac.py pye/rulg_all.py pye/rulg_omo.py \
+      settings.ini unistress.gz unistrehy.gz yodef.awk yodef.gz yodhy.gz yolc.gz yomo-lc.gz yomo-uc.gz ext/x4707.awk ext/x4709.awk \
+      dic_prop.gz awx/rules_sort.awk cstrings.gz awx/sort_gzstrings.awk awx/gen_prq.awk dix_prq.gz awx/parser.awk xmd/xmods.py"
 read -a minpack <<< $pack
 
 # Проверка не потерялось ли чего
@@ -66,10 +67,20 @@ case $key in
 
        awk -f awx/parser.awk deomo.awk defunct.awk yodef.awk ext/x4707.awk ext/x4709.awk ext/x1111.awk;
 
+       # Проверка состояния системы automo
+       awk -f awx/automo_check.awk
+
        # сортировка cstrings.gz
        zcat cstrings.gz | awk -f awx/sort_gzstrings.awk | $zipper > cstrings_ord.gz; mv cstrings_ord.gz cstrings.gz
        # gen_prq -- генерируем полный словарь причастий
-       zcat dix_prq.gz | awk -f awx/gen_prq.awk | sort -u | $zipper > dic_prq.gz
+       if md5sum -c --status <(cat awx/dix_prq.md5) >/dev/null 2>&1; then
+           printf '\e[36m%s \e[36m%s\e[0m\n' "Словарь причатий не изменился.";
+       else
+          printf '\e[36m%s \e[36m%s\e[0m\n' "Генерация словаря причастий...";
+          zcat dix_prq.gz | awk -f awx/gen_prq.awk | sort -u | $zipper > dic_prq.gz
+          md5sum dix_prq.gz dic_prq.gz > awx/dix_prq.md5;
+       fi;
+
        # ddic -- поиск дублей с разной основой
        zcat dic_cust.gz dic_gl.gz dic_prl.gz dic_prq.gz dic_rest.gz dic_suw.gz | \
          awk '{ if ( f1 == $1 && f2 == $2 )  {printf("\033[91m%s\n\033[0m", $0); fnd=1}; f1=$1; f2=$2; }
