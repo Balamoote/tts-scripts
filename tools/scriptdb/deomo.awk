@@ -3972,11 +3972,11 @@ xgrp="x2163";for(wrd in omap[xgrp]){omakevars(xgrp);for(y=1;y<=wln;y++)        #
  { l[i]=omo2; R[836]++; if(dbg){print "R836", "sw_em_t_f"}; continue };
  }; book[b]=joinpat(l,sep,nf) };};                                ##_footer
 
-###   x2164 !_#_! ==> pq_kr_em_		pq_kr_em_
-xgrp="x2164";for(wrd in omap[xgrp]){omakevars(xgrp);for(y=1;y<=wln;y++)        # header1
-{makebookvars();for(i in wpos){makewposvars();if(tolower(l[i])!=iwrd)continue; # header2
- #
- }; book[b]=joinpat(l,sep,nf) };};                                ##_footer
+###   x2164 !_#_! ==> ground_		pourout_   источен  исто́чен  источё́н
+#xgrp="x2164";for(wrd in omap[xgrp]){omakevars(xgrp);for(y=1;y<=wln;y++)        # header1
+#{makebookvars();for(i in wpos){makewposvars();if(tolower(l[i])!=iwrd)continue; # header2
+# #
+# }; book[b]=joinpat(l,sep,nf) };};                                ##_footer
 
 ###   x2165 !_#_! ==> pq_kr_em_		sw_1em_iv_2mn_vr_
 xgrp="x2165";for(wrd in omap[xgrp]){omakevars(xgrp);for(y=1;y<=wln;y++)        # header1
