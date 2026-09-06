@@ -108,6 +108,9 @@ class OmographManager:
         self._scan_all_omographs()
         self._add_omo_from_text()
         self._scan_all_omographs()
+        for word in list(self.scripts_info.keys())[:5]:
+            info = self.scripts_info[word]
+            print(f"  {word}: total={info.get('total_count')}, unacc={info.get('unaccented_count')}, marked={info.get('marked_count')}")
         for word, info in self.scripts_info.items():
             if info.get("unaccented_count", 0) == 0:
                 self._checked_words.add(word)
@@ -217,13 +220,9 @@ class OmographManager:
         if not self.script_dir.exists():
             self.select_working_directory()
             return
-        old_counts = {w: info.get("unaccented_count", 0) for w, info in self.scripts_info.items()}
         self.scripts_info, target_file = parse_scripts(self.script_dir)
         if target_file and target_file.exists():
             self.book_file = target_file
-        for w, count in old_counts.items():
-            if w in self.scripts_info:
-                self.scripts_info[w]["unaccented_count"] = count
 
     def _add_omo_from_text(self):
         """Добавляет в scripts_info омографы из базы, которые найдены в книге, но не имеют скриптов."""
@@ -293,8 +292,16 @@ class OmographManager:
             for li in self._dirty_lines:
                 if li < len(raw_lines):
                     new_line = detokenize_line(self.lines[li])
-                    # Сохраняем символ новой строки, если он был
-                    if raw_lines[li].endswith("\n"):
+                    # Сохраняем исходный символ новой строки
+                    original_line = raw_lines[li]
+                    # detokenize_line может уже содержать \n — не дублируем
+                    if new_line.endswith("\r\n"):
+                        pass  # уже есть
+                    elif new_line.endswith("\n"):
+                        pass  # уже есть
+                    elif original_line.endswith("\r\n"):
+                        new_line += "\r\n"
+                    elif original_line.endswith("\n"):
                         new_line += "\n"
                     raw_lines[li] = new_line
             with open(self.book_file, "w", encoding="utf-8") as f:
@@ -303,6 +310,9 @@ class OmographManager:
             self.occ_counter_var.set("")
             self.dirty_status_var.set("✓ Сохранено")
             self.dirty_status_label.configure(foreground=cfg.DEFAULT_COLORS["fg_status_saved"])
+            self._scan_all_omographs()
+            self._script_items_dirty = True
+            self.filter_scripts()
             self._update_progress_with_time("✓ Сохранено")
         except Exception as e:
             messagebox.showerror("Ошибка", f"Не удалось записать файл: {e}")

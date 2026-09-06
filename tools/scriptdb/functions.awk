@@ -348,7 +348,7 @@ function Xw(n,wl,           ret) {                   # слово(n) содер�
 function xw(n,wl,           ret) {                   # слово(n) содержится в массиве исключений omarr[wl]: выдать 1
                if(lc(n) in omarr[wl]) {ret=1} else {ret=0}; return ret }
 function digits(n, ret) {                   # нахождение в списке? = "одно из слов"
-                if (l[i+n] ~ /[0-9]+$/) {ret=1} else {ret=0}; return ret }
+                if (l[i+n] ~ /^[0-9]+$/) {ret=1} else {ret=0}; return ret }
 function roman(n, ret) {                   # нахождение в списке? = "одно из слов"
                 if (sep[i+n] ~ /[IVXLMC]+/) {ret=1} else {ret=0}; return ret }
 function w(n, wl,    itmz, ret) {                   # нахождение в списке? = "одно из слов"
@@ -374,6 +374,8 @@ function gist(n, m,    wd, istomo,  ret) {          # омограф текще�
                 istomo=tolower(l[i+n]); wd=oms[xgrp][xclass[xgrp][m]][lc(n)]; if(wd == istomo) {ret=1}; return ret }
 function wc(n, wl,    itmz, k, lk, ret) {           # нахождение части слова в списке? = "один из набора"
                 lk=split(wl, itmz, "[ |]"); for (k=1; k<=lk; k++) { if (lc(n)~itmz[k]) {ret=1; break} else {ret=0};}; return ret }
+function wC(n, wl,    itmz, k, lk, ret) {           # нахождение части слова в списке? = "один из набора"
+                lk=split(wl, itmz, "[ |]"); for (k=1; k<=lk; k++) { if (l[i+n]~itmz[k]) {ret=1; break} else {ret=0};}; return ret }
 function jme(n, p1, p2,    itmz1, itmz2, jwordz, jword, k, j, ret) {   # нахождение части слова в списке из "серединки" и окончания слова
                 lk1=split(p1, itmz1, "[ |]");lk2=split(p2, itmz2, "[ |]"); for (k in itmz1) { for (j in itmz2) {jword=itmz1[k] itmz2[j] "$"; jwordz[jword]};}; 
                   for(k in jwordz){ if (lc(n) ~ k) {ret=1;break} else {ret=0};}; return ret }
@@ -3289,6 +3291,7 @@ function narph_spos(n,  wd,                                                     
                           qxw(n,"друг","другу дружке")||
                           qxw(n,"друг","напротив","друга")||
                           qxw(n,"друг","с","другом дружкой")||
+                          qxw(n,"друг","у","друга дружки")||
                           qxw(n,"душа","в","душу")||
                           qxw(n,"еще","более менее")||
                           qxw(n,"и","так")||

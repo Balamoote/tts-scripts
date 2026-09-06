@@ -3,19 +3,17 @@
 
 function x1111_f() {
 
-  if (vso == "x1111") { if(dbg){print "x1111_f"} } else { return 0 }; # если подключена "старая" функция "vsevso", то выйти
-
 ###   x1111 !_#_! ==> vsje_     vsyo_     все  все́  всё
-#for(wrd in vseT){wln=split(vseT[wrd],omlin," ");for(y=1;y<=wln;y++){b=strtonum(omlin[y]);nf=splitline(book[b]);splitlinephy(bphy[b]); # header1
-#hyphback(book[b]);hyphbphy(bphy[b]);getwpos(wrd);for(i in wpos){i=strtonum(i);if(tolower(l[i])!=tolower(wrd))continue;is_vsyo=vsyo[l[i]];is_vsje=vsje[l[i]];          # header2
 xgrp="x1111";for(wrd in omap[xgrp]){omakevars(xgrp);for(y=1;y<=wln;y++)         # header1
 {makebookvars();for(i in wpos){makewposvars();if(tolower(l[i])!=iwrd)continue; is_vsje=omo1; is_vsyo=omo2; # header2
 
+#continue
+
  # SpaCy или Natasha
- if ( veq(morphy_yo,1) && vsyo_sy(0) )
- { l[i]=is_vsyo; V[1]++; if(dbg){print "V1"}; continue };
- if ( veq(morphy_yo,1) && vsje_sy(0) )
- { l[i]=is_vsje; V[2]++; if(dbg){print "V2"}; continue };
+#if ( veq(morphy_yo,1) && vsyo_sy(0) )
+#{ l[i]=is_vsyo; V[1]++; if(dbg){print "V1"}; continue };
+#if ( veq(morphy_yo,1) && vsje_sy(0) )
+#{ l[i]=is_vsje; V[2]++; if(dbg){print "V2"}; continue };
 #if ( veq(morphy_yo,1) && vsyo_tt(0) )
 #{ l[i]=is_vsyo; V[3]++; if(dbg){print "V3"}; continue };
 #if ( veq(morphy_yo,1) && vsje_tt(0) )
@@ -42,7 +40,10 @@ xgrp="x1111";for(wrd in omap[xgrp]){omakevars(xgrp);for(y=1;y<=wln;y++)         
  if ( bfa(1,WRI,"_gl_mental_pe")  ) { Y["n+_gl_mental_pe"]  = bfn; Y["w+_gl_mental_pe"]  = BFn; };
  if ( bba(WLE,-1,"_gl_mental_pe") ) { Y["n-_gl_mental_pe"]  = bbn; Y["w-_gl_mental_pe"]  = BBn; };
 
- if ( qf(1,WRI,"suw_mnim") )              { Y["n+_suw_mnim"]    = qfn; };
+ if ( bfa(1,WRI,"_gl_vida_pe")  ) { Y["n+_gl_vida_pe"]  = bfn; Y["w+_gl_vida_pe"]  = BFn; };
+ if ( bba(WLE,-1,"_gl_vida_pe") ) { Y["n-_gl_vida_pe"]  = bbn; Y["w-_gl_vida_pe"]  = BBn; };
+
+ if ( qf(1,WRI,"suw_mnim suw_mnne") )     { Y["n+_suw_mnim"]    = qfn; };
  if ( qf(1,WRI,"suw_mnro") )              { Y["n+_suw_mnro"]    = qfn; };
  if ( qf(1,WRI,"suw_edro") )              { Y["n+_suw_edro"]    = qfn; };
  if ( qf(1,WRI,"suw_ed") && Q(qfn,"suw_noedne fam_edzene") ) { Y["n+_suw_ed"]      = qfn; };
@@ -219,6 +220,9 @@ xgrp="x1111";for(wrd in omap[xgrp]){omakevars(xgrp);for(y=1;y<=wln;y++)         
     { l[i]=is_vsje; V[36]++; if(dbg){print "V36"}; continue };
  };
 
+ if ( s(0) && q(1,"digits") )
+ { l[i]=is_vsje; V[36]++; if(dbg){print "V36"}; continue };
+
  #Устойчивые сочетания
  cst="ажуре жопу кучу меру мусор норме нужник порядке унитаз";
  if ( vgl(Y["n-_suw_mnim"],-2,-1) && qy(-1,"qast_any qast") && s(Y["n-_suw_mnim"],-1) &&
@@ -252,58 +256,60 @@ xgrp="x1111";for(wrd in omap[xgrp]){omakevars(xgrp);for(y=1;y<=wln;y++)         
  cst="новые новых";
  if ( w(1,cst) && w(2,"и") && qq(1,3) && s(0,2) )
  { l[i]=is_vsyo; V[44]++; if(dbg){print "V44"}; continue };
+ if ( w(1,cst) && z(1) && w(2,"еще") && w(3,"более менее") && s(0) && s(2) )
+ { l[i]=is_vsyo; V[45]++; if(dbg){print "V45"}; continue };
  if (!vex(stopper) ) {
     if ( q(1,"nar_srav prl_srav") && w(2,"и") && qq(1,3) && s(0,2) )
-    { l[i]=is_vsyo; V[45]++; if(dbg){print "V45"}; continue };
-    if ( q(1,"nar_srav prl_srav") && q(2,"gl_ed gl_mn gl_vzmn gl_vzed deep") && s(0,1) )
     { l[i]=is_vsyo; V[46]++; if(dbg){print "V46"}; continue };
-    if ( q(1,"nar_srav prl_srav") && q(2,"prl_im prl_vi prl_ro prl_da prl_tv") && s(0,1) )
+    if ( q(1,"nar_srav prl_srav") && q(2,"gl_ed gl_mn gl_vzmn gl_vzed deep") && s(0,1) )
     { l[i]=is_vsyo; V[47]++; if(dbg){print "V47"}; continue };
-    if ( q(1,"nar_srav prl_srav") && q(2,"suw_ro") && s(0,1) )
+    if ( q(1,"nar_srav prl_srav") && q(2,"prl_im prl_vi prl_ro prl_da prl_tv") && s(0,1) )
     { l[i]=is_vsyo; V[48]++; if(dbg){print "V48"}; continue };
-    if ( q(1,"nar_srav prl_srav") && q(-1,"suw_ro") && s(-1,0) )
+    if ( q(1,"nar_srav prl_srav") && q(2,"suw_ro") && s(0,1) )
     { l[i]=is_vsyo; V[49]++; if(dbg){print "V49"}; continue };
-    if ( q(1,"nar_srav prl_srav") && s(0) && p(1) )
+    if ( q(1,"nar_srav prl_srav") && q(-1,"suw_ro") && s(-1,0) )
     { l[i]=is_vsyo; V[50]++; if(dbg){print "V50"}; continue };
+    if ( q(1,"nar_srav prl_srav") && s(0) && p(1) )
+    { l[i]=is_vsyo; V[51]++; if(dbg){print "V51"}; continue };
  };
- }
+ } # сравнительные
 
  # это
  if ( w(-1,"это") &&
      qf(1,3,"suw_vi") &&
     qir(1,qfn-1,"mest_vi prl_vi qast_ne") )
- { l[i]=is_vsyo; V[51]++; if(dbg){print "V51"}; continue };
+ { l[i]=is_vsyo; V[52]++; if(dbg){print "V52"}; continue };
  if ( w(-1,"это")  &&
      wf(1,3,"были") &&
     qir(1,wfn-1,"nar_any") )
- { l[i]=is_vsyo; V[52]++; if(dbg){print "V52"}; continue };
- if ( (veq(Y["n+_eos"],1)||veq(Y["n+_comma"],1)) && w(1,"это") && s(0) )
  { l[i]=is_vsyo; V[53]++; if(dbg){print "V53"}; continue };
+ if ( (veq(Y["n+_eos"],1)||veq(Y["n+_comma"],1)) && w(1,"это") && s(0) )
+ { l[i]=is_vsyo; V[54]++; if(dbg){print "V54"}; continue };
 
  if ( (veq(Y["n+_eos"],0)||veq(Y["n+_comma"],0)) &&
         wb(-3,-1,"это") && s(wbn,-1) &&
        wir(wbn+1,-1,"не еще же") )
- { l[i]=is_vsyo; V[54]++; if(dbg){print "V54"}; continue };
+ { l[i]=is_vsyo; V[55]++; if(dbg){print "V55"}; continue };
  if ( w(1,"это то") && q(2,"pre_ro") && qf(3,6,"suw_ro") && s(0,qfn-1) && p(qfn) &&
     qir(3,qfn-1,"mest_ro mest_3e prl_ro") )
- { l[i]=is_vsyo; V[55]++; if(dbg){print "V55"}; continue };
+ { l[i]=is_vsyo; V[56]++; if(dbg){print "V56"}; continue };
  if ( w(1,"это то") && q(2,"pre_da") && qf(3,6,"suw_da") && s(0,qfn-1) && p(qfn) &&
     qir(3,qfn-1,"mest_da mest_3e prl_da") )
- { l[i]=is_vsyo; V[56]++; if(dbg){print "V56"}; continue };
+ { l[i]=is_vsyo; V[57]++; if(dbg){print "V57"}; continue };
 
 
  # с предложными фразами в конце предложения
  if ( vex(Y["n-_sos"]) && q(1,"pre_ro") && qf(2,5,"suw_ro") && s(0,qfn-1) && p(qfn) &&
       qir(Y["n-_sos"],-1,"qast_any") &&
       qir(3,qfn-1,"mest_ro mest_3e prl_ro") )
- { l[i]=is_vsyo; V[57]++; if(dbg){print "V57"}; continue };
+ { l[i]=is_vsyo; V[58]++; if(dbg){print "V58"}; continue };
  if ( vex(Y["n-_sos"]) && q(1,"pre_da") && qf(2,5,"suw_da") && s(0,qfn-1) && p(qfn) &&
       qir(Y["n-_sos"],-1,"qast_any") &&
       qir(3,qfn-1,"mest_da mest_3e prl_da") )
- { l[i]=is_vsyo; V[58]++; if(dbg){print "V58"}; continue };
+ { l[i]=is_vsyo; V[59]++; if(dbg){print "V59"}; continue };
 
  if ( z(0) && w(1,"кроме") && q(2,"nam_edro fam_edro pat_edro") && s(1) && cap(2) )
- { l[i]=is_vsje; V[59]++; if(dbg){print "V59"}; continue };
+ { l[i]=is_vsje; V[60]++; if(dbg){print "V60"}; continue };
 
 
  # Определение для сущ ед.ч. ср.р.
@@ -311,11 +317,11 @@ xgrp="x1111";for(wrd in omap[xgrp]){omakevars(xgrp);for(y=1;y<=wln;y++)         
 
     if ( Q(bf_n,"suw_mnim suw_mnvi") && s(0,bf_n-1) &&
        qir(1,bf_n-1,"prl_edsrim mest_edsrim mest_3e nar_any prl_kred_sr") )
-    { l[i]=is_vsyo; V[60]++; if(dbg){print "V60"}; continue };
+    { l[i]=is_vsyo; V[61]++; if(dbg){print "V61"}; continue };
 
     if ( Q(bf_n,"suw_mnim suw_mnvi") && s(0,bf_n-1) &&
        qir(1,bf_n-1,"prl_edsrim mest_edsrim mest_3e nar_any prl_kred_sr") )
-    { l[i]=is_vsyo; V[61]++; if(dbg){print "V61"}; continue };
+    { l[i]=is_vsyo; V[62]++; if(dbg){print "V62"}; continue };
  };
 
  # Определение для сущ ед.ч. с числительными.
@@ -323,7 +329,7 @@ xgrp="x1111";for(wrd in omap[xgrp]){omakevars(xgrp);for(y=1;y<=wln;y++)         
 
     if ( w(bf_n-1,"два три четыре") && s(0,bf_n-1) &&
        qir(1,bf_n-2,"mest_mnim mest_3e") )
-    { l[i]=is_vsje; V[62]++; if(dbg){print "V62"}; continue };
+    { l[i]=is_vsje; V[63]++; if(dbg){print "V63"}; continue };
  };
 
  # Определение для сущ мн.ч. с числительными.
@@ -331,7 +337,7 @@ xgrp="x1111";for(wrd in omap[xgrp]){omakevars(xgrp);for(y=1;y<=wln;y++)         
 
     if ( q(bf_n-1,"qik_im") && s(0,bf_n-1) &&
        qir(1,bf_n-2,"mest_mnim mest_3e") )
-    { l[i]=is_vsje; V[63]++; if(dbg){print "V63"}; continue };
+    { l[i]=is_vsje; V[64]++; if(dbg){print "V64"}; continue };
  };
 
  # связка + существительное
@@ -340,78 +346,86 @@ xgrp="x1111";for(wrd in omap[xgrp]){omakevars(xgrp);for(y=1;y<=wln;y++)         
     if ( qf(bf_n+1,bf_n+4,"suw_mntv") && s(0,bf_n-1) &&
         qir(1,bf_n-1,"sz_i nar_any prl_kred_sr prl_srav mest_mnim") &&
         qir(bf_n+1,qfn-1,"prl_mntv mest_mntv mest_3e nar_spos nar_mest") )
-    { l[i]=is_vsje; V[64]++; if(dbg){print "V64"}; continue };
+    { l[i]=is_vsje; V[65]++; if(dbg){print "V65"}; continue };
 
  };
 
-## с причастием мн.ч. отдельно
+ # с причастием мн.ч. отдельно
 
  cst="новые";
  if ( !w(1,cst) && qf(1,3,"prl_mnim prq_mnim prl_krmn prq_krmn") && s(0,qfn-1) &&
      qir(1,qfn-1,"mest_mnim nar_mest qast_ne") )
- { l[i]=is_vsje; V[65]++; if(dbg){print "V65"}; continue };
+ { l[i]=is_vsje; V[66]++; if(dbg){print "V66"}; continue };
  if ( mqast(1) && qf(xwn+1,xwn+3,"prl_mnim prq_mnim prl_krmn prq_krmn") && s(0,qfn-1) &&
         qir(xwn+1,qfn-1,"mest_mnim nar_mest qast_any") )
- { l[i]=is_vsje; V[66]++; if(dbg){print "V66"}; continue };
+ { l[i]=is_vsje; V[67]++; if(dbg){print "V67"}; continue };
 
  if ( q(1,"prq_kred_sr") && s(0) )
- { l[i]=is_vsyo; V[67]++; if(dbg){print "V67"}; continue };
+ { l[i]=is_vsyo; V[68]++; if(dbg){print "V68"}; continue };
 
  if ( q(1,"prq_edsrim") && s(0) )
- { l[i]=is_vsyo; V[68]++; if(dbg){print "V68"}; continue };
- if ( z(0) && q(1,"prq_edsrim") )
  { l[i]=is_vsyo; V[69]++; if(dbg){print "V69"}; continue };
+ if ( z(0) && q(1,"prq_edsrim") )
+ { l[i]=is_vsyo; V[70]++; if(dbg){print "V70"}; continue };
 
  # прилагательные и причастия в конце предложения
  if ( q(Y["n+_eos"],"prl_krmn prq_krmn") && s(0,Y["n+_eos"]-1) &&
     qir(1,Y["n+_eos"]-1,"mod_mn gl_in") )
- { l[i]=is_vsje; V[70]++; if(dbg){print "V70"}; continue };
+ { l[i]=is_vsje; V[71]++; if(dbg){print "V71"}; continue };
  if ( q(Y["n+_comma"],"prl_krmn prq_krmn") && s(0,Y["n+_comma"]-1) &&
     qir(1,Y["n+_comma"]-1,"mod_mn gl_in") )
- { l[i]=is_vsje; V[71]++; if(dbg){print "V71"}; continue };
+ { l[i]=is_vsje; V[72]++; if(dbg){print "V72"}; continue };
 
  if ( W(-1,"их") && q(Y["n+_eos"],"prl_edsrim prl_kred_sr prq_kred_sr") && s(0,Y["n+_eos"]-1) &&
     qir(1,Y["n+_eos"]-1,"mod_ed mod_bz qast_any nar_any gl_in mest_it") )
- { l[i]=is_vsyo; V[72]++; if(dbg){print "V72"}; continue };
+ { l[i]=is_vsyo; V[73]++; if(dbg){print "V73"}; continue };
  if ( q(Y["n+_comma"],"prl_kred_sr prq_kred_sr") && s(0,Y["n+_comma"]-1) &&
     qir(1,Y["n+_comma"]-1,"mod_ed mod_bz qast_any gl_in") )
- { l[i]=is_vsyo; V[73]++; if(dbg){print "V73"}; continue };
+ { l[i]=is_vsyo; V[74]++; if(dbg){print "V74"}; continue };
  if ( q(Y["n+_tire"],"prl_kred_sr prq_kred_sr") && s(0,Y["n+_tire"]-1) &&
     qir(1,Y["n+_tire"]-1,"mod_ed mod_bz qast_any gl_in") )
- { l[i]=is_vsyo; V[74]++; if(dbg){print "V74"}; continue };
+ { l[i]=is_vsyo; V[75]++; if(dbg){print "V75"}; continue };
+
+ # Буквы
+ cst="^[" _RUUC "]$";
+ if ( s(0) && wC(1,cst) && sL(1,".") )
+ { l[i]=is_vsje; V[36]++; if(dbg){print "V36"}; continue };
+ cst="^ [" _LAUC "].";
+ if ( sc(0,cst) )
+ { l[i]=is_vsje; V[36]++; if(dbg){print "V36"}; continue };
 
 
  # Деепричание
  if ( q(-1,"deep") && q(1,"nar_srav prl_srav") && s(-1,0) )
- { l[i]=is_vsyo; V[75]++; if(dbg){print "V75"}; continue };
+ { l[i]=is_vsyo; V[76]++; if(dbg){print "V76"}; continue };
 
  if ( qb(-4,-1,"deep_ne") && s(qbn,0) && w(1,"вместе") &&
-     qir(bb_n+1,-1,"nar_vrem nar_mest nar_spos mest_mnim qast_any") )
- { l[i]=is_vsje; V[76]++; if(dbg){print "V76"}; continue };
+     qir(bbn+1,-1,"nar_vrem nar_mest nar_spos mest_mnim qast_any") )
+ { l[i]=is_vsje; V[77]++; if(dbg){print "V77"}; continue };
 
-# =============== Глаголы ===============
+ # =============== Глаголы ===============
 
  # с глаголом ед.ч.
  if ( vgl(Y["n+_gl_ed"],1,WRI) ) { bf_n=Y["n+_gl_ed"];
 
     if ( s(0,bf_n-1) &&
        qir(1,bf_n-1,"nar_any prl_kred_sr sz_i mest_edsrim qast_any prl_srav") )
-    { l[i]=is_vsyo; V[77]++; if(dbg){print "V77"}; continue };
+    { l[i]=is_vsyo; V[78]++; if(dbg){print "V78"}; continue };
 
     if ( s(0,bf_n-1) &&
          q(1,"pre_pr") && q(2,"suw_pr mest_pr") &&
        qir(3,bf_n-1,"nar_any prl_kred_sr sz_i mest_edsrim qast_any prl_srav") )
-    { l[i]=is_vsyo; V[78]++; if(dbg){print "V78"}; continue };
+    { l[i]=is_vsyo; V[79]++; if(dbg){print "V79"}; continue };
 
     if ( s(0,bf_n-1) &&
          q(1,"pre_da") && q(2,"suw_da mest_da") &&
        qir(3,bf_n-1,"nar_any prl_kred_sr sz_i mest_edsrim qast_any prl_srav") )
-    { l[i]=is_vsyo; V[79]++; if(dbg){print "V79"}; continue };
+    { l[i]=is_vsyo; V[80]++; if(dbg){print "V80"}; continue };
 
     if ( s(0,bf_n-1) &&
          q(1,"pre_ro") && q(2,"suw_ro mest_ro mest_3e") &&
        qir(3,bf_n-1,"nar_any prl_kred_sr sz_i mest_edsrim qast_any prl_srav suw_ro") )
-    { l[i]=is_vsyo; V[80]++; if(dbg){print "V80"}; continue };
+    { l[i]=is_vsyo; V[81]++; if(dbg){print "V81"}; continue };
 
  };
 
@@ -423,69 +437,91 @@ xgrp="x1111";for(wrd in omap[xgrp]){omakevars(xgrp);for(y=1;y<=wln;y++)         
     cst="новые";
     if ( w(1,cst) && veq(Y["n+_sz_i"],2) && qq(1,3) && s(0,bf_n-1) &&
        qir(4,bf_n-1,"prl_mnim mest_mnim mest_mnvi mest_3e") )
-    { l[i]=is_vsyo; V[81]++; if(dbg){print "V81"}; continue };
+    { l[i]=is_vsyo; V[82]++; if(dbg){print "V82"}; continue };
 
     cst="новые";
     if ( !vex(stopper) && !w(1,cst) && s(0,bf_n-1) &&
           qir(1,bf_n-1,"prl_mnim mest_mnim mest_mnvi mest_3e prq_mnim qik_im nar_spos nar_vrem nar_mest prl_kred_sr") )
-    { l[i]=is_vsje; V[82]++; if(dbg){print "V82"}; continue };
+    { l[i]=is_vsje; V[83]++; if(dbg){print "V83"}; continue };
 
     if ( !vex(stopper) && vex(Y["n+_tire"]) && !w(1,cst) && s(0,Y["n+_tire"]-1) && s(Y["n+_tire"]+1,bf_n-1) &&
           qir(1,Y["n+_tire"],"nar_spos nar_vrem nar_mest prl_kred_sr") &&
           qir(Y["n+_tire"]+1,bf_n-1,"prl_mnim mest_mnim mest_mnvi mest_3e prq_mnim qik_im nar_spos nar_vrem nar_mest prl_kred_sr") )
-    { l[i]=is_vsje; V[83]++; if(dbg){print "V83"}; continue };
+    { l[i]=is_vsje; V[84]++; if(dbg){print "V84"}; continue };
 
     if ( !vex(stopper) && s(0,bf_n-1) && vgt(bf_n,2) &&
             q(1,"pre_ro") && qf(2,bf_n-1,"suw_ro") &&
           qir(2,qfn-1,"prl_ro mest_3e mest_ro") &&
           qir(qfn+1,bf_n-1,"prl_mnim mest_mnim mest_mnvi mest_3e nar_spos nar_vrem nar_mest prl_kred_sr") )
-    { l[i]=is_vsje; V[84]++; if(dbg){print "V84"}; continue };
+    { l[i]=is_vsje; V[85]++; if(dbg){print "V85"}; continue };
 
     if ( !vex(stopper) && vgl(Y["n+_sz_i"],2,bf_n-2) && s(0,bf_n-1) &&
           qir(1,Y["n+_sz_i"]-1,"prl_mnim mest_3e prq_mnim") &&
           qir(Y["n+_sz_i"]+1,bf_n-1,"prl_mnim mest_mnim mest_mnvi mest_3e prq_mnim nar_spos nar_vrem nar_mest prl_kred_sr") )
-    { l[i]=is_vsje; V[85]++; if(dbg){print "V85"}; continue };
+    { l[i]=is_vsje; V[86]++; if(dbg){print "V86"}; continue };
 
  };
 
- # Все с глаголами говорения
+## Все с глаголами говорения, ментальными
 #if ( vgl(Y["n+_gl_mental_pe"],1,WRI) ) { bf_n=Y["n+_gl_mental_pe"]; BF_n=Y["w+_gl_mental_pe"];
 
-#   if ( q(bf_n,"gl_mn") && s(0,bf_n-1) &&
-#        z(Y["n+_comma"]) && w(Y["n+_comma"]+1,"что чтобы для как") &&
+#   if ( q(bf_n,"gl_mn") && s(0,bf_n-1) && s(bf_n+1,Y["n+_comma"]-1) &&
+#      vle(bf_n,Y["n+_comma"]) && w(Y["n+_comma"]+1,"что чтобы для как на за кто кого кому") &&
 #      qir(1,bf_n-1,"mest_mnim qast nar_any prl_kred_sr") &&
-#      qir(1,bf_n-1,"sz_iili nar_any prl_kred_sr gl_mn") )
-#   { l[i]=is_vsje; V[86]++; if(dbg){print "V86"}; continue };
-
-#   if ( q(-1,"suw_mnim mest_mnim") &&
-#        q(bf_n,"gl_mn") && s(0,bf_n-1) &&
-#      q(1,"mest_mnim nar_any prl_kred_sr") )
-#   { l[i]=is_vsyo; V[87]++; if(dbg){print "V87"}; continue };
-
-#   if ( q(bf_n,"gl_mn gl_vzmn") && s(0,bf_n-1) &&
-#      qir(1,bf_n-1,"mest_mnim qast nar_any prl_kred_sr") )
+#      qir(bf_n+1,Y["n+_comma"]-1,"sz_iili nar_any prl_kred_sr gl_mn") )
+#   { l[i]=is_vsje; V[87]++; if(dbg){print "V87"}; continue };
+#   if ( q(-1,"mest_mnim") &&
+#        q(bf_n,"gl_mn") && s(-1,bf_n-1) && q(bf_n+1,"pre_pr") && z(bf_n) &&
+#      qir(1,bf_n-1,"sz_iili nar_any prl_kred_sr") )
 #   { l[i]=is_vsje; V[88]++; if(dbg){print "V88"}; continue };
+#   if ( q(bf_n,"gl_mn") && s(-1,bf_n) && q(bf_n+1,"pre_pr pre_vi") &&
+#      qir(1,bf_n-1,"nar_any prl_kred_sr mest_mnim qast") )
+#   { l[i]=is_vsje; V[89]++; if(dbg){print "V89"}; continue };
+
 #}; # n+_gl_mental_pe
 #if ( vgl(Y["n-_gl_mental_pe"],WLE,-1) ) { bb_n=Y["n-_gl_mental_pe"]; BB_n=Y["w-_gl_mental_pe"];
 
-#   if ( veq(Y["n-_gl_mn"],bb_n) && s(bb_n,-1) &&
-#        qir(bb_n+1,-1,"mest_mnim qast nar_any prl_kred_sr") )
-#   { l[i]=is_vsje; V[89]++; if(dbg){print "V89"}; continue };
+#   if ( veq(bb_n,-1) && q(1,"pre_pr") &&
+#         qf(2,5,"suw_pr") && s(-1,qfn-1) &&
+#        qir(2,qfn-1,"prl_pr mest_pr mest_3e prq_pr") )
+#   { l[i]=is_vsyo; V[90]++; if(dbg){print "V90"}; continue };
 #}; # n-_gl_mental_pe
+
+## Все с глаголами типа гл. что кому
+#if ( vgl(Y["n+_gl_vida_pe"],1,WRI) ) { bf_n=Y["n+_gl_vida_pe"]; BF_n=Y["w+_gl_vida_pe"];
+
+#   if ( q(-1,"mest_da suw_da") && s(-1,bf_n) &&
+#        q(bf_n+1,"pre_pr") &&
+#      qir(1,bf_n-1,"mest_mnim qast nar_any prl_kred_sr") )
+#   { l[i]=is_vsyo; V[91]++; if(dbg){print "V91"}; continue };
+#   if ( q(1,"mest_da suw_da") && s(0,bf_n) &&
+#        q(bf_n+1,"pre_pr") &&
+#      qir(2,bf_n-1,"mest_mnim qast nar_any prl_kred_sr") )
+#   { l[i]=is_vsyo; V[92]++; if(dbg){print "V92"}; continue };
+
+
+#}; # n+_gl_vida_pe
+#if ( vgl(Y["n-_gl_vida_pe"],WLE,-1) ) { bb_n=Y["n-_gl_vida_pe"]; BB_n=Y["w-_gl_vida_pe"];
+
+#   if ( veq(bb_n,-1) && q(1,"pre_pr") &&
+#        qf(2,5,"suw_pr") && s(-1,qfn-1) &&
+#        qir(2,qfn-1,"prl_pr mest_pr mest_3e prq_pr") )
+#   { l[i]=is_vsyo; V[93]++; if(dbg){print "V93"}; continue };
+#}; # n-_gl_vida_pe
 
  # Все с глаголами из списка
  if ( vgl(Y["n+_ge_vsje"],1,WRI) ) { bf_n=Y["n+_ge_vsje"]; BF_n=Y["w+_ge_vsje"];
 
     if ( q(bf_n,"gl_mn gl_vzmn") && s(0,bf_n-1) &&
        qir(1,bf_n-1,"mest_mnim qast nar_any prl_kred_sr") )
-    { l[i]=is_vsje; V[90]++; if(dbg){print "V90"}; continue };
+    { l[i]=is_vsje; V[94]++; if(dbg){print "V94"}; continue };
  };
  # n+_ge_vsje
  if ( vgl(Y["n-_ge_vsje"],WLE,-1) ) { bb_n=Y["n-_ge_vsje"]; BB_n=Y["w-_ge_vsje"];
 
     if ( veq(Y["n-_gl_mn"],bb_n) && s(bb_n,-1) &&
          qir(bb_n+1,-1,"mest_mnim qast nar_any prl_kred_sr") )
-    { l[i]=is_vsje; V[91]++; if(dbg){print "V91"}; continue };
+    { l[i]=is_vsje; V[95]++; if(dbg){print "V95"}; continue };
  };
  # n-_ge_vsje
 
@@ -494,165 +530,16 @@ xgrp="x1111";for(wrd in omap[xgrp]){omakevars(xgrp);for(y=1;y<=wln;y++)         
 
     if ( veq(Y["n+_gl_mn"],bf_n) && s(0,bf_n-1) &&
          qir(1,bf_n-1,"mest_mnim qast nar_any prl_kred_sr") )
-    { l[i]=is_vsyo; V[92]++; if(dbg){print "V92"}; continue };
+    { l[i]=is_vsyo; V[96]++; if(dbg){print "V96"}; continue };
  };
  # n+_ge_vsyo
  if ( vgl(Y["n-_ge_vsyo"],WLE,-1) ) { bb_n=Y["n-_ge_vsyo"]; BB_n=Y["w-_ge_vsyo"];
 
     if ( veq(Y["n-_gl_mn"],bb_n) && s(bb_n,-1) &&
          qir(bb_n+1,-1,"mest_mnim qast nar_any prl_kred_sr") )
-    { l[i]=is_vsyo; V[93]++; if(dbg){print "V93"}; continue };
+    { l[i]=is_vsyo; V[97]++; if(dbg){print "V97"}; continue };
  };
  # n-_ge_vsje
-
- # с возвратным глаголом мн.ч.
- if ( vgl(Y["n+_gl_vzmn"],1,WRI) ) { bf_n=Y["n+_gl_vzmn"];
-
-    cst="уже";
-    if ( W(1,cst) && q(1,"nar_srav prl_srav") && s(0,bf_n-1) &&
-       qir(2,bf_n-1,"nar_srav prl_srav") )
-    { l[i]=is_vsyo; V[94]++; if(dbg){print "V94"}; continue };
-    if (  q(-1,"suw_mnim") && w(1,"не") && veq(bf_n,2) && s(-1,1) )
-    { l[i]=is_vsyo; V[95]++; if(dbg){print "V95"}; continue };
-    if ( s(0,bf_n-1) &&
-       qir(1,bf_n-1,"sz_i nar_vrem nar_mest nar_spos mest_mnim qast_any qast") )
-    { l[i]=is_vsje; V[96]++; if(dbg){print "V96"}; continue };
-
- };
- if ( vgl(Y["n-_gl_vzmn"],WLE,-1) ) { bb_n=Y["n-_gl_vzmn"];
-
-    if ( s(bb_n,-1) &&
-       qir(bb_n+1,-1,"nar_vrem nar_mest nar_spos mest_mnim qast_any") )
-    { l[i]=is_vsje; V[97]++; if(dbg){print "V97"}; continue };
-
- };
-
- # Переходные глаголы во мн.ч  с дополнением
- if ( vgl(Y["n+_gl_pnmn"],1,WRI) ) { bf_n=Y["n+_gl_pnmn"];
-
-    if ( q(-3,"mest_im suw_odim") && q(-2,"sz_iili") && q(-1,"mest_im suw_odim") &&
-         q(bf_n+1,"pre_ro pre_pr pre_da pre_tv pre_vi") && s(-3,bfn) &&
-       qir(2,bf_n-1,"nar_spos nar_vrem") )
-    { l[i]=is_vsyo; V[98]++; if(dbg){print "V98"}; continue };
-    if ( q(-1,"mest_mnim suw_odmnim") && q(bf_n+1,"pre_ro pre_pr pre_da pre_tv pre_vi") && s(-1,bfn) &&
-       qir(2,bf_n-1,"nar_spos nar_vrem") )
-    { l[i]=is_vsyo; V[99]++; if(dbg){print "V99"}; continue };
-    if ( q(1,"mest_mnim suw_odmnim") && q(bf_n+1,"pre_ro pre_pr pre_da pre_tv pre_vi") && s(0,bfn) &&
-       qir(2,bf_n-1,"nar_spos nar_vrem") )
-    { l[i]=is_vsyo; V[100]++; if(dbg){print "V100"}; continue };
-    if ( vex(Y["n+_comma"]) && vle(bf_n,Y["n+_comma"]) && s(0,Y["n+_comma"]-1) &&
-           w(Y["n+_comma"]+1,"что") &&
-         qir(1,bf_n-1,"mest_mnim nar_any prl_kred_sr") &&
-         qir(bf_n+1,Y["n+_comma"],"nar_spos mest_da suw_da") )
-    { l[i]=is_vsje; V[101]++; if(dbg){print "V101"}; continue };
-
-    if ( qf(bf_n+1,bf_n+4,"suw_ro") && s(0,qfn-1) &&
-        qir(1,bf_n-1,"mest_mnim nar_any prl_kred_sr") &&
-        qir(bf_n+1,qfn-1,"prl_ro mest_ro mest_3e") )
-    { l[i]=is_vsje; V[102]++; if(dbg){print "V102"}; continue };
-    if ( qf(bf_n+1,bf_n+3,"pre_ro pre_pr pre_da pre_tv pre_vi") && s(0,qfn-1) &&
-        qir(1,bf_n-1,"mest_mnim nar_any prl_kred_sr mest_da suw_da qast") &&
-        qir(bf_n+1,qfn-1,"suw_da mest_da nar_any") )
-    { l[i]=is_vsje; V[103]++; if(dbg){print "V103"}; continue };
-   if ( qb(-7,-1,"pre_pr") && s(qbn,qfn-1) &&
-       qir(1,bf_n-1,"mest_mnim nar_any prl_kred_sr mest_da suw_da") &&
-       qir(qbn+1,-1,"suw_pr prl_pr mest_pr mest_3e nar_any") )
-   { l[i]=is_vsje; V[104]++; if(dbg){print "V104"}; continue };
-
- };
- if ( vgl(Y["n-_gl_pnmn"],WLE,-1) ) { bb_n=Y["n-_gl_pnmn"]; # todo
-
-    if ( q(1,"mest_mnim") && q(bb_n,"pre_tv") && s(0,bfn) &&
-       qir(2,bf_n-1,"nar_spos nar_vrem") )
-    { l[i]=is_vsyo; V[105]++; if(dbg){print "V105"}; continue };
-
- };
-
-
- # с переходным глаголом
- if ( vgl(Y["n+_gl_pe"],1,WRI) ) { bf_n=Y["n+_gl_pe"];
-
-    if ( veq(bf_n,2) && q(bf_n,"gl_pemn") &&
-           q(-1,"mest_mnim") && s(0,bf_n-1) &&
-           q(1,"mest_vi mest_3e") )
-    { l[i]=is_vsje; V[106]++; if(dbg){print "V106"}; continue };
-    if ( veq(bf_n,1) && q(bf_n,"gl_pemn") && s(0,bf_n) &&
-           q(2,"mest_vi mest_3e suw_vi") )
-    { l[i]=is_vsje; V[107]++; if(dbg){print "V107"}; continue };
-
- };
- if ( vgl(Y["n-_gl_pe"],WLE,-1) ) { bb_n=Y["n-_gl_pe"];
-
-    if ( veq(bb_n,-2) && w(-1,"их") && s(-2,-1) )
-    { l[i]=is_vsje; V[108]++; if(dbg){print "V108"}; continue };
-    if ( veq(bb_n,-1) && q(1,"pre_pr") &&
-          qf(2,5,"suw_pr") && q(qfn+1,"suw_mnim") && s(-1,qfn) &&
-         qir(2,qfn-1,"mest_pr mest_3e prl_pr") )
-    { l[i]=is_vsje; V[109]++; if(dbg){print "V109"}; continue };
-
- };
-
- if ( vgl(Y["n+_suw_ed"],1,WRI) ) { bf_n=Y["n+_suw_ed"];
-
-    stopper=""
-    if ( q(bf_n,"suw_mnim suw_mnvi nar_spos") ) { stopper = 1 };
-    if ( w(1,"уже перед") ) { stopper = 1 };
-    if ( q(bf_n,"prl_kred_mu") ) { stopper = 1 };
-
-    if (  vex(Y["n+_eos"]) && vle(bf_n,Y["n+_eos"]) && vgt(bf_n,1) && s(0,bf_n-1) &&
-          qir(1,bf_n-1,"prl_ed mest_ed") &&
-          qir(bf_n+1,Y["n+_eos"],"prl_ed") )
-    { l[i]=is_vsyo; V[110]++; if(dbg){print "V110"}; continue };
-
-    if ( !vex(stopper) && vex(Y["n+_eos"]) && vle(bf_n,Y["n+_eos"]) && s(0,bf_n-1) &&
-          qir(1,bf_n-1,"prl_ed mest_ed mest_3e nar_any prl_kred_sr") &&
-          qir(bf_n+1,Y["n+_eos"],"prl_ed") )
-    { l[i]=is_vsyo; V[111]++; if(dbg){print "V111"}; continue };
-
-    if ( !vex(stopper) && s(0,bf_n-1) &&
-          qir(1,bf_n-1,"prl_edsrim mest_edsrim mest_3e nar_any prl_kred_sr") )
-    { l[i]=is_vsyo; V[112]++; if(dbg){print "V112"}; continue };
- };
-
- # с глаголом мн.ч.
- if ( vgl(Y["n+_mod_mn"],1,WRI) ) { bf_n=Y["n+_mod_mn"];
-
-    if ( vex(Y["n+_gl_in"]) && vlt(bf_n,Y["n+_gl_in"]) && s(0,bf_n-1) &&
-         qir(1,bf_n-1,"sz_i nar_any prl_kred_sr prl_srav mest_mnim") &&
-         qir(bf_n+1,Y["n+_gl_in"]-1,"nar_any mest_vi mest_da suw_da suw_vi") )
-    { l[i]=is_vsje; V[113]++; if(dbg){print "V113"}; continue };
-
-    if ( vex(Y["n+_prl_krmn"]) && vlt(bf_n,Y["n+_prl_krmn"]) && s(0,bf_n-1) &&
-         qir(1,bf_n-1,"sz_i nar_any prl_kred_sr prl_srav mest_mnim") &&
-         qir(bf_n+1,Y["n+_prl_krmn"]-1,"nar_any mest_da mest_tv suw_da suw_tv") )
-    { l[i]=is_vsje; V[114]++; if(dbg){print "V114"}; continue };
-    if ( vex(Y["n+_prq_krmn"]) && vlt(bf_n,Y["n+_prq_krmn"]) && s(0,bf_n-1) &&
-         qir(1,bf_n-1,"sz_i nar_any prl_kred_sr prl_srav mest_mnim") &&
-         qir(bf_n+1,Y["n+_prq_krmn"]-1,"nar_any mest_da mest_tv suw_da suw_tv") )
-    { l[i]=is_vsje; V[115]++; if(dbg){print "V115"}; continue };
-
-    if ( s(0,bf_n-1) && vex(Y["n+_eos"]) && vle(bf_n,Y["n+_eos"]) &&
-       qir(1,bf_n-1,"mest_mnim suw_mnim nes_mnim") &&
-       qir(bf_n+1,Y["n+_eos"]-1,"nar_any") )
-    { l[i]=is_vsje; V[116]++; if(dbg){print "V116"}; continue };
-    if ( s(0,bf_n-1) && vex(Y["n+_comma"]) && vle(bf_n,Y["n+_comma"]) &&
-       qir(1,bf_n-1,"mest_mnim suw_mnim nes_mnim") &&
-       qir(bf_n+1,Y["n+_comma"]-1,"nar_any") )
-    { l[i]=is_vsje; V[117]++; if(dbg){print "V117"}; continue };
- };
-
- if ( vgl(Y["n-_mod_mn"],WLE,-1) ) { bb_n=Y["n-_mod_mn"];
-
-    if ( veq(bb_n,-1) && q(1,"gl_pnin gl_nein") && s(-2,0) &&
-           q(-2,"mest_mnim suw_mnim sz_qto mest_da suw_da") )
-    { l[i]=is_vsje; V[118]++; if(dbg){print "V118"}; continue };
-    if ( veq(bb_n,-2) && q(-1,"gl_pnin gl_nein") && s(-2,0) )
-    { l[i]=is_vsje; V[119]++; if(dbg){print "V119"}; continue };
-    if ( veq(bb_n,-1) && vex(Y["n+_gl_pnin"]) && s(bb_n,Y["n+_gl_pnin"]-1) &&
-         qir(1,Y["n+_gl_in"]-1,"nar_srav prl_srav mest_it mest_3e mest_vi") )
-    { l[i]=is_vsyo; V[120]++; if(dbg){print "V120"}; continue };
-
- };
 
  if ( vgl(Y["n-_gl_ed"],WLE,-1) ) { bb_n=Y["n-_gl_ed"];
 
@@ -665,47 +552,213 @@ xgrp="x1111";for(wrd in omap[xgrp]){omakevars(xgrp);for(y=1;y<=wln;y++)         
 
     if ( !vex(stopper) && s(bb_n,-1) &&
           qir(bb_n+1,-1,"nar_any prl_kred_sr sz_i mest_edsrim qast_any prl_srav") )
-    { l[i]=is_vsyo; V[121]++; if(dbg){print "V121"}; continue };
+    { l[i]=is_vsyo; V[127]++; if(dbg){print "V127"}; continue };
 
  };
 
- if ( vgl(Y["n+_gl_in"],1,WRI) ) { bf_n=Y["n+_gl_in"];
+ # с возвратным глаголом мн.ч.
+ if ( vgl(Y["n+_gl_vzmn"],1,WRI) ) { bf_n=Y["n+_gl_vzmn"];
 
+    cst="уже";
+    if ( W(1,cst) && q(1,"nar_srav prl_srav") && s(0,bf_n-1) &&
+       qir(2,bf_n-1,"nar_srav prl_srav") )
+    { l[i]=is_vsyo; V[98]++; if(dbg){print "V98"}; continue };
+    if (  q(-1,"suw_mnim") && w(1,"не") && veq(bf_n,2) && s(-1,1) )
+    { l[i]=is_vsyo; V[99]++; if(dbg){print "V99"}; continue };
     if ( s(0,bf_n-1) &&
-       qir(1,bf_n-1,"nar_any prl_kred_sr mest_edsrim qast_any prl_srav mod_bz mod_ed") )
-    { l[i]=is_vsyo; V[122]++; if(dbg){print "V122"}; continue };
+       qir(1,bf_n-1,"sz_i nar_vrem nar_mest nar_spos mest_mnim qast_any qast") )
+    { l[i]=is_vsje; V[100]++; if(dbg){print "V100"}; continue };
+
+ };
+ if ( vgl(Y["n-_gl_vzmn"],WLE,-1) ) { bb_n=Y["n-_gl_vzmn"];
+
+    if ( s(bb_n,-1) &&
+       qir(bb_n+1,-1,"nar_vrem nar_mest nar_spos mest_mnim qast_any") )
+    { l[i]=is_vsje; V[101]++; if(dbg){print "V101"}; continue };
 
  };
 
- { #
-   stopper=""
-   if ( vex(Y["n-_gl_mn"])   && s(Y["n-_gl_mn"],-1) )   { stopper = 1 };
-   if ( vex(Y["n-_gl_vzmn"]) && s(Y["n-_gl_vzmn"],-1) ) { stopper = 1 };
+## Переходные глаголы во мн.ч  с дополнением
+#if ( vgl(Y["n+_gl_pnmn"],1,WRI) ) { bf_n=Y["n+_gl_pnmn"];
+
+#   if ( q(-3,"mest_im suw_odim") && q(-2,"sz_iili") && q(-1,"mest_im suw_odim") &&
+#        q(bf_n+1,"pre_ro pre_pr pre_da pre_tv pre_vi") && s(-3,bfn) &&
+#      qir(2,bf_n-1,"nar_spos nar_vrem") )
+#   { l[i]=is_vsyo; V[102]++; if(dbg){print "V102"}; continue };
+#   if ( q(-1,"mest_mnim suw_odmnim") && q(bf_n+1,"pre_ro pre_pr pre_da pre_tv pre_vi") && s(-1,bfn) &&
+#      qir(2,bf_n-1,"nar_spos nar_vrem") )
+#   { l[i]=is_vsyo; V[103]++; if(dbg){print "V103"}; continue };
+#   if ( q(1,"mest_mnim suw_odmnim") && q(bf_n+1,"pre_ro pre_pr pre_da pre_tv pre_vi") && s(0,bfn) &&
+#      qir(2,bf_n-1,"nar_spos nar_vrem") )
+#   { l[i]=is_vsyo; V[104]++; if(dbg){print "V104"}; continue };
+#   if ( vex(Y["n+_comma"]) && vle(bf_n,Y["n+_comma"]) && s(0,Y["n+_comma"]-1) &&
+#          w(Y["n+_comma"]+1,"что") &&
+#        qir(1,bf_n-1,"mest_mnim mest_vi sz_i nar_any prl_kred_sr") &&
+#        qir(bf_n+1,Y["n+_comma"],"nar_spos mest_da suw_da") )
+#   { l[i]=is_vsje; V[105]++; if(dbg){print "V105"}; continue };
+
+#   if ( qf(bf_n+1,bf_n+4,"suw_ro") && s(0,qfn-1) &&
+#       qir(1,bf_n-1,"mest_mnim nar_any prl_kred_sr") &&
+#       qir(bf_n+1,qfn-1,"prl_ro mest_ro mest_3e") )
+#   { l[i]=is_vsje; V[106]++; if(dbg){print "V106"}; continue };
+#   if ( qf(bf_n+1,bf_n+3,"pre_ro pre_pr pre_da pre_tv pre_vi") && s(0,qfn-1) &&
+#       qir(1,bf_n-1,"mest_mnim nar_any prl_kred_sr mest_da suw_da qast") &&
+#       qir(bf_n+1,qfn-1,"suw_da mest_da nar_any") )
+#   { l[i]=is_vsje; V[107]++; if(dbg){print "V107"}; continue };
+#  if ( qb(-7,-1,"pre_pr") && s(qbn,qfn-1) &&
+#      qir(1,bf_n-1,"mest_mnim nar_any prl_kred_sr mest_da suw_da") &&
+#      qir(qbn+1,-1,"suw_pr prl_pr mest_pr mest_3e nar_any") )
+#  { l[i]=is_vsje; V[108]++; if(dbg){print "V108"}; continue };
+
+#};
+#if ( vgl(Y["n-_gl_pnmn"],WLE,-1) ) { bb_n=Y["n-_gl_pnmn"]; # todo
+
+#   if ( q(1,"mest_mnim") && q(bb_n,"pre_tv") && s(0,bfn) &&
+#      qir(2,bf_n-1,"nar_spos nar_vrem") )
+#   { l[i]=is_vsyo; V[109]++; if(dbg){print "V109"}; continue };
+
+#};
 
 
-   if ( ! vex(stopper) ){
+# # с переходным глаголом  в мн.ч.
+#if ( vgl(Y["n+_gl_pemn"],1,WRI) ) { bf_n=Y["n+_gl_pemn"];
 
-      if ( q(-1,"mest_mnim") && vex(Y["n+_comma"]) && vle(Y["n+_comma"],3) &&
-           q(Y["n+_comma"],"nar_any prl_kred_sr prq_kred_sr") && s(-1,Y["n+_comma"]-1) &&
-         qir(1,Y["n+_comma"]-1,"nar_any prl_kred_sr prq_kred_sr sz_iili prq_edsrim prl_edsrim") )
-      { l[i]=is_vsje; V[123]++; if(dbg){print "V123"}; continue };
-      if ( q(-1,"mest_mnim") && vex(Y["n+_eos"]) && vle(Y["n+_eos"],3) &&
-           q(Y["n+_eos"],"nar_any prl_kred_sr prq_kred_sr") && s(-1,Y["n+_eos"]-1) &&
-         qir(1,Y["n+_eos"]-1,"nar_any prl_kred_sr prq_kred_sr sz_iili prq_edsrim prl_edsrim") )
-      { l[i]=is_vsje; V[124]++; if(dbg){print "V124"}; continue };
-      if ( vex(Y["n+_eos"]) && vle(Y["n+_eos"],3) &&
-             q(Y["n+_eos"],"nar_any prl_kred_sr prq_kred_sr") && s(0,Y["n+_eos"]-1) &&
-           qir(1,Y["n+_eos"]-1,"nar_any prl_kred_sr prq_kred_sr sz_iili prq_edsrim prl_edsrim") )
-      { l[i]=is_vsyo; V[125]++; if(dbg){print "V125"}; continue };
-      if ( vex(Y["n+_comma"]) && vle(Y["n+_comma"],3) &&
-             q(Y["n+_comma"],"nar_any prl_kred_sr prq_edsrim prl_edsrim") && s(0,Y["n+_comma"]-1) &&
-           qir(1,Y["n+_comma"]-1,"nar_any prl_kred_sr") )
-      { l[i]=is_vsyo; V[126]++; if(dbg){print "V126"}; continue };
-      if ( wf(1,4,"и") && q(wfn-1,"nar_any prl_kred_sr") && s(0,wfn) &&
-          qir(1,wfn-2,"nar_any prl_kred_sr") )
-      { l[i]=is_vsyo; V[127]++; if(dbg){print "V127"}; continue };
-   };
- }
+#   if ( q(bf_n-1,"suw_tv") &&
+#        q(-1,"mest_3e mest_vi suw_vi") && s(-1,bf_n-1) &&
+#      qir(1,bf_n-2,"prl_tv mest_tv") )
+#   { l[i]=is_vsje; V[110]++; if(dbg){print "V110"}; continue };
+#   if ( veq(bf_n,1) && s(0,bf_n) &&
+#          q(2,"mest_vi mest_3e suw_vi") )
+#   { l[i]=is_vsje; V[111]++; if(dbg){print "V111"}; continue };
+#   if ( vex(Y["n+_comma"]) && vle(bf_n,Y["n+_comma"]) && s(0,Y["n+_comma"]-1) &&
+#          w(Y["n+_comma"]+1,"что") &&
+#        qir(1,bf_n-1,"mest_mnim mest_vi sz_i nar_any prl_kred_sr") &&
+#        qir(bf_n+1,Y["n+_comma"],"nar_spos mest_da suw_da") )
+#   { l[i]=is_vsje; V[112]++; if(dbg){print "V112"}; continue };
+
+
+#};
+
+##
+## с переходным глаголом
+#if ( vgl(Y["n+_gl_pe"],1,WRI) ) { bf_n=Y["n+_gl_pe"];
+
+#   if ( veq(bf_n,2) && q(bf_n,"gl_pemn") &&
+#          q(-1,"mest_mnim") && s(0,bf_n-1) &&
+#          q(1,"mest_vi mest_3e") )
+#   { l[i]=is_vsje; V[113]++; if(dbg){print "V113"}; continue };
+
+#};
+#if ( vgl(Y["n-_gl_pe"],WLE,-1) ) { bb_n=Y["n-_gl_pe"];
+
+#   if ( veq(bb_n,-2) && w(-1,"их") && s(-2,-1) )
+#   { l[i]=is_vsje; V[114]++; if(dbg){print "V114"}; continue };
+#   if ( veq(bb_n,-1) && q(1,"pre_pr") &&
+#         qf(2,5,"suw_pr") && q(qfn+1,"suw_mnim") && s(-1,qfn) &&
+#        qir(2,qfn-1,"mest_pr mest_3e prl_pr") )
+#   { l[i]=is_vsje; V[115]++; if(dbg){print "V115"}; continue };
+
+#};
+
+ if ( vgl(Y["n+_suw_ed"],1,WRI) ) { bf_n=Y["n+_suw_ed"];
+
+    stopper=""
+    if ( q(bf_n,"suw_mnim suw_mnvi nar_spos") ) { stopper = 1 };
+    if ( w(1,"уже перед") ) { stopper = 1 };
+    if ( q(bf_n,"prl_kred_mu") ) { stopper = 1 };
+
+    if (  vex(Y["n+_eos"]) && vle(bf_n,Y["n+_eos"]) && vgt(bf_n,1) && s(0,bf_n-1) &&
+          qir(1,bf_n-1,"prl_ed mest_ed") &&
+          qir(bf_n+1,Y["n+_eos"],"prl_ed") )
+    { l[i]=is_vsyo; V[116]++; if(dbg){print "V116"}; continue };
+
+    if ( !vex(stopper) && vex(Y["n+_eos"]) && vle(bf_n,Y["n+_eos"]) && s(0,bf_n-1) &&
+          qir(1,bf_n-1,"prl_ed mest_ed mest_3e nar_any prl_kred_sr") &&
+          qir(bf_n+1,Y["n+_eos"],"prl_ed") )
+    { l[i]=is_vsyo; V[117]++; if(dbg){print "V117"}; continue };
+
+    if ( !vex(stopper) && s(0,bf_n-1) &&
+          qir(1,bf_n-1,"prl_edsrim mest_edsrim mest_3e nar_any prl_kred_sr") )
+    { l[i]=is_vsyo; V[118]++; if(dbg){print "V118"}; continue };
+ };
+
+## с глаголом мн.ч.
+#if ( vgl(Y["n+_mod_mn"],1,WRI) ) { bf_n=Y["n+_mod_mn"];
+
+#   if ( vex(Y["n+_gl_in"]) && vlt(bf_n,Y["n+_gl_in"]) && s(0,bf_n-1) &&
+#        qir(1,bf_n-1,"sz_i nar_any prl_kred_sr prl_srav mest_mnim") &&
+#        qir(bf_n+1,Y["n+_gl_in"]-1,"nar_any mest_vi mest_da suw_da suw_vi") )
+#   { l[i]=is_vsje; V[119]++; if(dbg){print "V119"}; continue };
+
+#   if ( vex(Y["n+_prl_krmn"]) && vlt(bf_n,Y["n+_prl_krmn"]) && s(0,bf_n-1) &&
+#        qir(1,bf_n-1,"sz_i nar_any prl_kred_sr prl_srav mest_mnim") &&
+#        qir(bf_n+1,Y["n+_prl_krmn"]-1,"nar_any mest_da mest_tv suw_da suw_tv") )
+#   { l[i]=is_vsje; V[120]++; if(dbg){print "V120"}; continue };
+#   if ( vex(Y["n+_prq_krmn"]) && vlt(bf_n,Y["n+_prq_krmn"]) && s(0,bf_n-1) &&
+#        qir(1,bf_n-1,"sz_i nar_any prl_kred_sr prl_srav mest_mnim") &&
+#        qir(bf_n+1,Y["n+_prq_krmn"]-1,"nar_any mest_da mest_tv suw_da suw_tv") )
+#   { l[i]=is_vsje; V[121]++; if(dbg){print "V121"}; continue };
+
+#   if ( s(0,bf_n-1) && vex(Y["n+_eos"]) && vle(bf_n,Y["n+_eos"]) &&
+#      qir(1,bf_n-1,"mest_mnim suw_mnim nes_mnim") &&
+#      qir(bf_n+1,Y["n+_eos"]-1,"nar_any") )
+#   { l[i]=is_vsje; V[122]++; if(dbg){print "V122"}; continue };
+#   if ( s(0,bf_n-1) && vex(Y["n+_comma"]) && vle(bf_n,Y["n+_comma"]) &&
+#      qir(1,bf_n-1,"mest_mnim suw_mnim nes_mnim") &&
+#      qir(bf_n+1,Y["n+_comma"]-1,"nar_any") )
+#   { l[i]=is_vsje; V[123]++; if(dbg){print "V123"}; continue };
+#};
+
+#if ( vgl(Y["n-_mod_mn"],WLE,-1) ) { bb_n=Y["n-_mod_mn"];
+
+#   if ( veq(bb_n,-1) && q(1,"gl_pnin gl_nein") && s(-2,0) &&
+#          q(-2,"mest_mnim suw_mnim sz_qto mest_da suw_da") )
+#   { l[i]=is_vsje; V[124]++; if(dbg){print "V124"}; continue };
+#   if ( veq(bb_n,-2) && q(-1,"gl_pnin gl_nein") && s(-2,0) )
+#   { l[i]=is_vsje; V[125]++; if(dbg){print "V125"}; continue };
+#   if ( veq(bb_n,-1) && vex(Y["n+_gl_pnin"]) && s(bb_n,Y["n+_gl_pnin"]-1) &&
+#        qir(1,Y["n+_gl_in"]-1,"nar_srav prl_srav mest_it mest_3e mest_vi") )
+#   { l[i]=is_vsyo; V[126]++; if(dbg){print "V126"}; continue };
+
+#};
+
+#if ( vgl(Y["n+_gl_in"],1,WRI) ) { bf_n=Y["n+_gl_in"];
+
+#   if ( s(0,bf_n-1) &&
+#      qir(1,bf_n-1,"nar_any prl_kred_sr mest_edsrim qast_any prl_srav mod_bz mod_ed") )
+#   { l[i]=is_vsyo; V[128]++; if(dbg){print "V128"}; continue };
+
+#};
+
+#{ #
+#  stopper=""
+#  if ( vex(Y["n-_gl_mn"])   && s(Y["n-_gl_mn"],-1) )   { stopper = 1 };
+#  if ( vex(Y["n-_gl_vzmn"]) && s(Y["n-_gl_vzmn"],-1) ) { stopper = 1 };
+
+
+#  if ( ! vex(stopper) ){
+
+#     if ( q(-1,"mest_mnim") && vex(Y["n+_comma"]) && vle(Y["n+_comma"],3) &&
+#          q(Y["n+_comma"],"nar_any prl_kred_sr prq_kred_sr") && s(-1,Y["n+_comma"]-1) &&
+#        qir(1,Y["n+_comma"]-1,"nar_any prl_kred_sr prq_kred_sr sz_iili prq_edsrim prl_edsrim") )
+#     { l[i]=is_vsje; V[129]++; if(dbg){print "V129"}; continue };
+#     if ( q(-1,"mest_mnim") && vex(Y["n+_eos"]) && vle(Y["n+_eos"],3) &&
+#          q(Y["n+_eos"],"nar_any prl_kred_sr prq_kred_sr") && s(-1,Y["n+_eos"]-1) &&
+#        qir(1,Y["n+_eos"]-1,"nar_any prl_kred_sr prq_kred_sr sz_iili prq_edsrim prl_edsrim") )
+#     { l[i]=is_vsje; V[130]++; if(dbg){print "V130"}; continue };
+#     if ( vex(Y["n+_eos"]) && vle(Y["n+_eos"],3) &&
+#            q(Y["n+_eos"],"nar_any prl_kred_sr prq_kred_sr") && s(0,Y["n+_eos"]-1) &&
+#          qir(1,Y["n+_eos"]-1,"nar_any prl_kred_sr prq_kred_sr sz_iili prq_edsrim prl_edsrim") )
+#     { l[i]=is_vsyo; V[131]++; if(dbg){print "V131"}; continue };
+#     if ( vex(Y["n+_comma"]) && vle(Y["n+_comma"],3) &&
+#            q(Y["n+_comma"],"nar_any prl_kred_sr prq_edsrim prl_edsrim") && s(0,Y["n+_comma"]-1) &&
+#          qir(1,Y["n+_comma"]-1,"nar_any prl_kred_sr") )
+#     { l[i]=is_vsyo; V[132]++; if(dbg){print "V132"}; continue };
+#     if ( wf(1,4,"и") && q(wfn-1,"nar_any prl_kred_sr") && s(0,wfn) &&
+#         qir(1,wfn-2,"nar_any prl_kred_sr") )
+#     { l[i]=is_vsyo; V[133]++; if(dbg){print "V133"}; continue };
+#  };
+#}
 
 
 
