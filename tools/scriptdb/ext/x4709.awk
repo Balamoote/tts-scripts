@@ -41,7 +41,8 @@ xgrp="x4709";for(wrd in omap[xgrp]){omakevars(xgrp);for(y=1;y<=wln;y++)        #
 
           if ( bba(tn-9,tn-1,"_gl_v_palate-iv")  ) { Y["n-_gl_v_palate-iv"]  = bbn; Y["w-_gl_v_palate-iv"]  = BBn; };
           if ( bba(tn-9,tn-1,"_gl_v_sky-iv")    ) { Y["n-_gl_v_sky-iv"]    = bbn; Y["w-_gl_v_sky-iv"]    = BBn; };
-          if ( bba(tn-6,tn-1,"_suw_v_palate-vp") ) { Y["n-_suw_v_palate-vp"] = bbn; Y["w-_suw_v_palate-vp"] = BBn; }; };
+#         if ( bba(tn-6,tn-1,"_suw_v_palate-vp") ) { Y["n-_suw_v_palate-vp"] = bbn; Y["w-_suw_v_palate-vp"] = BBn; }; };
+          if ( bba(tn-6,tn-1,"_suw_v_sky-vp") ) { Y["n-_suw_v_sky-vp"] = bbn; Y["w-_suw_v_sky-vp"] = BBn; }; };
 
      }; #
 
@@ -161,7 +162,7 @@ if ( vex(Y["n_pre_v_ist"]) && !vex(Y["tn_ok_v"]) ) { tn=Y["n_pre_v_ist"];
 
  cst="их наше само самое это";
  if ( w(-1,cst) && s(-1) )
- { l[i]=omo2; X[6]++; if(dbg){print "X6 -- _sky_prl_true"}; continue };
+ { l[i]=omo1; X[6]++; if(dbg){print "X6 -- _sky_prl_true"}; continue };
 
   if ( TN_v_nebo_f() )
   { X[6]++; if(dbg){print "X6 -- TN_v_nebo_f"}; continue };
@@ -175,18 +176,19 @@ if ( vex(Y["n_pre_v_ist"]) && !vex(Y["tn_ok_v"]) ) { tn=Y["n_pre_v_ist"];
 
        if ( vgl(bb_n,-7,-1) && s(bb_n,-1) &&
             qir(bb_n+1,-1,"suw_vi prl_vi prq_vi mest_vi mest_3e qast_any nar_any prl_kred_sr") )
-       { l[i]=omo2; X[6]++; if(dbg){print "X6"}; continue };
+       { l[i]=omo1; X[6]++; if(dbg){print "X6"}; continue };
 
        if ( vgl(bb_n,-7,-3) && q(-1,"narph_any") && s(bb_n,-1) &&
             qir(bb_n+1,xwn-1,"nar_any") )
-       { l[i]=omo2; X[7]++; if(dbg){print "X7"}; continue };
+       { l[i]=omo1; X[7]++; if(dbg){print "X7"}; continue };
     };
     # _sky_pe --->>>:start
-    if ( vgl(Y["n+_sky_pe"],1,6) ) { bf_n=Y["n+_sky_pe"]; bb_n=Y["n-_palate_pe"]; wf_n=Y["n-_gl_v_palate-iv"];
+    if ( vgl(Y["n+_sky_pe"],1,6) ) { bf_n=Y["n+_sky_pe"];
 
        if ( vgl(bf_n,1,6) && s(0,bf_n-1) &&
             qir(1,bf_n-1,"mod_any gl_aux_be nar_any") )
-       { l[i]=omo2; X[8]++; if(dbg){print "X8"}; continue };
+       { l[i]=omo1; X[8]++; if(dbg){print "X8"}; continue };
+
     };
     # _sky_pe --->>>:end
  }; # и_п_ и в_п_ небо
@@ -378,6 +380,9 @@ function TN_v_nebo_f(    ret, tn, stopp, bb_n,bf_n,qb_n,qf_n,wb_n,wf_n,BB_n,BF_n
 
   if ( vex(Y["tn_ok_v"]) ) { tn=Y["n_pre_v"];
 
+    cst="вдалеке высоко выше далеко дальше прямиком";
+    if ( w(tn-1,cst) && s(tn-1) )
+    { l[i]=omo1; X[36]++; if(dbg){print "X36"}; stopp=ret=1; continue };
 
     # _gl_v_sky-iv:start
     if ( vgl(Y["n-_gl_v_sky-iv"],tn-9,tn-1) ) { bb_n=Y["n-_gl_v_sky-iv"]; BB_n=Y["w-_gl_v_sky-iv"];
@@ -386,119 +391,119 @@ function TN_v_nebo_f(    ret, tn, stopp, bb_n,bf_n,qb_n,qf_n,wb_n,wf_n,BB_n,BF_n
        if ( weq(BB_n,cst) ) {
          if ( veq(bb_n,tn-2) && s(bb_n,tn-1) &&
                (w(tn-1,"мне ему ей")||q(tn-1,"suw_odedda")) )
-         { l[i]=omo1; X[36]++; if(dbg){print "X36"}; stopp=ret=1; continue };
+         { l[i]=omo2; X[37]++; if(dbg){print "X37"}; stopp=ret=1; continue };
        };
        cst="бить брызнуть";
        cst1="слюна сок сперма";
        if ( weq(BB_n,cst) ) {
          if ( s(bb_n,tn-1) && bw(bb_n-1,cst1) &&
             qir(bb_n+1,tn-1,"gl_aux_be mod_any mest_da nar_any suw_da isname") )
-         { l[i]=omo1; X[37]++; if(dbg){print "X37"}; stopp=ret=1; continue };
+         { l[i]=omo2; X[38]++; if(dbg){print "X38"}; stopp=ret=1; continue };
          if ( veq(bb_n,tn-2) && s(bb_n,tn-1) &&
                 q(tn-1,"mest_da suw_odedda") )
-         { l[i]=omo1; X[38]++; if(dbg){print "X38"}; stopp=ret=1; continue };
+         { l[i]=omo2; X[39]++; if(dbg){print "X39"}; stopp=ret=1; continue };
          if ( s(bb_n,tn-1) && bf(1,3,cst1) && s(0,bfn-1) &&
             qir(bb_n+1,tn-1,"gl_aux_be mod_any mest_da nar_any suw_da isname") &&
             qir(1,bfn-1,"mest_ro prl_ro prq_ro") )
-         { l[i]=omo1; X[39]++; if(dbg){print "X39"}; stopp=ret=1; continue };
+         { l[i]=omo2; X[40]++; if(dbg){print "X40"}; stopp=ret=1; continue };
        };
        cst="впиться";
        if ( weq(BB_n,cst) ) {
          if ( s(bb_n,tn-1) && wfa(1,3,"_palate_suw-ro") && s(0,wfn-1) &&
             qir(bb_n+1,tn-1,"gl_aux_be mod_any mest_da nar_any suw_da isname") &&
             qir(1,bfn-1,"mest_ro prl_ro prq_ro") )
-         { l[i]=omo2; X[40]++; if(dbg){print "X40"}; stopp=ret=1; continue };
+         { l[i]=omo1; X[41]++; if(dbg){print "X41"}; stopp=ret=1; continue };
        };
        cst="упереться упираться";
        cst1="головка зуб кончик член язык";
        if ( weq(BB_n,cst) ) {
          if ( bb(bb_n-3,bb_n-1,cst1) && s(bbn,tn-1) &&
              qir(bbn+1,bb_n-1,"mod_any prl_kred_sr gl_aux_be") )
-         { l[i]=omo1; X[41]++; if(dbg){print "X41"}; stopp=ret=1; continue };
+         { l[i]=omo2; X[42]++; if(dbg){print "X42"}; stopp=ret=1; continue };
          if ( bf(bb_n+1,tn-1,cst1) && s(bb_n,tn-1) &&
              qir(bb_n+1,bfn-1,"prl_edsrtv mest_edsrtv") &&
              qir(bfn+1,tn-1,"suw_ro prl_ro mest_ro mest_da") )
-         { l[i]=omo1; X[42]++; if(dbg){print "X42"}; stopp=ret=1; continue };
+         { l[i]=omo2; X[43]++; if(dbg){print "X43"}; stopp=ret=1; continue };
        };
        cst="вгонять вогнать";
        cst1="кинжал крючок";
        if ( weq(BB_n,cst) ) {
          if ( s(bb_n,tn-1) && w(tn-1,cst1) &&
             qir(bb_n+1,tn-2,"mest_vi prl_vi prq_vi") )
-         { l[i]=omo1; X[43]++; if(dbg){print "X43"}; stopp=ret=1; continue };
+         { l[i]=omo2; X[44]++; if(dbg){print "X44"}; stopp=ret=1; continue };
        };
          # pointesque
 
        if ( vgl(bb_n,tn-9,tn-1) && s(bb_n,tn-1) &&
             bba(tn+1,-1,"_palate_prl_true") )
-       { bb_n=""; X[44]++; if(dbg){print "X44"}; };
+       { bb_n=""; X[45]++; if(dbg){print "X45"}; };
 
        if ( veq(bb_n,tn-1) && s(tn-1) )
-       { l[i]=omo2; X[45]++; if(dbg){print "X45"}; stopp=ret=1; continue };
+       { l[i]=omo1; X[46]++; if(dbg){print "X46"}; stopp=ret=1; continue };
        if ( vgl(bb_n,tn-6,tn-2) &&
             qir(bb_n+1,tn-2,"prl_vi prq_vi mcop_vi qik_vi qis_vi prl_kred_sr nar_any isname qast_any") &&
               q(tn-1,"suw_vi qast_any") && s(bb_n,tn-1) )
-       { l[i]=omo2; X[46]++; if(dbg){print "X46"}; stopp=ret=1; continue };
+       { l[i]=omo1; X[47]++; if(dbg){print "X47"}; stopp=ret=1; continue };
        if ( vgl(bb_n,tn-6,tn-3) && s(bb_n,tn-3) &&
             qir(bb_n+1,tn-3,"prl_vi prq_vi mcop_vi qik_vi qis_vi prl_kred_sr nar_any isname qast_any") &&
               q(tn-2,"suw_vi qast_any") && zs(tn-2) && s(tn-1) &&
               q(tn-1,"sz") )
-       { l[i]=omo2; X[47]++; if(dbg){print "X47"}; stopp=ret=1; continue };
+       { l[i]=omo1; X[48]++; if(dbg){print "X48"}; stopp=ret=1; continue };
        if ( vgl(bb_n,tn-7,tn-3) &&
             qir(bb_n+1,tn-3,"prl_vi prq_vi mest_vi mest_3e prl_kred_sr nar_step isname") &&
               q(tn-2,"suw_vi") &&
               q(tn-1,"suw_ro") && s(bb_n,tn-1) )
-       { l[i]=omo2; X[48]++; if(dbg){print "X48"}; stopp=ret=1; continue };
+       { l[i]=omo1; X[49]++; if(dbg){print "X49"}; stopp=ret=1; continue };
        if ( veq(bb_n,tn-4) &&
               q(tn-3,"suw_vi suw_im mest_im mest_vi suw_tv qast isname") &&
               q(tn-2,"suw_vi suw_tv") &&
               q(tn-1,"suw_ro") && s(tn-4,tn-1) && Qf(tn-3,tn-1,"sz_iili pre_any"))
-       { l[i]=omo2; X[49]++; if(dbg){print "X49"}; stopp=ret=1; continue }; #inspect
+       { l[i]=omo1; X[50]++; if(dbg){print "X50"}; stopp=ret=1; continue }; #inspect
        if ( vgl(bb_n,tn-6,tn-2) &&
               q(bb_n+1,"suw_vi suw_edne") &&
             qir(bb_n+2,tn-2,"prl_ro prq_ro mcop_ro qis_ro qik_ro qik_vi suw_ro suw_edne isname") &&
               q(tn-1,"suw_ro suw_edne isname") && s(bb_n,tn-1) )
-       { l[i]=omo2; X[50]++; if(dbg){print "X50"}; stopp=ret=1; continue };
+       { l[i]=omo1; X[51]++; if(dbg){print "X51"}; stopp=ret=1; continue };
        if ( vgl(bb_n,tn-7,tn-3) &&
               q(bb_n+1,"suw_vi") &&
             qir(bb_n+2,tn-3,"prl_ro prq_ro mcop_ro qis_ro qik_ro suw_ro suw_edne isname") &&
               q(tn-2,"suw_ro isname") &&
               q(tn-1,"mest_ro suw_ro") && s(bb_n,tn-1) )
-       { l[i]=omo2; X[51]++; if(dbg){print "X51"}; stopp=ret=1; continue };
+       { l[i]=omo1; X[52]++; if(dbg){print "X52"}; stopp=ret=1; continue };
        if ( vgl(bb_n,tn-7,tn-2) &&
             qir(bb_n+1,tn-2,"prl_tv prq_tv mest_tv mcop_tv mest_vi qik_tv qis_tv prl_vi prq_vi mest_3e qik_vi qis_vi suw_vi") &&
               q(tn-1,"suw_tv") && s(bb_n,tn-1) )
-       { l[i]=omo2; X[52]++; if(dbg){print "X52"}; stopp=ret=1; continue };
+       { l[i]=omo1; X[53]++; if(dbg){print "X53"}; stopp=ret=1; continue };
        if ( vgl(bb_n,tn-9,tn-3) &&
             qir(bb_n+1,tn-2,"prl_tv prq_tv mest_tv mest_vi qik_tv qis_tv prl_vi prq_vi mest_3e qik_vi qis_vi suw_tv") &&
               q(tn-1,"suw_vi") && s(bb_n,tn-1) )
-       { l[i]=omo2; X[53]++; if(dbg){print "X53"}; stopp=ret=1; continue };
+       { l[i]=omo1; X[54]++; if(dbg){print "X54"}; stopp=ret=1; continue };
        if ( vgl(bb_n,tn-7,tn-5) && s(bb_n) &&
               q(bb_n+1,"prl_vi prq_vi") && z(bb_n+1) &&
               q(bb_n+2,"prq_vi") &&
             qir(bb_n+3,tn-3,"mest_tv prl_tv prq_tv mest_3e qik_tv qis_tv") &&
               q(tn-2,"suw_tv") &&
               q(tn-1,"suw_vi") && s(bb_n+2,tn-1) )
-       { l[i]=omo2; X[54]++; if(dbg){print "X54"}; stopp=ret=1; continue };
+       { l[i]=omo1; X[55]++; if(dbg){print "X55"}; stopp=ret=1; continue };
        if ( vgl(bb_n,tn-7,tn-5) && tz(tn-1) && tz(tn-4) && z(tn-3) && s(2) &&
               q(tn-3,"prl_kred_sr") && q(tn-2,"nar_step") && q(tn-1,"prl_kred_sr") &&
             qir(bbn+1,vvn-1,"prl_vi prq_vi mcop_vi qik_vi qis_vi prl_kred_sr nar_any isname") &&
               q(tn-4,"suw_vi") && s(bb_n,tn-5) )
-       { l[i]=omo2; X[55]++; if(dbg){print "X55"}; stopp=ret=1; continue };
+       { l[i]=omo1; X[56]++; if(dbg){print "X56"}; stopp=ret=1; continue };
        if ( veq(bb_n,tn-3) &&
               q(tn-2,"suw_vi suw_im mest_im mest_vi suw_tv mest_tv qast isname") &&
               q(tn-1,"suw_vi suw_tv qast nar_any") && s(tn-3,tn-1) )
-       { l[i]=omo2; X[56]++; if(dbg){print "X56"}; stopp=ret=1; continue }; #inspect
+       { l[i]=omo1; X[57]++; if(dbg){print "X57"}; stopp=ret=1; continue }; #inspect
        if ( veq(bb_n,tn-2) &&
               q(tn-1,"mest_vi mest_tv mest_im mest_3e prl_vi") && s(tn-2,tn-1) )
-       { l[i]=omo2; X[57]++; if(dbg){print "X57"}; stopp=ret=1; continue };
+       { l[i]=omo1; X[58]++; if(dbg){print "X58"}; stopp=ret=1; continue };
        if ( veq(bb_n,tn-3) &&
               q(tn-2,"prl_srav prl_kred_sr nar_spos") && Q(tn-2,"pre_vi") &&
               q(tn-1,"suw_vi mest_vi suw_im mest_im mest_3e prl_kred_sr prl_srav isname nar_mest") && s(tn-3,tn-1) )
-       { l[i]=omo2; X[58]++; if(dbg){print "X58"}; stopp=ret=1; continue };
+       { l[i]=omo1; X[59]++; if(dbg){print "X59"}; stopp=ret=1; continue };
        if ( veq(bb_n,tn-2) &&
               q(tn-1,"suw_im prl_kred_sr prl_srav isname nar_any qis_vi") && s(tn-2,tn-1) )
-       { l[i]=omo2; X[59]++; if(dbg){print "X59"}; stopp=ret=1; continue };
+       { l[i]=omo1; X[60]++; if(dbg){print "X60"}; stopp=ret=1; continue };
     };
 
     # _gl_v_palate-iv:start
@@ -507,74 +512,158 @@ function TN_v_nebo_f(    ret, tn, stopp, bb_n,bf_n,qb_n,qf_n,wb_n,wf_n,BB_n,BF_n
 
        if ( vgl(bb_n,tn-9,tn-1) && s(bb_n,tn-1) &&
             bba(tn+1,-1,"_sky_prl_true") )
-       { bb_n=""; X[60]++; if(dbg){print "X60"}; };
+       { bb_n=""; X[61]++; if(dbg){print "X61"}; };
 
        if ( veq(bb_n,tn-1) && s(tn-1) )
-       { l[i]=omo1; X[61]++; if(dbg){print "X61"}; stopp=ret=1; continue };
+       { l[i]=omo2; X[62]++; if(dbg){print "X62"}; stopp=ret=1; continue };
        if ( vgl(bb_n,tn-6,tn-2) &&
             qir(bb_n+1,tn-2,"prl_vi prq_vi mcop_vi qik_vi qis_vi prl_kred_sr nar_any isname qast_any") &&
               q(tn-1,"suw_vi qast_any") && s(bb_n,tn-1) )
-       { l[i]=omo1; X[62]++; if(dbg){print "X62"}; stopp=ret=1; continue };
+       { l[i]=omo2; X[63]++; if(dbg){print "X63"}; stopp=ret=1; continue };
        if ( vgl(bb_n,tn-6,tn-3) && s(bb_n,tn-3) &&
             qir(bb_n+1,tn-3,"prl_vi prq_vi mcop_vi qik_vi qis_vi prl_kred_sr nar_any isname qast_any") &&
               q(tn-2,"suw_vi qast_any") && zs(tn-2) && s(tn-1) &&
               q(tn-1,"sz") )
-       { l[i]=omo1; X[63]++; if(dbg){print "X63"}; stopp=ret=1; continue };
+       { l[i]=omo2; X[64]++; if(dbg){print "X64"}; stopp=ret=1; continue };
        if ( vgl(bb_n,tn-7,tn-3) &&
             qir(bb_n+1,tn-3,"prl_vi prq_vi mest_vi mest_3e prl_kred_sr nar_step isname") &&
               q(tn-2,"suw_vi") &&
               q(tn-1,"suw_ro") && s(bb_n,tn-1) )
-       { l[i]=omo1; X[64]++; if(dbg){print "X64"}; stopp=ret=1; continue };
+       { l[i]=omo2; X[65]++; if(dbg){print "X65"}; stopp=ret=1; continue };
        if ( veq(bb_n,tn-4) &&
               q(tn-3,"suw_vi suw_im mest_im mest_vi suw_tv qast isname") &&
               q(tn-2,"suw_vi suw_tv") &&
               q(tn-1,"suw_ro") && s(tn-4,tn-1) && Qf(tn-3,tn-1,"sz_iili pre_any"))
-       { l[i]=omo1; X[65]++; if(dbg){print "X65"}; stopp=ret=1; continue }; #inspect
+       { l[i]=omo2; X[66]++; if(dbg){print "X66"}; stopp=ret=1; continue }; #inspect
        if ( vgl(bb_n,tn-6,tn-2) &&
               q(bb_n+1,"suw_vi suw_edne") &&
             qir(bb_n+2,tn-2,"prl_ro prq_ro mcop_ro qis_ro qik_ro qik_vi suw_ro suw_edne isname") &&
               q(tn-1,"suw_ro suw_edne isname") && s(bb_n,tn-1) )
-       { l[i]=omo1; X[66]++; if(dbg){print "X66"}; stopp=ret=1; continue };
+       { l[i]=omo2; X[67]++; if(dbg){print "X67"}; stopp=ret=1; continue };
        if ( vgl(bb_n,tn-7,tn-3) &&
               q(bb_n+1,"suw_vi") &&
             qir(bb_n+2,tn-3,"prl_ro prq_ro mcop_ro qis_ro qik_ro suw_ro suw_edne isname") &&
               q(tn-2,"suw_ro isname") &&
               q(tn-1,"mest_ro suw_ro") && s(bb_n,tn-1) )
-       { l[i]=omo1; X[67]++; if(dbg){print "X67"}; stopp=ret=1; continue };
+       { l[i]=omo2; X[68]++; if(dbg){print "X68"}; stopp=ret=1; continue };
        if ( vgl(bb_n,tn-7,tn-2) &&
             qir(bb_n+1,tn-2,"prl_tv prq_tv mest_tv mcop_tv mest_vi qik_tv qis_tv prl_vi prq_vi mest_3e qik_vi qis_vi suw_vi") &&
               q(tn-1,"suw_tv") && s(bb_n,tn-1) )
-       { l[i]=omo1; X[68]++; if(dbg){print "X68"}; stopp=ret=1; continue };
+       { l[i]=omo2; X[69]++; if(dbg){print "X69"}; stopp=ret=1; continue };
        if ( vgl(bb_n,tn-9,tn-3) &&
             qir(bb_n+1,tn-2,"prl_tv prq_tv mest_tv mest_vi qik_tv qis_tv prl_vi prq_vi mest_3e qik_vi qis_vi suw_tv") &&
               q(tn-1,"suw_vi") && s(bb_n,tn-1) )
-       { l[i]=omo1; X[69]++; if(dbg){print "X69"}; stopp=ret=1; continue };
+       { l[i]=omo2; X[70]++; if(dbg){print "X70"}; stopp=ret=1; continue };
        if ( vgl(bb_n,tn-7,tn-5) && s(bb_n) &&
               q(bb_n+1,"prl_vi prq_vi") && z(bb_n+1) &&
               q(bb_n+2,"prq_vi") &&
             qir(bb_n+3,tn-3,"mest_tv prl_tv prq_tv mest_3e qik_tv qis_tv") &&
               q(tn-2,"suw_tv") &&
               q(tn-1,"suw_vi") && s(bb_n+2,tn-1) )
-       { l[i]=omo1; X[70]++; if(dbg){print "X70"}; stopp=ret=1; continue };
+       { l[i]=omo2; X[71]++; if(dbg){print "X71"}; stopp=ret=1; continue };
        if ( vgl(bb_n,tn-7,tn-5) && tz(tn-1) && tz(tn-4) && z(tn-3) && s(2) &&
               q(tn-3,"prl_kred_sr") && q(tn-2,"nar_step") && q(tn-1,"prl_kred_sr") &&
             qir(bbn+1,vvn-1,"prl_vi prq_vi mcop_vi qik_vi qis_vi prl_kred_sr nar_any isname") &&
               q(tn-4,"suw_vi") && s(bb_n,tn-5) )
-       { l[i]=omo1; X[71]++; if(dbg){print "X71"}; stopp=ret=1; continue };
+       { l[i]=omo2; X[72]++; if(dbg){print "X72"}; stopp=ret=1; continue };
        if ( veq(bb_n,tn-3) &&
               q(tn-2,"suw_vi suw_im mest_im mest_vi suw_tv mest_tv qast isname") &&
               q(tn-1,"suw_vi suw_tv qast nar_any") && s(tn-3,tn-1) )
-       { l[i]=omo1; X[72]++; if(dbg){print "X72"}; stopp=ret=1; continue }; #inspect
+       { l[i]=omo2; X[73]++; if(dbg){print "X73"}; stopp=ret=1; continue }; #inspect
        if ( veq(bb_n,tn-2) &&
               q(tn-1,"mest_vi mest_tv mest_im mest_3e prl_vi") && s(tn-2,tn-1) )
-       { l[i]=omo1; X[73]++; if(dbg){print "X73"}; stopp=ret=1; continue };
+       { l[i]=omo2; X[74]++; if(dbg){print "X74"}; stopp=ret=1; continue };
        if ( veq(bb_n,tn-3) &&
               q(tn-2,"prl_srav prl_kred_sr nar_spos") && Q(tn-2,"pre_vi") &&
               q(tn-1,"suw_vi mest_vi suw_im mest_im mest_3e prl_kred_sr prl_srav isname nar_mest") && s(tn-3,tn-1) )
-       { l[i]=omo1; X[74]++; if(dbg){print "X74"}; stopp=ret=1; continue };
+       { l[i]=omo2; X[75]++; if(dbg){print "X75"}; stopp=ret=1; continue };
        if ( veq(bb_n,tn-2) &&
               q(tn-1,"suw_im prl_kred_sr prl_srav isname nar_any qis_vi") && s(tn-2,tn-1) )
-       { l[i]=omo1; X[75]++; if(dbg){print "X75"}; stopp=ret=1; continue };
+       { l[i]=omo2; X[76]++; if(dbg){print "X76"}; stopp=ret=1; continue };
+    };
+
+    # _suw_v_sky-vp:start
+    if ( vgl(Y["n-_suw_v_sky-vp"],tn-6,tn-1) ) { bb_n=Y["n-_suw_v_sky-vp"]; BB_n=Y["w-_suw_v_sky-vp"];
+         # pointesque
+
+       if ( vgl(bb_n,tn-6,tn-1) && s(bb_n,tn-1) &&
+            qir(bb_n+1,tn-1,"nar_any") )
+       { l[i]=omo1; X[77]++; if(dbg){print "X77"}; stopp=ret=1; continue };
+    };
+
+    if ( vgl(Y["n-_gl_v_palate-iv"],tn-9,tn-1) ) { bb_n=Y["n-_gl_v_palate-iv"]; BB_n=Y["w-_gl_v_palate-iv"];
+         # pointesque
+
+       if ( vgl(bb_n,tn-9,tn-1) && s(bb_n,tn-1) &&
+            bba(tn+1,-1,"_sky_prl_true") )
+       { bb_n=""; X[78]++; if(dbg){print "X78"}; };
+
+       if ( veq(bb_n,tn-1) && s(tn-1) )
+       { l[i]=omo2; X[79]++; if(dbg){print "X79"}; stopp=ret=1; continue };
+       if ( vgl(bb_n,tn-6,tn-2) &&
+            qir(bb_n+1,tn-2,"prl_vi prq_vi mcop_vi qik_vi qis_vi prl_kred_sr nar_any isname qast_any") &&
+              q(tn-1,"suw_vi qast_any") && s(bb_n,tn-1) )
+       { l[i]=omo2; X[80]++; if(dbg){print "X80"}; stopp=ret=1; continue };
+       if ( vgl(bb_n,tn-6,tn-3) && s(bb_n,tn-3) &&
+            qir(bb_n+1,tn-3,"prl_vi prq_vi mcop_vi qik_vi qis_vi prl_kred_sr nar_any isname qast_any") &&
+              q(tn-2,"suw_vi qast_any") && zs(tn-2) && s(tn-1) &&
+              q(tn-1,"sz") )
+       { l[i]=omo2; X[81]++; if(dbg){print "X81"}; stopp=ret=1; continue };
+       if ( vgl(bb_n,tn-7,tn-3) &&
+            qir(bb_n+1,tn-3,"prl_vi prq_vi mest_vi mest_3e prl_kred_sr nar_step isname") &&
+              q(tn-2,"suw_vi") &&
+              q(tn-1,"suw_ro") && s(bb_n,tn-1) )
+       { l[i]=omo2; X[82]++; if(dbg){print "X82"}; stopp=ret=1; continue };
+       if ( veq(bb_n,tn-4) &&
+              q(tn-3,"suw_vi suw_im mest_im mest_vi suw_tv qast isname") &&
+              q(tn-2,"suw_vi suw_tv") &&
+              q(tn-1,"suw_ro") && s(tn-4,tn-1) && Qf(tn-3,tn-1,"sz_iili pre_any"))
+       { l[i]=omo2; X[83]++; if(dbg){print "X83"}; stopp=ret=1; continue }; #inspect
+       if ( vgl(bb_n,tn-6,tn-2) &&
+              q(bb_n+1,"suw_vi suw_edne") &&
+            qir(bb_n+2,tn-2,"prl_ro prq_ro mcop_ro qis_ro qik_ro qik_vi suw_ro suw_edne isname") &&
+              q(tn-1,"suw_ro suw_edne isname") && s(bb_n,tn-1) )
+       { l[i]=omo2; X[84]++; if(dbg){print "X84"}; stopp=ret=1; continue };
+       if ( vgl(bb_n,tn-7,tn-3) &&
+              q(bb_n+1,"suw_vi") &&
+            qir(bb_n+2,tn-3,"prl_ro prq_ro mcop_ro qis_ro qik_ro suw_ro suw_edne isname") &&
+              q(tn-2,"suw_ro isname") &&
+              q(tn-1,"mest_ro suw_ro") && s(bb_n,tn-1) )
+       { l[i]=omo2; X[85]++; if(dbg){print "X85"}; stopp=ret=1; continue };
+       if ( vgl(bb_n,tn-7,tn-2) &&
+            qir(bb_n+1,tn-2,"prl_tv prq_tv mest_tv mcop_tv mest_vi qik_tv qis_tv prl_vi prq_vi mest_3e qik_vi qis_vi suw_vi") &&
+              q(tn-1,"suw_tv") && s(bb_n,tn-1) )
+       { l[i]=omo2; X[86]++; if(dbg){print "X86"}; stopp=ret=1; continue };
+       if ( vgl(bb_n,tn-9,tn-3) &&
+            qir(bb_n+1,tn-2,"prl_tv prq_tv mest_tv mest_vi qik_tv qis_tv prl_vi prq_vi mest_3e qik_vi qis_vi suw_tv") &&
+              q(tn-1,"suw_vi") && s(bb_n,tn-1) )
+       { l[i]=omo2; X[87]++; if(dbg){print "X87"}; stopp=ret=1; continue };
+       if ( vgl(bb_n,tn-7,tn-5) && s(bb_n) &&
+              q(bb_n+1,"prl_vi prq_vi") && z(bb_n+1) &&
+              q(bb_n+2,"prq_vi") &&
+            qir(bb_n+3,tn-3,"mest_tv prl_tv prq_tv mest_3e qik_tv qis_tv") &&
+              q(tn-2,"suw_tv") &&
+              q(tn-1,"suw_vi") && s(bb_n+2,tn-1) )
+       { l[i]=omo2; X[88]++; if(dbg){print "X88"}; stopp=ret=1; continue };
+       if ( vgl(bb_n,tn-7,tn-5) && tz(tn-1) && tz(tn-4) && z(tn-3) && s(2) &&
+              q(tn-3,"prl_kred_sr") && q(tn-2,"nar_step") && q(tn-1,"prl_kred_sr") &&
+            qir(bbn+1,vvn-1,"prl_vi prq_vi mcop_vi qik_vi qis_vi prl_kred_sr nar_any isname") &&
+              q(tn-4,"suw_vi") && s(bb_n,tn-5) )
+       { l[i]=omo2; X[89]++; if(dbg){print "X89"}; stopp=ret=1; continue };
+       if ( veq(bb_n,tn-3) &&
+              q(tn-2,"suw_vi suw_im mest_im mest_vi suw_tv mest_tv qast isname") &&
+              q(tn-1,"suw_vi suw_tv qast nar_any") && s(tn-3,tn-1) )
+       { l[i]=omo2; X[90]++; if(dbg){print "X90"}; stopp=ret=1; continue }; #inspect
+       if ( veq(bb_n,tn-2) &&
+              q(tn-1,"mest_vi mest_tv mest_im mest_3e prl_vi") && s(tn-2,tn-1) )
+       { l[i]=omo2; X[91]++; if(dbg){print "X91"}; stopp=ret=1; continue };
+       if ( veq(bb_n,tn-3) &&
+              q(tn-2,"prl_srav prl_kred_sr nar_spos") && Q(tn-2,"pre_vi") &&
+              q(tn-1,"suw_vi mest_vi suw_im mest_im mest_3e prl_kred_sr prl_srav isname nar_mest") && s(tn-3,tn-1) )
+       { l[i]=omo2; X[92]++; if(dbg){print "X92"}; stopp=ret=1; continue };
+       if ( veq(bb_n,tn-2) &&
+              q(tn-1,"suw_im prl_kred_sr prl_srav isname nar_any qis_vi") && s(tn-2,tn-1) )
+       { l[i]=omo2; X[93]++; if(dbg){print "X93"}; stopp=ret=1; continue };
     };
 
 
@@ -658,27 +747,27 @@ function DEF_TN_PRERO_NEBA(num,el) { # определение компонент
     { cst1 = cst1_edsrro; cst2 = cst2_edsrro;  cst3 = cst3_edsrro; };
 
     if ( hwy(-1,"то") && qir(tn+1,-1-hyn,cst1) && s(tn,-1) )
-    { tn_ok = 1; X[76]++; if(dbg){print "X76", "-- tn_ok ON", el, "неба"};};
+    { tn_ok = 1; X[94]++; if(dbg){print "X94", "-- tn_ok ON", el, "неба"};};
     cst="именно собственно";
     if ( !vex(tn_ok) && s(tn,-1) && qiw(tn+1,-1,cst1,cst) )
-    { tn_ok = 1; X[77]++; if(dbg){print "X77", "-- tn_ok ON", el, "неба"};};
+    { tn_ok = 1; X[95]++; if(dbg){print "X95", "-- tn_ok ON", el, "неба"};};
     if ( !vex(tn_ok) && s(-4) && zs(-3) && s(-2,-1) && veq(tn,-4) &&
             q(-3,cst2) && q(-2,"nar_any prl_kred_sr") && q(-1,cst2) )
-    { tn_ok = 1; X[78]++; if(dbg){print "X78", "-- tn_ok ON", el, "неба"};};
+    { tn_ok = 1; X[96]++; if(dbg){print "X96", "-- tn_ok ON", el, "неба"};};
     if ( !vex(tn_ok) && s(tn,-1) && veq(tn,-2) && wc(-1,"ского$|ного$") )
-    { tn_ok = 1; X[79]++; if(dbg){print "X79", "-- tn_ok ON", el, "неба"};};
+    { tn_ok = 1; X[97]++; if(dbg){print "X97", "-- tn_ok ON", el, "неба"};};
     if ( !vex(tn_ok) && zs(-2) && s(-1) && veq(tn,-3) &&
             q(-2,cst2) && wc(-1,"ского$|ного$") )
-    { tn_ok = 1; X[80]++; if(dbg){print "X80", "-- tn_ok ON", el, "неба"};};
+    { tn_ok = 1; X[98]++; if(dbg){print "X98", "-- tn_ok ON", el, "неба"};};
     if ( !vex(tn_ok) && s(tn,-1) && veq(tn,-4) &&
             q(-3,cst2) && q(-2,"sz_iili") && wc(-1,"ского$|ного$") )
-    { tn_ok = 1; X[81]++; if(dbg){print "X81", "-- tn_ok ON", el, "неба"};};
+    { tn_ok = 1; X[99]++; if(dbg){print "X99", "-- tn_ok ON", el, "неба"};};
     # передвижка tn_ok
     if ( vex(tn_ok) && s(tn,-1) &&
        ( qxs(tn-1,"как","и")||
          qxs(tn-1,"да","еще","и")||
          qxs(tn-1,"ведь даже же прямо сразу") ) )
-    { tn = xsn; X[82]++; if(dbg){print "X82", "-- tn_ok MOV", el, "неба"};};
+    { tn = xsn; X[100]++; if(dbg){print "X100", "-- tn_ok MOV", el, "неба"};};
 }
 
 function TN_do_neba_f(    ret, tn, stopp, bb_n,bf_n,qb_n,qf_n,wb_n,wf_n,BB_n,BF_n,eb_n,EB_n,ef_n,EF_n) { stopp=v2s(Y["TN_do_neba_f"]);
@@ -759,83 +848,83 @@ function FN_palate_prl_f(str_palate,    ret, stopp_str, stopp, bb_n,bf_n,qb_n,qf
        if ( iwrd == "небо") {
 
           if ( s(-1) && q(-1,"prl_edsrim prl_kred_sr") && ba(-1,str_palate) && !wa(-1,"X_palate_prl") )
-          { l[i]=omo1; X[83]++; if(dbg){print "X83"}; stopp=ret=1; continue };
+          { l[i]=omo2; X[101]++; if(dbg){print "X101"}; stopp=ret=1; continue };
           if ( zs(-2) && s(-1) && qm(-2,"prl_edsrim prl_kred_sr",str_palate) && !wa(-2,"X_palate_prl") && !wa(-1,"_sky_prl_true") &&
                 q(-1,"prl_edsrim mest_edsrvi prq_edsrim mest_3e qast_any nar_any prl_kred_sr gl_aux_be isname") && zs(-2) && s(-1)  )
-          { l[i]=omo1; X[84]++; if(dbg){print "X84"}; stopp=ret=1; continue }; #uphere
+          { l[i]=omo2; X[102]++; if(dbg){print "X102"}; stopp=ret=1; continue }; #uphere
           if ( z(-3) && s(-2,-1) && qm(-3,"prl_edsrim",str_palate) && q(-2,"prl_edsrim prl_kred_sr nar_any sz_i") && q(-1,"prl_edsrim") )
-          { l[i]=omo1; X[85]++; if(dbg){print "X85"}; stopp=ret=1; continue };
+          { l[i]=omo2; X[103]++; if(dbg){print "X103"}; stopp=ret=1; continue };
           if ( q(1,"prl_edsrim prl_edsrtv qast_any gl_aux_be") && qm(2,"prl_edsrim prl_edsrtv",str_palate) && Q_w(3,"suw_edvi suw_edim suw_edtv") &&
              (zs(0)||se(0," — ")) && zs(1) )
-          { l[i]=omo1; X[86]++; if(dbg){print "X86"}; stopp=ret=1; continue };
+          { l[i]=omo2; X[104]++; if(dbg){print "X104"}; stopp=ret=1; continue };
           if ( q(1,"prl_edsrim prl_edsrtv") &&
                q(2,"prl_edsrim prl_edsrtv qast_any gl_aux_be") && qm(3,"prl_edsrim prl_edsrtv",str_palate) && Q_w(4,"suw_edvi suw_edim suw_edtv") &&
              (zs(0)||se(0," — ")) && zs(2) )
-          { l[i]=omo1; X[87]++; if(dbg){print "X87"}; stopp=ret=1; continue };
+          { l[i]=omo2; X[105]++; if(dbg){print "X105"}; stopp=ret=1; continue };
           if ( qm(1,"prl_edsrim",str_palate) && (s(0)||se(0," — ")||sc(0,":")) && Q_w(2,"suw_edvi suw_edim suw_edtv") )
-          { l[i]=omo1; X[88]++; if(dbg){print "X88"}; stopp=ret=1; continue };
+          { l[i]=omo2; X[106]++; if(dbg){print "X106"}; stopp=ret=1; continue };
           if ( qf(1,5,"prl_edsrim prl_edsrtv prl_kred_sr") && qir(1,qfn-1,"gl_aux_be qast_any nar_any predik prl_kred_sr muk_edsrim") && !wa(qfn,"X_palate_prl") &&
                ba(qfn,str_palate) && (zs(0)||se(0," — ")) && s(1,qfn-1) && Q_w(qfn+1,"suw_edvi suw_edim suw_edtv") )
-          { l[i]=omo1; X[89]++; if(dbg){print "X89"}; stopp=ret=1; continue };
+          { l[i]=omo2; X[107]++; if(dbg){print "X107"}; stopp=ret=1; continue };
           if ( qb(1,5,"prl_edsrim prl_edsrtv prl_kred_sr") && qir(1,qbn-1,"gl_aux_be qast_any nar_any prl_kred_sr prl_edsrim prl_edsrtv muk_edsrim mezd") && !wa(qbn,"X_palate_prl") &&
                ba(qbn,str_palate) && (zs(0)||se(0," — ")) && s(1,qbn-1) && Q(qbn+1,"suw_edvi suw_edim suw_edtv") )
-          { l[i]=omo1; X[90]++; if(dbg){print "X90"}; stopp=ret=1; continue };
+          { l[i]=omo2; X[108]++; if(dbg){print "X108"}; stopp=ret=1; continue };
 
           if ( q(1,"vvod") && z(0) && z(1) && qm(2,"prl_edsrim prl_kred_sr",str_palate) && Q_w(3,"suw_edvi suw_edim") )
-          { l[i]=omo1; X[91]++; if(dbg){print "X91"}; stopp=ret=1; continue };
+          { l[i]=omo2; X[109]++; if(dbg){print "X109"}; stopp=ret=1; continue };
           if ( q(1,"nar_mest") && s(0) && q(2,"vvod") && z(1) && z(2) && qm(3,"prl_edsrim prl_kred_sr",str_palate) && Q_w(4,"suw_edvi suw_edim") )
-          { l[i]=omo1; X[92]++; if(dbg){print "X92"}; stopp=ret=1; continue };
+          { l[i]=omo2; X[110]++; if(dbg){print "X110"}; stopp=ret=1; continue };
           if ( q(1,"nar_mest") && s(0) && q(2,"vvod") && z(1) && z(2) && q(3,"nar_spos") && qm(4,"prl_edsrim prl_kred_sr",str_palate) && Q_w(5,"suw_edvi suw_edim") )
-          { l[i]=omo1; X[93]++; if(dbg){print "X93"}; stopp=ret=1; continue };
+          { l[i]=omo2; X[111]++; if(dbg){print "X111"}; stopp=ret=1; continue };
 
           if ( qf(1,5,"prl_edsrim prl_edsrtv") && qir(1,qfn-1,"gl_aux_be qast_any nar_any prl_kred_sr") && sc(qfn,"[,—]") &&
                 q(qfn+1,"prl_edsrim prl_edsrtv") && ba(qfn+1,str_palate) && s(0,qfn-1) )
-          { l[i]=omo1; X[94]++; if(dbg){print "X94"}; stopp=ret=1; continue };
+          { l[i]=omo2; X[112]++; if(dbg){print "X112"}; stopp=ret=1; continue };
           if ( qf(2,6,"sz_i") && qiz(1,qfn-1,"gl_aux_be qast_any nar_any prl_kred_sr muk_edsrim muk_edsrtv","prl_edsrim prl_edsrtv") &&
                 q(qfn+1,"prl_edsrim prl_edsrtv") && ba(qfn+1,str_palate) && s(0,qfn) )
-          { l[i]=omo1; X[95]++; if(dbg){print "X95"}; stopp=ret=1; continue };
+          { l[i]=omo2; X[113]++; if(dbg){print "X113"}; stopp=ret=1; continue };
 
           cst="казаться оказаться остаться показаться являться";
           if ( bf(1,3,cst) ) { wf_n=bfn;
               if ( qf(wf_n+1,wf_n+3,"prl_edsrtv") && ba(qfn,str_palate) && s(0,qfn-1) && Q_w(qfn+1,"suw_edtv") &&
                   qir(1,wf_n-1,"nar_any qast_any") && qir(wf_n+1,qfn-1,"nar_any qast_any") )
-              { l[i]=omo1; X[96]++; if(dbg){print "X96"}; stopp=ret=1; continue };
+              { l[i]=omo2; X[114]++; if(dbg){print "X114"}; stopp=ret=1; continue };
               if ( qb(wf_n+1,wf_n+3,"prl_edsrtv") && ba(qbn,str_palate) && s(0,qbn-1) && Q_w(qfn+1,"suw_edtv") &&
                   qir(1,wf_n-1,"nar_any qast_any") && qir(wf_n+1,qbn-1,"nar_any qast_any prl_edsrtv") )
-              { l[i]=omo1; X[97]++; if(dbg){print "X97"}; stopp=ret=1; continue };
+              { l[i]=omo2; X[115]++; if(dbg){print "X115"}; stopp=ret=1; continue };
               if ( qf(wf_n+1,wf_n+3,"prl_edsrim prl_kred_sr") && ba(qfn,str_palate) && s(0,qfn-1) && Q_w(qfn+1,"suw_edvi suw_edim") &&
                   qir(1,wf_n-1,"nar_any qast_any") && qir(wf_n+1,qfn-1,"nar_any qast_any") )
-              { l[i]=omo1; X[98]++; if(dbg){print "X98"}; stopp=ret=1; continue };
+              { l[i]=omo2; X[116]++; if(dbg){print "X116"}; stopp=ret=1; continue };
               if ( qb(wf_n+1,wf_n+3,"prl_edsrim prl_kred_sr") && ba(qbn,str_palate) && s(0,qbn-1) && Q_w(qfn+1,"suw_edvi suw_edim") &&
                   qir(1,wf_n-1,"nar_any qast_any") && qir(wf_n+1,qbn-1,"nar_any qast_any prl_edsrim") )
-              { l[i]=omo1; X[99]++; if(dbg){print "X99"}; stopp=ret=1; continue };
+              { l[i]=omo2; X[117]++; if(dbg){print "X117"}; stopp=ret=1; continue };
           };
        }; #небо
        if ( iwrd == "неба") {
           if ( s(-1) && q(-1,"prl_edsrro") && ba(-1,str_palate) )
-          { l[i]=omo1; X[100]++; if(dbg){print "X100"}; stopp=ret=1; continue };
+          { l[i]=omo2; X[118]++; if(dbg){print "X118"}; stopp=ret=1; continue };
           if ( s(-2,-1) && prl_edsrro(-2) && q(-1,"prl_edsrro") && ba(-2,str_palate) )
-          { l[i]=omo1; X[101]++; if(dbg){print "X101"}; stopp=ret=1; continue };
+          { l[i]=omo2; X[119]++; if(dbg){print "X119"}; stopp=ret=1; continue };
        };
        if ( iwrd == "небу") {
           if ( s(-1) && q(-1,"prl_edsrda") && ba(-1,str_palate) )
-          { l[i]=omo1; X[102]++; if(dbg){print "X102"}; stopp=ret=1; continue };
+          { l[i]=omo2; X[120]++; if(dbg){print "X120"}; stopp=ret=1; continue };
           if ( s(-2,-1) && prl_edsrda(-2) && q(-1,"prl_edsrda") && ba(-2,str_palate) )
-          { l[i]=omo1; X[103]++; if(dbg){print "X103"}; stopp=ret=1; continue };
+          { l[i]=omo2; X[121]++; if(dbg){print "X121"}; stopp=ret=1; continue };
           if ( q(1,"prl_edsrda") && (s(0)||se(0," — ")||sc(0,":")) && Q_w(2,"suw_edda") )
-          { l[i]=omo1; X[104]++; if(dbg){print "X104"}; stopp=ret=1; continue };
+          { l[i]=omo2; X[122]++; if(dbg){print "X122"}; stopp=ret=1; continue };
        };
        if ( iwrd == "небом") {
           if ( s(-1) && q(-1,"prl_edsrtv") && ba(-1,str_palate) )
-          { l[i]=omo1; X[105]++; if(dbg){print "X105"}; stopp=ret=1; continue };
+          { l[i]=omo2; X[123]++; if(dbg){print "X123"}; stopp=ret=1; continue };
           if ( s(-2,-1) && prl_edsrtv(-2) && q(-1,"prl_edsrtv") && ba(-2,str_palate) )
-          { l[i]=omo1; X[106]++; if(dbg){print "X106"}; stopp=ret=1; continue };
+          { l[i]=omo2; X[124]++; if(dbg){print "X124"}; stopp=ret=1; continue };
        };
        if ( iwrd == "небе") {
           if ( s(-1) && q(-1,"prl_edsrpr") && ba(-1,str_palate) )
-          { l[i]=omo1; X[107]++; if(dbg){print "X107"}; stopp=ret=1; continue };
+          { l[i]=omo2; X[125]++; if(dbg){print "X125"}; stopp=ret=1; continue };
           if ( s(-2,-1) && prl_edsrpr(-2) && q(-1,"prl_edsrpr") && ba(-2,str_palate) )
-          { l[i]=omo1; X[108]++; if(dbg){print "X108"}; stopp=ret=1; continue };
+          { l[i]=omo2; X[126]++; if(dbg){print "X126"}; stopp=ret=1; continue };
        };
     # _palate_prl:end
 break}; Y[stopp_str]=1; return ret }
@@ -846,83 +935,83 @@ function FN_sky_prl_f(str_sky,    ret, stopp, bb_n,bf_n,qb_n,qf_n,wb_n,wf_n,BB_n
        if ( iwrd == "небо") {
 
           if ( s(-1) && q(-1,"prl_edsrim prl_kred_sr") && ba(-1,str_sky) && !wa(-1,"X_sky_prl") )
-          { l[i]=omo2; X[109]++; if(dbg){print "X109"}; stopp=ret=1; continue };
+          { l[i]=omo1; X[127]++; if(dbg){print "X127"}; stopp=ret=1; continue };
           if ( zs(-2) && s(-1) && qm(-2,"prl_edsrim prl_kred_sr",str_sky) && !wa(-2,"X_sky_prl") && !wa(-1,"_palate_prl") &&
                 q(-1,"prl_edsrim mest_edsrvi prq_edsrim mest_3e qast_any nar_any prl_kred_sr gl_aux_be isname") && zs(-2) && s(-1)  )
-          { l[i]=omo2; X[110]++; if(dbg){print "X110"}; stopp=ret=1; continue }; #uphere
+          { l[i]=omo1; X[128]++; if(dbg){print "X128"}; stopp=ret=1; continue }; #uphere
           if ( z(-3) && s(-2,-1) && qm(-3,"prl_edsrim",str_sky) && q(-2,"prl_edsrim prl_kred_sr nar_any sz_i") && q(-1,"prl_edsrim") )
-          { l[i]=omo2; X[111]++; if(dbg){print "X111"}; stopp=ret=1; continue };
+          { l[i]=omo1; X[129]++; if(dbg){print "X129"}; stopp=ret=1; continue };
           if ( q(1,"prl_edsrim prl_edsrtv qast_any gl_aux_be") && qm(2,"prl_edsrim prl_edsrtv",str_sky) && Q_w(3,"suw_edvi suw_edim suw_edtv") &&
              (zs(0)||se(0," — ")) && zs(1) )
-          { l[i]=omo2; X[112]++; if(dbg){print "X112"}; stopp=ret=1; continue };
+          { l[i]=omo1; X[130]++; if(dbg){print "X130"}; stopp=ret=1; continue };
           if ( q(1,"prl_edsrim prl_edsrtv") &&
                q(2,"prl_edsrim prl_edsrtv qast_any gl_aux_be") && qm(3,"prl_edsrim prl_edsrtv",str_sky) && Q_w(4,"suw_edvi suw_edim suw_edtv") &&
              (zs(0)||se(0," — ")) && zs(2) )
-          { l[i]=omo2; X[113]++; if(dbg){print "X113"}; stopp=ret=1; continue };
+          { l[i]=omo1; X[131]++; if(dbg){print "X131"}; stopp=ret=1; continue };
           if ( qm(1,"prl_edsrim",str_sky) && (s(0)||se(0," — ")||sc(0,":")) && Q_w(2,"suw_edvi suw_edim suw_edtv") )
-          { l[i]=omo2; X[114]++; if(dbg){print "X114"}; stopp=ret=1; continue };
+          { l[i]=omo1; X[132]++; if(dbg){print "X132"}; stopp=ret=1; continue };
           if ( qf(1,5,"prl_edsrim prl_edsrtv prl_kred_sr") && qir(1,qfn-1,"gl_aux_be qast_any nar_any predik prl_kred_sr muk_edsrim") && !wa(qfn,"X_sky_prl") &&
                ba(qfn,str_sky) && (zs(0)||se(0," — ")) && s(1,qfn-1) && Q_w(qfn+1,"suw_edvi suw_edim suw_edtv") )
-          { l[i]=omo2; X[115]++; if(dbg){print "X115"}; stopp=ret=1; continue };
+          { l[i]=omo1; X[133]++; if(dbg){print "X133"}; stopp=ret=1; continue };
           if ( qb(1,5,"prl_edsrim prl_edsrtv prl_kred_sr") && qir(1,qbn-1,"gl_aux_be qast_any nar_any prl_kred_sr prl_edsrim prl_edsrtv muk_edsrim mezd") && !wa(qbn,"X_sky_prl") &&
                ba(qbn,str_sky) && (zs(0)||se(0," — ")) && s(1,qbn-1) && Q(qbn+1,"suw_edvi suw_edim suw_edtv") )
-          { l[i]=omo2; X[116]++; if(dbg){print "X116"}; stopp=ret=1; continue };
+          { l[i]=omo1; X[134]++; if(dbg){print "X134"}; stopp=ret=1; continue };
 
           if ( q(1,"vvod") && z(0) && z(1) && qm(2,"prl_edsrim prl_kred_sr",str_sky) && Q_w(3,"suw_edvi suw_edim") )
-          { l[i]=omo2; X[117]++; if(dbg){print "X117"}; stopp=ret=1; continue };
+          { l[i]=omo1; X[135]++; if(dbg){print "X135"}; stopp=ret=1; continue };
           if ( q(1,"nar_mest") && s(0) && q(2,"vvod") && z(1) && z(2) && qm(3,"prl_edsrim prl_kred_sr",str_sky) && Q_w(4,"suw_edvi suw_edim") )
-          { l[i]=omo2; X[118]++; if(dbg){print "X118"}; stopp=ret=1; continue };
+          { l[i]=omo1; X[136]++; if(dbg){print "X136"}; stopp=ret=1; continue };
           if ( q(1,"nar_mest") && s(0) && q(2,"vvod") && z(1) && z(2) && q(3,"nar_spos") && qm(4,"prl_edsrim prl_kred_sr",str_sky) && Q_w(5,"suw_edvi suw_edim") )
-          { l[i]=omo2; X[119]++; if(dbg){print "X119"}; stopp=ret=1; continue };
+          { l[i]=omo1; X[137]++; if(dbg){print "X137"}; stopp=ret=1; continue };
 
           if ( qf(1,5,"prl_edsrim prl_edsrtv") && qir(1,qfn-1,"gl_aux_be qast_any nar_any prl_kred_sr") && sc(qfn,"[,—]") &&
                 q(qfn+1,"prl_edsrim prl_edsrtv") && ba(qfn+1,str_sky) && s(0,qfn-1) )
-          { l[i]=omo2; X[120]++; if(dbg){print "X120"}; stopp=ret=1; continue };
+          { l[i]=omo1; X[138]++; if(dbg){print "X138"}; stopp=ret=1; continue };
           if ( qf(2,6,"sz_i") && qiz(1,qfn-1,"gl_aux_be qast_any nar_any prl_kred_sr muk_edsrim muk_edsrtv","prl_edsrim prl_edsrtv") &&
                 q(qfn+1,"prl_edsrim prl_edsrtv") && ba(qfn+1,str_sky) && s(0,qfn) )
-          { l[i]=omo2; X[121]++; if(dbg){print "X121"}; stopp=ret=1; continue };
+          { l[i]=omo1; X[139]++; if(dbg){print "X139"}; stopp=ret=1; continue };
 
           cst="казаться оказаться остаться показаться являться";
           if ( bf(1,3,cst) ) { wf_n=bfn;
               if ( qf(wf_n+1,wf_n+3,"prl_edsrtv") && ba(qfn,str_sky) && s(0,qfn-1) && Q_w(qfn+1,"suw_edtv") &&
                   qir(1,wf_n-1,"nar_any qast_any") && qir(wf_n+1,qfn-1,"nar_any qast_any") )
-              { l[i]=omo2; X[122]++; if(dbg){print "X122"}; stopp=ret=1; continue };
+              { l[i]=omo1; X[140]++; if(dbg){print "X140"}; stopp=ret=1; continue };
               if ( qb(wf_n+1,wf_n+3,"prl_edsrtv") && ba(qbn,str_sky) && s(0,qbn-1) && Q_w(qfn+1,"suw_edtv") &&
                   qir(1,wf_n-1,"nar_any qast_any") && qir(wf_n+1,qbn-1,"nar_any qast_any prl_edsrtv") )
-              { l[i]=omo2; X[123]++; if(dbg){print "X123"}; stopp=ret=1; continue };
+              { l[i]=omo1; X[141]++; if(dbg){print "X141"}; stopp=ret=1; continue };
               if ( qf(wf_n+1,wf_n+3,"prl_edsrim prl_kred_sr") && ba(qfn,str_sky) && s(0,qfn-1) && Q_w(qfn+1,"suw_edvi suw_edim") &&
                   qir(1,wf_n-1,"nar_any qast_any") && qir(wf_n+1,qfn-1,"nar_any qast_any") )
-              { l[i]=omo2; X[124]++; if(dbg){print "X124"}; stopp=ret=1; continue };
+              { l[i]=omo1; X[142]++; if(dbg){print "X142"}; stopp=ret=1; continue };
               if ( qb(wf_n+1,wf_n+3,"prl_edsrim prl_kred_sr") && ba(qbn,str_sky) && s(0,qbn-1) && Q_w(qfn+1,"suw_edvi suw_edim") &&
                   qir(1,wf_n-1,"nar_any qast_any") && qir(wf_n+1,qbn-1,"nar_any qast_any prl_edsrim") )
-              { l[i]=omo2; X[125]++; if(dbg){print "X125"}; stopp=ret=1; continue };
+              { l[i]=omo1; X[143]++; if(dbg){print "X143"}; stopp=ret=1; continue };
           };
        }; #небо
        if ( iwrd == "неба") {
           if ( s(-1) && q(-1,"prl_edsrro") && ba(-1,str_sky) )
-          { l[i]=omo2; X[126]++; if(dbg){print "X126"}; stopp=ret=1; continue };
+          { l[i]=omo1; X[144]++; if(dbg){print "X144"}; stopp=ret=1; continue };
           if ( s(-2,-1) && prl_edsrro(-2) && q(-1,"prl_edsrro") && ba(-2,str_sky) )
-          { l[i]=omo2; X[127]++; if(dbg){print "X127"}; stopp=ret=1; continue };
+          { l[i]=omo1; X[145]++; if(dbg){print "X145"}; stopp=ret=1; continue };
        };
        if ( iwrd == "небу") {
           if ( s(-1) && q(-1,"prl_edsrda") && ba(-1,str_sky) )
-          { l[i]=omo2; X[128]++; if(dbg){print "X128"}; stopp=ret=1; continue };
+          { l[i]=omo1; X[146]++; if(dbg){print "X146"}; stopp=ret=1; continue };
           if ( s(-2,-1) && prl_edsrda(-2) && q(-1,"prl_edsrda") && ba(-2,str_sky) )
-          { l[i]=omo2; X[129]++; if(dbg){print "X129"}; stopp=ret=1; continue };
+          { l[i]=omo1; X[147]++; if(dbg){print "X147"}; stopp=ret=1; continue };
           if ( q(1,"prl_edsrda") && (s(0)||se(0," — ")||sc(0,":")) && Q_w(2,"suw_edda") )
-          { l[i]=omo2; X[130]++; if(dbg){print "X130"}; stopp=ret=1; continue };
+          { l[i]=omo1; X[148]++; if(dbg){print "X148"}; stopp=ret=1; continue };
        };
        if ( iwrd == "небом") {
           if ( s(-1) && q(-1,"prl_edsrtv") && ba(-1,str_sky) )
-          { l[i]=omo2; X[131]++; if(dbg){print "X131"}; stopp=ret=1; continue };
+          { l[i]=omo1; X[149]++; if(dbg){print "X149"}; stopp=ret=1; continue };
           if ( s(-2,-1) && prl_edsrtv(-2) && q(-1,"prl_edsrtv") && ba(-2,str_sky) )
-          { l[i]=omo2; X[132]++; if(dbg){print "X132"}; stopp=ret=1; continue };
+          { l[i]=omo1; X[150]++; if(dbg){print "X150"}; stopp=ret=1; continue };
        };
        if ( iwrd == "небе") {
           if ( s(-1) && q(-1,"prl_edsrpr") && ba(-1,str_sky) )
-          { l[i]=omo2; X[133]++; if(dbg){print "X133"}; stopp=ret=1; continue };
+          { l[i]=omo1; X[151]++; if(dbg){print "X151"}; stopp=ret=1; continue };
           if ( s(-2,-1) && prl_edsrpr(-2) && q(-1,"prl_edsrpr") && ba(-2,str_sky) )
-          { l[i]=omo2; X[134]++; if(dbg){print "X134"}; stopp=ret=1; continue };
+          { l[i]=omo1; X[152]++; if(dbg){print "X152"}; stopp=ret=1; continue };
        };
     # _sky_prl:end
 break}; Y[stopp_str]=1; return ret }
@@ -938,7 +1027,7 @@ function FN_nebo_suwro_f(    ret, stopp_str, stopp, bb_n,bf_n,qb_n,qf_n,wb_n,wf_
   if ( wfa(1,5,"_palate_suw-ro") ) { wf_n=wfn;
      if ( vgl(wf_n,1,5) && s(0,wf_n-1) && !( isname(wf_n)||isname(1) ) &&
           qir(1,wf_n-1,"prl_ro mest_ro prq_ro prl_kred_sr nar_step qip_ro qik_im") )
-     { l[i]=omo1; X[135]++; if(dbg){print "X135"}; stopp=ret=1; continue };
+     { l[i]=omo2; X[153]++; if(dbg){print "X153"}; stopp=ret=1; continue };
   };
   # _palate_suw-ro:end
 
@@ -947,7 +1036,7 @@ function FN_nebo_suwro_f(    ret, stopp_str, stopp, bb_n,bf_n,qb_n,qf_n,wb_n,wf_
 
         if ( vgl(wf_n,1,5) && s(0,wf_n-1) &&
              qir(1,wf_n-1,"prl_ro mest_ro prq_ro qik_im qip_ro") )
-        { l[i]=omo2; X[136]++; if(dbg){print "X136"}; stopp=ret=1; continue };
+        { l[i]=omo1; X[154]++; if(dbg){print "X154"}; stopp=ret=1; continue };
  };
 
  # _sky_suw-ro:end

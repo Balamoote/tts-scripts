@@ -129,14 +129,14 @@ obook="$book" # омографы пишутся в $book, т.е. в резуль
 
 #if [[ ! -d $aux ]]; then mkdir $aux; fi
 
-d2u
+if [[ $key != "-n" ]]; then d2u; fi
 
 case $key in 
  -f) # удалить директорию nomo-book
   if [[ -d "$wrkdir" ]]; then rm -rf "nomo-$book"; printf '\e[36m%s \e[33m%s \e[36m%s\e[0m\n' "Директория" $wrkdir "удалена."; exit 1
   else printf '\e[36m%s \e[33m%s \e[36m%s\e[0m\n' "Директории" $wrkdir "не существует. Используйте другой ключ."; exit 1; fi ;;
  -n) # Собрать слова, директорию namo- не удалять (если хотим продолжить работу)
-  nama=0; dixa=0; printf '\e[32m%s\e[0m\n' "Собрать слова. Ударения: словари выключены." ;;
+  nama=0; dixa=0; if [[ ! -d "$wrkdir" ]]; then mkdir "$wrkdir"; fi; printf '\e[32m%s\e[0m\n' "Собрать слова. Ударения: словари выключены." ;;
  -gg) # Обработать имена, собрать слова, директорию namo- удалить и создать заново
   nama=1; dixa=0; if [[ -d "$wrkdir" ]]; then rm -rf "$wrkdir"; mkdir "$wrkdir";
   printf '\e[36m%s \e[33m%s \e[36m%s\e[0m\n' "Директория" $wrkdir "пересоздана. Собрать слова. Ударения: включён только namebase."; else mkdir "$wrkdir"; fi ;;
@@ -200,7 +200,7 @@ find . -type f -name "[01][0-9]_*\.list" -exec rm '{}'  \;
 
      sed -ri "s=([АБВГДЕЁЖЗИЙКЛМНОПРСТУФЦЧШЩЪЫЬЭЮЯ])хЪх([АБВГДЕЁЖЗИЙКЛМНОПРСТУФЦЧШЩЪЫЬЭЮЯ])=\1ХХ\2=g" $stadir/text-book.txt
 
-  md5sum $backup $stadir/text-book.txt $stadir/binary-book.txt > $stadir/book.md5;
+  md5sum $backup $stadir/text-book.txt $stadir/binary-book.txt $backup > $stadir/book.md5;
 
   gw_cur=$(date +%s.%N); duration=$( echo $gw_cur - $gw_prev | bc ); gw_prev=$gw_cur;
   LC_ALL="en_US.UTF-8" printf '\e[36m%s \e[93m%.2f \e[36m%s\e[0m\n' "Чистка текста:" $duration "сек"
@@ -212,38 +212,22 @@ find . -type f -name "[01][0-9]_*\.list" -exec rm '{}'  \;
 	locdicsize=$(cat $stadir/bookwords.list | wc -l)
         printf '\e[36m%s \e[33m%s \e[36m%s \e[93m%s\e[0m\n' "Файлы в" $stadir/locdic.md5 "OK. Словоформ в локальных словарях:" $locdicsize;
  else
- sed -r 's/^/ /g' $stadir/text-book.txt | grep -Eo "[$RUUC$rulc$unxc-]+" |\
-     sed -r "s/[$unxc]+//g;
+ sed -r 's/^/ /g' "$stadir/text-book.txt" | grep -Eo "[$RUUC$rulc$unxc-]+" |\
+     sed -r "s/[$unxc]+//g; s/^.*$/\L\0/g;" |\
+          awk '{ print "_" $0 "="; n=split($0,arr,"-"); if(n>1) { for (i in arr) { if(arr[i] != "") {print "_" arr[i] "=" };}; }; }' |\
+          sed -r "s/^_-/_/; s/-=$/=/" | sort -u > "$stadir/bookwords.list"
 #            s/ё/е/g;
-             s/^.*$/_\0=/g;
-             s/^(.*)-(.*)$/\0\n\1=\n_\2/g;
-             s/^(.*)-(.*)$/\0\n\1=\n_\2/g;
-             s/^(.*)-(.*)$/\0\n\1=\n_\2/g;
-             s/^_-/_/; s/-=$/=/;
-             " | sed -r "s/^.*$/\L\0/g;" | sort -u > $stadir/bookwords.list
-    locdicsize=$(grep -c ^ $stadir/bookwords.list)
 
- grep -Ff $stadir/bookwords.list <(zcat $aux/dic.pat.gz)           | $zipper > $stadir/dic.pat.gz
- grep -Ff $stadir/bookwords.list <(zcat $aux/unistress-all.pat.gz) | $zipper > $stadir/unistress-all.pat.gz
- grep -Ff $stadir/bookwords.list <(zcat $aux/malc.pat.gz)          | $zipper > $stadir/malc.pat.gz
- grep -Ff $stadir/bookwords.list <(zcat $aux/yodef.pat.gz)         | $zipper > $stadir/yodef.pat.gz
- grep -Ff $stadir/bookwords.list <(zcat $aux/yolc.pat.gz)          | $zipper > $stadir/yolc.pat.gz
- grep -Ff $stadir/bookwords.list <(zcat $aux/yoyo.pat.gz)          | $zipper > $stadir/yoyo.pat.gz
- grep -Ff $stadir/bookwords.list <(zcat $aux/yoyo_lc.pat.gz)       | $zipper > $stadir/yoyo_lc.pat.gz
- grep -Ff $stadir/bookwords.list <(zcat $aux/names-all.pat.gz)     | $zipper > $stadir/names-all.pat.gz
- grep -Ff $stadir/bookwords.list <(zcat $aux/namebase.pat.gz)      | $zipper > $stadir/namebase.pat.gz
- grep -Ff $stadir/bookwords.list <(zcat $aux/mano-sm.pat.gz)       | $zipper > $stadir/mano-sm.pat.gz
+    locdicsize=$(grep -c ^ "$stadir/"bookwords.list)
 
- grep -Ff $stadir/bookwords.list <(zcat $sdb/unistress.gz)         | $zipper > $stadir/unistress.gz
- grep -Ff $stadir/bookwords.list <(zcat $sdb/unistrehy.gz)         | $zipper > $stadir/unistrehy.gz
- grep -Ff $stadir/bookwords.list <(zcat $sdb/malc.gz)              | $zipper > $stadir/malc.gz
- grep -Ff $stadir/bookwords.list <(zcat $sdb/yodef.gz)             | $zipper > $stadir/yodef.gz
- grep -Ff $stadir/bookwords.list <(zcat $sdb/yodhy.gz)             | $zipper > $stadir/yodhy.gz
- grep -Ff $stadir/bookwords.list <(zcat $sdb/yolc.gz)              | $zipper > $stadir/yolc.gz
- grep -Ff $stadir/bookwords.list <(zcat $sdb/yoyo.gz)              | $zipper > $stadir/yoyo.gz
- grep -Ff $stadir/bookwords.list <(zcat $sdb/yoyo_lc.gz)           | $zipper > $stadir/yoyo_lc.gz
- grep -Ff $stadir/bookwords.list <(zcat $sdb/namebase.gz)          | $zipper > $stadir/namebase.gz
-
+ # Создаем локальные словари
+ for dic in dic unistress-all malc yodef yolc yoyo yoyo_lc names-all namebase mano-sm; do
+   grep -Ff "$stadir/bookwords.list" <(zcat $aux/$dic.pat.gz) | $zipper > "$stadir/$dic.pat.gz"
+ done
+ for dic in unistress unistrehy malc yodef yodhy yolc yoyo yoyo_lc namebase; do
+   grep -Ff "$stadir/bookwords.list" <(zcat $sdb/$dic.gz) | $zipper > "$stadir/$dic.gz"
+ done
+  
     md5sum $stadir/bookwords.list $stadir/text-book.txt $aux/dic.pat.gz $stadir/dic.pat.gz $aux/unistress-all.pat.gz $stadir/unistress-all.pat.gz \
            $aux/malc.pat.gz $stadir/malc.pat.gz $aux/yodef.pat.gz $stadir/yodef.pat.gz $aux/yolc.pat.gz $stadir/yolc.pat.gz $aux/yoyo.pat.gz \
            $stadir/yoyo.pat.gz $aux/yoyo_lc.pat.gz $stadir/yoyo_lc.pat.gz $aux/names-all.pat.gz $stadir/names-all.pat.gz $aux/namebase.pat.gz \

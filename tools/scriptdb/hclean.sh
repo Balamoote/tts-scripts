@@ -78,7 +78,7 @@ case $key in
        else
           printf '\e[36m%s \e[36m%s\e[0m\n' "Генерация словаря причастий...";
           zcat dix_prq.gz | awk -f awx/gen_prq.awk | sort -u | $zipper > dic_prq.gz
-          md5sum dix_prq.gz dic_prq.gz > awx/dix_prq.md5;
+          md5sum dix_prq.gz dic_prq.gz awx/gen_prq.awk > awx/dix_prq.md5;
        fi;
 
        # ddic -- поиск дублей с разной основой

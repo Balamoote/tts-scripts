@@ -10,6 +10,7 @@ WORD_RE = None  # будет импортирован из tokenizer
 DEFAULT_COLORS = {
     "bg_main": "#2D2D2D",
     "bg_text": "#000000",
+    "bg_occurrences": "#000000",
     "fg_text": "#FFFFFF",
     "fg_scripts": "#FFFFFF",
     "fg_occurrences": "#FFFFFF",
@@ -24,6 +25,7 @@ DEFAULT_COLORS = {
     "bg_om_highlight": "#FFD700",
     "fg_om_highlight": "#000000",
     "bg_sel_line": "#1E3A5F",
+    "fg_sel_line": "#FFFFFF",
     "fg_accent": "#00FF00",
     "fg_heading_focus": "#00FF00",
     "fg_context_line": "#AAAAAA",
@@ -50,13 +52,13 @@ DEFAULT_FONTS = {
 DEFAULT_SETTINGS = {
     "context_length": 40,
     "context_factor": 1.15,
+    "prefix_share": 0.5,
     "cache_size": 20,
     "auto_cache_size": 10,
     "auto_cache": False,
     "allow_context_edit": False,
     "font_scale": 1.0,
     "book_reader": "",
-    "pattern_window_size": 8,
     "context_spacing1": 3,
     "context_spacing2": 0,
     "context_spacing3": 3,
@@ -85,5 +87,12 @@ def load_config():
             for key, value in colors.items():
                 if key in DEFAULT_COLORS:
                     DEFAULT_COLORS[key] = value
+            # Добавляем недостающие ключи из DEFAULT_COLORS
+            for key, value in DEFAULT_COLORS.items():
+                if key not in colors:
+                    colors[key] = value
+            # Обновляем DEFAULT_COLORS всеми ключами
+            for key, value in colors.items():
+                DEFAULT_COLORS[key] = value
         except Exception:
             pass

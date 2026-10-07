@@ -28,17 +28,20 @@ sdb="scriptdb"
 #repper="grep"
  repper="rg"
 
-debug=1       # Если 1, то сделать отладку скриптов омографов: поиск искажений текста в "пастеризованных" версиях исходника и результата 
-nocaps=0      # Если 1, то при debug=1 капсов в "пастеризованных" не будет
-locdic=1      # Создавать локальные словари для каждой книги из фактически найденной лексики
-sed_do=0      # 1 = постобработка sed, мелочи для выделения инициалов и пр. работает только для [gtts] + [ttslexx] + [словарь расшифровки условных обоззначений]
-morphy_is=0   # 1 = SpaCy; 2 = Natasha; 3 = beta_1; 4 = RNNTagger; NOTE: только для исследовательских целей. На практике используем ruaccent.
-  morphy_yo=0 # 1 = скрипт x1111.awk использует только данные SpaCy или Natasha; 0 = сторонняя модель только "подбирает хвосты"
-  morphy_do=0 # 1 = некоторые скрипты могут использовать только данные SpaCy или Natasha; 0 = только "подбирает хвосты" (не сделано)
-main_do=1     # 1 = включить основную обработку, для возможности ее выключения, для -ruac, например.
-disc_do=1     # 1 = включить дискретные скрипты
-fixomo=1      # 1 = включить скрипты awk разрешения неоднозначности омографов
-xmods=2       # включить собственные модели разрешения омографов из scriptdb/xmods: 1 = основной; вспомогательный
+debug=1        # Если 1, то сделать отладку скриптов омографов: поиск искажений текста в "пастеризованных" версиях исходника и результата 
+nocaps=0       # Если 1, то при debug=1 капсов в "пастеризованных" не будет
+locdic=1       # Создавать локальные словари для каждой книги из фактически найденной лексики
+sed_do=0       # 1 = постобработка sed, мелочи для выделения инициалов и пр. работает только для [gtts] + [ttslexx] + [словарь расшифровки условных обозначений]
+morphy_is=0    # 1 = SpaCy; 2 = Natasha; 3 = beta_1; 4 = RNNTagger; NOTE: только для исследовательских целей. На практике используем ruaccent.
+  morphy_yo=0  # 1 = скрипт x1111.awk использует только данные SpaCy или Natasha; 0 = сторонняя модель только "подбирает хвосты"
+  morphy_do=0  # 1 = некоторые скрипты могут использовать только данные SpaCy или Natasha; 0 = только "подбирает хвосты" (не сделано)
+main_do=1      # 1 = включить основную обработку, для возможности ее выключения, для -ruac, например.
+disc_do=1      # 1 = включить дискретные скрипты
+fixomo=1       # 1 = включить скрипты awk разрешения неоднозначности омографов
+xmods=0        # включить собственные модели разрешения омографов из scriptdb/xmods: 1 = основной; 2 = вспомогательный; 3 = основной и вспомогательный
+  xc_main=0.00  # основная уверенность для моделей, если = 0, то использовать уверенность из модели
+  xc_gess=0.80 # уверенность для подбирания хвостов при xmods=3 (но модель запускается 2 раза!)
+  xjobs=8      # число процессов для xmods.py (multiprocessing)  
 
 # Сторонние пакеты проставления ударения: ИЛИ ruaccent ИЛИ silero-stress. Попытка включить оба выключит оба пакета.
  rust=0       # 1 = включить обработку ruaccent -- выставит ударения везде, где сможет. Уже проставленные ударения сохраняются
@@ -54,8 +57,8 @@ do_parallel=1     # включить GNU Parallel. ВНИМАНИЕ: подоб�
    pmem=1G        # мин. память, перед началом следующей задачи, если памяти менее 50% от значения, завершить самую свежую задачу.
    pnice=0        # приоритет
 
-   paraopts_awk="--jobs=$pjobs --load=$pload --block=$pblock_a --memfree $pmem --nice=$pnice --noswap --eta --bar --pipe-part -ka"
-   paraopts_sed="--jobs=$pjobs --load=$pload --block=$pblock_s --memfree $pmem --nice=$pnice --noswap --pipe-part -ka"
+   paraopts_awk=( "--jobs=$pjobs" "--load=$pload" "--block=$pblock_a" "--memfree" "$pmem" "--nice=$pnice" "--noswap" "--eta" "--bar" "--pipe-part" "-ka" )
+   awk_opts_std=( -v "indb=$sdb/" -v "inax=$aux/" -v "bkphydir=$bookstadir/" -v "locdic=$bookstadir/" -v "morphy_on=$morphy" -v "morphy_yo=$morphy_yo" )
 
 # Установка редактора: vim или neovim
 edi=$(sed -rn 's/^\s*editor\s*=\s*(vim|nvim)\s*$/\1/ p' $sdb/settings.ini)
@@ -99,8 +102,8 @@ rm_wdir () { if [[ -d "$bookwrkdir" ]]; then rm -rf "$bookwrkdir"; dir_rm=$(prin
                                       else dir_rm=$(printf "\n") ; fi; }
 cur_dur() { mo_cur=$(date +%s.%N); duration=$( echo $mo_cur - $mo_prev | bc ); mo_prev=$mo_cur; durhum=$(ms2sec); }
 
-run_xmods () { source .train/bin/activate
-          cat "$bookwrkdir"/text-book.bas | python3 $sdb/xmd/xmods.py --min-length 3 --stat "$bookstadir" > "$bookwrkdir"/text-book.bast
+run_xmods () { source .train/bin/activate; local XM_CON="${1:-0}"; local XM_JOBS="${2:-1}"
+          python3 $sdb/xmd/xmods.py --confidence "$XM_CON" --min-length 2 --jobs "$XM_JOBS" --stat "$bookstadir" "$bookwrkdir"/text-book.bas > "$bookwrkdir"/text-book.bast
           mv "$bookwrkdir"/text-book.bast "$bookwrkdir"/text-book.bas; deactivate
           cur_dur; LC_ALL="en_US.UTF-8" printf '\e[36m%s \e[93m%s \e[36m%s\e[0m\n' "Применены xmods:" $durhum;  }
 
@@ -146,7 +149,7 @@ case $key in
                   if [[ -z "$somo" ]]; then printf '\e[36m%s\e[0m\n' "Отдельный омограф не задан. Выход."; exit 1; fi ;;
   -sg   ) printf "$msg_fmt" "Обработка группы омографов ( $somo )";
                   if [[ -z "$somo" ]]; then printf '\e[36m%s\e[0m\n' "Код группы омографов не задан. Выход."; exit 1; fi ;;
-	-se   ) printf "$msg_fmt" "Обработка омографа ( все́/всё )"; ;;
+# -se   ) printf "$msg_fmt" "Обработка омографа ( все́/всё )"; ;;
 	-x    ) printf "$msg_fmt" "Обработка омографов, создание дискретных скриптов без превью. Рабочая директория сохранена."; ;;
   -xf   )	printf "$msg_fmt" "Обработка омографов, создание дискретных скриптов без превью. (-gg 'без превью')"; ;;
 	-p    ) printf "$msg_fmt" "Создание дискретных скриптов с превью. Рабочая директория сохранена. Обработка омографов выключена."; ;;
@@ -214,98 +217,83 @@ if [[ $fixomo == "1" ]]; then
               s/^(.+#_#_# foricycle !_#_!)$/#\1/g;
               s/^(.+#_#_# all_omos !_#_!)$/#\1/g}' $sdb/main.awk > "$bookstadir/"main_esc.awk
   
-      awk -vindb="$sdb/" -vinax="$aux/" -vbkphydir="$bookstadir/" -vlocdic="$bookstadir/" -vmorphy_on="$morphy" -vmorphy_yo="$morphy_yo" \
-          -vescan="$eSCAN" -vescap="$eSCAP" -vnoredix=1 -f "$bookstadir/"main_esc.awk "$bookwrkdir"/text-book.txt > "$bookwrkdir"/text-book.bas
+      awk ${awk_opts_std[@]} -vescan="$eSCAN" -vescap="$eSCAP" -vnoredix=1 \
+         -f "$bookstadir/"main_esc.awk "$bookwrkdir"/text-book.txt > "$bookwrkdir"/text-book.bas
   
       cur_dur; LC_ALL="en_US.UTF-8" printf '\e[36m%s \e[93m%s \e[36m%s\e[0m\n' "Обработка словаря исключений:" $durhum
     fi # ====================================================================================================
   
 # if [[ $morphy == "1" ]]; then
-#  # Создать копию текст книги и морфологией с помощью morphy << начало блока morphy
+#  # Создать копию текста книги и морфологией с помощью morphy << начало блока morphy
 #  
-#    if [[ $morphy_is == "1" ]]; then
+# case $morphy_is in
 #  
-#      if [[ -s "$bookstadir"/text-book.scy ]] && md5sum -c --status "$bookstadir"/text.shy.md5 >/dev/null 2>&1; then
-#         printf '\e[36m%s \e[33m%s \e[36m%s\e[0m\n' "Файлы в" "$bookstadir"/text.shy.md5 "OK: файл с разметкой SpaCy уже создан.";
+#    1) if [[ -s "$bookstadir"/text-book.tag ]] && md5sum -c --status "$bookstadir"/text.shy.md5 >/dev/null 2>&1; then
+#         printf '\e[36m%s \e[33m%s \e[36m%s\e[0m\n' "Файлы в" "$bookstadir"/text.tag.md5 "OK: файл с разметкой SpaCy уже создан.";
 #      else
 #         sed -r "s/[$unxc]+//g;
 #                 s/[$unxn]/./g;
 #                 s/([$RUUC])([$RUUC]+)/\1\L\2/g;
 #                 s/<[-a-zA-Z_/.,;:#?! ]+>//g" "$bookwrkdir"/text-book.txt | \
-#         python3 $sdb/pye/rulg_omo.py $sdb/omo_list.phy.gz > "$bookstadir"/text-book.scy
-#         #python3 $sdb/pye/rulg_all.py $sdb/omo_list.phy > "$bookstadir"/text-book.scy
+#         python3 $sdb/pye/rulg_omo.py $sdb/omo_list.phy.gz > "$bookstadir"/text-book.tag
+#         #python3 $sdb/pye/rulg_all.py $sdb/omo_list.phy > "$bookstadir"/text-book.tag
 #     
-#         md5sum "$bookstadir"/text-book.scy "$bookwrkdir"/text-book.txt $sdb/pye/rulg_omo.py $sdb/pye/rulg_all.py > "$bookstadir"/text.shy.md5
+#         md5sum "$bookstadir"/text-book.tag "$bookwrkdir"/text-book.txt $sdb/pye/rulg_omo.py $sdb/pye/rulg_all.py > "$bookstadir"/text.tag.md5
 #         cur_dur; LC_ALL="en_US.UTF-8" printf '\e[36m%s \e[93m%s \e[36m%s\e[0m\n' "Создана копия книги с морфологией строк по SpaCy:" $durhum
-#      fi;
-#   fi;
-#   if [[ $morphy_is == "2" ]]; then
-#  
-#      if [[ -s "$bookstadir"/text-book.nat ]] && md5sum -c --status "$bookstadir"/text.nhy.md5 >/dev/null 2>&1; then
-#         printf '\e[36m%s \e[33m%s \e[36m%s\e[0m\n' "Файлы в" "$bookstadir"/text.nhy.md5 "OK: файл с разметкой Natasha уже создан.";
+#      fi; ;;
+#   2) if [[ -s "$bookstadir"/text-book.tag ]] && md5sum -c --status "$bookstadir"/text.nhy.md5 >/dev/null 2>&1; then
+#         printf '\e[36m%s \e[33m%s \e[36m%s\e[0m\n' "Файлы в" "$bookstadir"/text.tag.md5 "OK: файл с разметкой Natasha уже создан.";
 #      else
 #         sed -r "s/[$unxc]+//g;
 #                 s/[$unxn]/./g;
 #                 s/([$RUUC])([$RUUC]+)/\1\L\2/g;
 #                 s/<[-a-zA-Z_/.,;:#?! ]+>//g" "$bookwrkdir"/text-book.txt | \
-#         python3 $sdb/pye/natru_omo.py $sdb/omo_list.phy.gz > "$bookstadir"/text-book.nat
-#     
-#         md5sum "$bookstadir"/text-book.nat "$bookwrkdir"/text-book.txt $sdb/pye/natru_omo.py > "$bookstadir"/text.nhy.md5
+#         python3 $sdb/pye/natru_omo.py $sdb/omo_list.phy.gz > "$bookstadir"/text-book.tag
+#    
+#         md5sum "$bookstadir"/text-book.tag "$bookwrkdir"/text-book.txt $sdb/pye/natru_omo.py > "$bookstadir"/text.tag.md5
 #         cur_dur; LC_ALL="en_US.UTF-8" printf '\e[36m%s \e[93m%s \e[36m%s\e[0m\n' "Создана копия книги с морфологией строк по Natasha:" $durhum
-#      fi;
-#   fi;
-#   if [[ $morphy_is == "3" ]]; then
-#  
-#      if [[ -s "$bookstadir"/text-book.bet ]] && md5sum -c --status "$bookstadir"/text.bhy.md5 >/dev/null 2>&1; then
-#         printf '\e[36m%s \e[33m%s \e[36m%s\e[0m\n' "Файлы в" "$bookstadir"/text.bhy.md5 "OK: файл с разметкой Natasha уже создан.";
+#      fi; ;;
+#   3) if [[ -s "$bookstadir"/text-book.tag ]] && md5sum -c --status "$bookstadir"/text.tag.md5 >/dev/null 2>&1; then
+#         printf '\e[36m%s \e[33m%s \e[36m%s\e[0m\n' "Файлы в" "$bookstadir"/text.bhy.md5 "OK: файл с разметкой beta_1 уже создан.";
 #      else
 #         source work/beta_1/.venv/bin/activate
 #           sed -r "s/[$unxc]+//g;
 #                   s/[$unxn]/./g;
 #                   s/([$RUUC])([$RUUC]+)/\1\L\2/g;
 #                   s/<[-a-zA-Z_/.,;:#?! ]+>//g" "$bookwrkdir"/text-book.txt | \
-#           python3 work/beta_1/omorpher.py > "$bookstadir"/text-book.bet
+#           python3 work/beta_1/omorpher.py > "$bookstadir"/text-book.tag
 #         deactivate
 #     
-#         md5sum "$bookstadir"/text-book.nat "$bookwrkdir"/text-book.txt > "$bookstadir"/text.bhy.md5
+#         md5sum "$bookstadir"/text-book.nat "$bookwrkdir"/text-book.txt > "$bookstadir"/text.tag.md5
 #         cur_dur; LC_ALL="en_US.UTF-8" printf '\e[36m%s \e[93m%s \e[36m%s\e[0m\n' "Создана копия книги с морфологией строк по Natasha:" $durhum
-#      fi;
-#   fi;
-#   if [[ $morphy_is == "4" ]]; then
+#      fi; ;;
 #  
-#      if [[ -s "$bookstadir"/text-book.rnn ]] && md5sum -c --status "$bookstadir"/text.rhy.md5 >/dev/null 2>&1; then
-#         printf '\e[36m%s \e[33m%s \e[36m%s\e[0m\n' "Файлы в" "$bookstadir"/text.rhy.md5 "OK: файл с разметкой RNNTagger уже создан.";
+#   4) if [[ -s "$bookstadir"/text-book.tag ]] && md5sum -c --status "$bookstadir"/text.tag.md5 >/dev/null 2>&1; then
+#         printf '\e[36m%s \e[33m%s \e[36m%s\e[0m\n' "Файлы в" "$bookstadir"/text.tag.md5 "OK: файл с разметкой RNNTagger уже создан.";
 #      else
 #         source .venvra/bin/activate
-#           python3 work/RNNTagger/pye/rnntag.py "$bookwrkdir"/text-book.txt "$bookstadir"/text-book.rnn scriptdb/omo-list.gz \
+#           python3 work/RNNTagger/pye/rnntag.py "$bookwrkdir"/text-book.txt "$bookstadir"/text-book.tag scriptdb/omo-list.gz \
 #                  --tt-path=work/RNNTagger/rnn-tagger-russian.sh
 #         deactivate
 #     
-#         md5sum "$bookstadir"/text-book.rnn "$bookwrkdir"/text-book.txt > "$bookstadir"/text.rhy.md5
+#         md5sum "$bookstadir"/text-book.tag "$bookwrkdir"/text-book.txt > "$bookstadir"/text.tag.md5
 #         cur_dur; LC_ALL="en_US.UTF-8" printf '\e[36m%s \e[93m%s \e[36m%s\e[0m\n' "Создана копия книги с морфологией строк по Natasha:" $durhum
-#      fi;
-#   fi;
-#   if [[ $morphy_is == "5" ]]; then
-#  
-#      if [[ -s "$bookstadir"/text-book.mac ]] && md5sum -c --status "$bookstadir"/text.mcy.md5 >/dev/null 2>&1; then
-#         printf '\e[36m%s \e[33m%s \e[36m%s\e[0m\n' "Файлы в" "$bookstadir"/text.rhy.md5 "OK: файл с разметкой mawo-core уже создан.";
+#      fi; ;;
+#   5) if [[ -s "$bookstadir"/text-book.tag ]] && md5sum -c --status "$bookstadir"/text.mcy.md5 >/dev/null 2>&1; then
+#         printf '\e[36m%s \e[33m%s \e[36m%s\e[0m\n' "Файлы в" "$bookstadir"/text.tag.md5 "OK: файл с разметкой mawo-core уже создан.";
 #      else
 #         source .maco/bin/activate
 #           sed -r "s/[$unxc]+//g;
 #                   s/[$unxn]/./g;
 #                   s/([$RUUC])([$RUUC]+)/\1\L\2/g;
 #                   s/<[-a-zA-Z_/.,;:#?! ]+>//g" "$bookwrkdir"/text-book.txt | \
-#           python3 $sdb/pye/mawo_core.py $sdb/omo_list.phy.gz > "$bookstadir"/text-book.mac
+#           python3 $sdb/pye/mawo_core.py $sdb/omo_list.phy.gz > "$bookstadir"/text-book.tag
 #         deactivate
 #     
-#     
-#         md5sum "$bookstadir"/text-book.mac "$bookwrkdir"/text-book.txt > "$bookstadir"/text.mcy.md5
+#         md5sum "$bookstadir"/text-book.tag "$bookwrkdir"/text-book.txt > "$bookstadir"/text.tag.md5
 #         cur_dur; LC_ALL="en_US.UTF-8" printf '\e[36m%s \e[93m%s \e[36m%s\e[0m\n' "Создана копия книги с морфологией строк по mawo-core:" $durhum
-#      fi;
-#   fi;
-#   if [[ $morphy_is == "6" ]]; then
-#  
-#      if [[ -s "$bookstadir"/text-book.tag ]] && md5sum -c --status "$bookstadir"/text.tag.md5 >/dev/null 2>&1; then
+#      fi; ;;
+#   6) if [[ -s "$bookstadir"/text-book.tag ]] && md5sum -c --status "$bookstadir"/text.tag.md5 >/dev/null 2>&1; then
 #         printf '\e[36m%s \e[33m%s \e[36m%s\e[0m\n' "Файлы в" "$bookstadir"/text.tag.md5 "OK: файл с разметкой DeepPavlov уже создан.";
 #      else
 #         source .dp/bin/activate
@@ -316,49 +304,19 @@ if [[ $fixomo == "1" ]]; then
 #           python3 $sdb/pye/dp_tag.py $sdb/omo_list.phy.gz > "$bookstadir"/text-book.tag
 #         deactivate
 #     
-#     
 #         md5sum "$bookstadir"/text-book.tag "$bookwrkdir"/text-book.txt > "$bookstadir"/text.tag.md5
 #         cur_dur; LC_ALL="en_US.UTF-8" printf '\e[36m%s \e[93m%s \e[36m%s\e[0m\n' "Создана копия книги с морфологией строк по DeepPavlov:" $durhum
-#      fi;
-#   fi;
-# fi;
-# # << Конец блока morphy
-
-# # 
-# case $morphy_is in
-# 
-#   1) if [[ -s "$bookstadir"/text-book.scy ]]; then
-#        awk '{if (FNR==NR) { a[FNR]=$0 } else { b[FNR]=$0 } }; END { for(i in a) print a[i] "<@##@##@>" b[i] }' \
-#        "$bookwrkdir"/text-book.txt "$bookstadir"/text-book.scy > "$bookwrkdir"/text-book.bast
-#        mv "$bookwrkdir"/text-book.bast "$bookwrkdir"/text-book.bas
-#      fi; ;;
-#   2) if [[ -s "$bookstadir"/text-book.nat ]]; then
-#        awk '{if (FNR==NR) { a[FNR]=$0 } else { b[FNR]=$0 } }; END { for(i in a) print a[i] "<@##@##@>" b[i] }' \
-#        "$bookwrkdir"/text-book.txt "$bookstadir"/text-book.nat > "$bookwrkdir"/text-book.bast
-#        mv "$bookwrkdir"/text-book.bast "$bookwrkdir"/text-book.bas
-#      fi; ;;
-#   3) if [[ -s "$bookstadir"/text-book.bet ]]; then
-#        awk '{if (FNR==NR) { a[FNR]=$0 } else { b[FNR]=$0 } }; END { for(i in a) print a[i] "<@##@##@>" b[i] }' \
-#        "$bookwrkdir"/text-book.txt "$bookstadir"/text-book.bet > "$bookwrkdir"/text-book.bast
-#        mv "$bookwrkdir"/text-book.bast "$bookwrkdir"/text-book.bas
-#      fi; ;;
-#   4) if [[ -s "$bookstadir"/text-book.rnn ]]; then
-#        awk '{if (FNR==NR) { a[FNR]=$0 } else { b[FNR]=$0 } }; END { for(i in a) print a[i] "<@##@##@>" b[i] }' \
-#          "$bookwrkdir"/text-book.txt "$bookstadir"/text-book.rnn > "$bookwrkdir"/text-book.bast
-#        mv "$bookwrkdir"/text-book.bast "$bookwrkdir"/text-book.bas
-#      fi; ;;
-#   5) if [[ -s "$bookstadir"/text-book.mac ]]; then
-#        awk '{if (FNR==NR) { a[FNR]=$0 } else { b[FNR]=$0 } }; END { for(i in a) print a[i] "<@##@##@>" b[i] }' \
-#          "$bookwrkdir"/text-book.txt "$bookstadir"/text-book.mac > "$bookwrkdir"/text-book.bast
-#        mv "$bookwrkdir"/text-book.bast "$bookwrkdir"/text-book.bas
-#      fi; ;;
-#   6) if [[ -s "$bookstadir"/text-book.tag ]]; then
-#        awk '{if (FNR==NR) { a[FNR]=$0 } else { b[FNR]=$0 } }; END { for(i in a) print a[i] "<@##@##@>" b[i] }' \
-#          "$bookwrkdir"/text-book.txt "$bookstadir"/text-book.tag > "$bookwrkdir"/text-book.bast
-#        mv "$bookwrkdir"/text-book.bast "$bookwrkdir"/text-book.bas
 #      fi; ;;
 #    *)    ;;
 # esac
+#
+#   if [[ -s "$bookstadir"/text-book.tag ]]; then
+#       awk '{if (FNR==NR) { a[FNR]=$0 } else { b[FNR]=$0 } }; END { for(i in a) print a[i] "<@##@##@>" b[i] }' \
+#        "$bookwrkdir"/text-book.txt "$bookstadir"/text-book.tag > "$bookwrkdir"/text-book.bas
+#   fi;
+#
+# fi;
+# # << Конец блока morphy
   
   if [[ $locdic == "1" ]]; then
   # Создать локальные для книги словари для уменьшения используемой памяти << locdic
@@ -370,42 +328,37 @@ if [[ $fixomo == "1" ]]; then
    else
        printf '\e[36m%s \e[33m%s \e[36m%s \e[33m%s \e[36m%s\e[0m\n' \
               "Первый запуск для файла" $book ": создание списков слов из локальных словарей в" "$bookstadir" "Подождите...";
+   # Список слов
    sed -r 's/^/ /g' "$bookwrkdir"/text-book.txt | grep -Eo "[$RUUC$rulc$unxc-]+" |\
-       sed -r "s/[$unxc]+//g;
-               s/^.*$/\L\0/g;
-               s/ё/е/g;
-               s/^.*$/_\0=/g;
-               s/^(.*)-(.*)$/\0\n\1=\n_\2/g
-               s/^(.*)-(.*)$/\0\n\1=\n_\2/g
-               s/^(.*)-(.*)$/\0\n\1=\n_\2/g" | sed -r "s/^_-/_/; s/-=$/=/" | sort -u > "$bookstadir"/bookwords.list
-       locdicsize=$(cat "$bookstadir"/bookwords.list | wc -l )
+     sed -r "s/[$unxc]+//g; s/^.*$/\L\0/g; s/ё/е/g;" |\
+     awk '{ print "_" $0 "="; n=split($0,arr,"-"); if(n>1) { for (i in arr) { if(arr[i] != "") {print "_" arr[i] "=" };}; }; }' |\
+     sed -r "s/^_-/_/; s/-=$/=/" | sort -u > "$bookstadir"/bookwords.list
+
+   locdicsize=$(cat "$bookstadir"/bookwords.list | wc -l )
   
-   grep -Ff "$bookstadir"/bookwords.list <(zcat $sdb/dic_gl.gz   | sed -r "s/^([^ ]+)/_\1=/") | sed -r "s/^_([^=]+)=/\1/" | $zipper > "$bookstadir"/dic_gl.gz
-   grep -Ff "$bookstadir"/bookwords.list <(zcat $sdb/dic_prl.gz  | sed -r "s/^([^ ]+)/_\1=/") | sed -r "s/^_([^=]+)=/\1/" | $zipper > "$bookstadir"/dic_prl.gz
-   grep -Ff "$bookstadir"/bookwords.list <(zcat $sdb/dic_prq.gz  | sed -r "s/^([^ ]+)/_\1=/") | sed -r "s/^_([^=]+)=/\1/" | $zipper > "$bookstadir"/dic_prq.gz
-   grep -Ff "$bookstadir"/bookwords.list <(zcat $sdb/dic_rest.gz | sed -r "s/^([^ ]+)/_\1=/") | sed -r "s/^_([^=]+)=/\1/" | $zipper > "$bookstadir"/dic_rest.gz
-   grep -Ff "$bookstadir"/bookwords.list <(zcat $sdb/dic_suw.gz  | sed -r "s/^([^ ]+)/_\1=/") | sed -r "s/^_([^=]+)=/\1/" | $zipper > "$bookstadir"/dic_suw.gz
-   grep -Ff "$bookstadir"/bookwords.list <(zcat $sdb/dic_prop.gz | sed -r "s/^([^ ]+)/_\1=/") | sed -r "s/^_([^=]+)=/\1/" | $zipper > "$bookstadir"/dic_prop.gz
+   # Создаем локальные словари
+   for dic in dic_gl dic_prl dic_prq dic_rest dic_suw dic_prop dic_cust; do
+       grep -Ff "$bookstadir/bookwords.list" <(zcat $sdb/$dic.gz | sed -r "s/^([^ ]+)/_\1=/") | sed -r "s/^_([^=]+)=/\1/" | $zipper > "$bookstadir/$dic.gz"
+   done
    grep -Ff "$bookstadir"/bookwords.list <(zcat $sdb/namebase.gz)                                                         | $zipper > "$bookstadir"/namebase.gz
   
      md5sum "$bookstadir"/bookwords.list "$bookwrkdir"/text-book.txt $sdb/dic_gl.gz $sdb/dic_prl.gz $sdb/dic_prq.gz $sdb/dic_rest.gz $sdb/dic_suw.gz \
              $sdb/dic_prop.gz "$bookstadir"/dic_gl.gz "$bookstadir"/dic_prl.gz "$bookstadir"/dic_prq.gz "$bookstadir"/dic_rest.gz "$bookstadir"/dic_suw.gz \
-             "$bookstadir"/dic_prop.gz $sdb/dix_prq.gz $sdb/namebase.gz > "$bookstadir"/locdic.md5
+             "$bookstadir"/dic_prop.gz $sdb/dix_prq.gz $sdb/dic_cust.gz $sdb/namebase.gz > "$bookstadir"/locdic.md5
   
      cur_dur; LC_ALL="en_US.UTF-8" printf '\e[36m%s \e[93m%s \e[36m%s \e[36m%s \e[93m%s\e[0m\n' "Подготовка локальных словарей:" $durhum "Словоформ:" $locdicsize;
    fi;
 
    if [[ -s "$bookstadir"/classes.bin ]] && md5sum -c --status "$bookstadir"/classes.md5 >/dev/null 2>&1; then
-       printf '\e[36m%s\e[0m\n' "OK: база classes.bin создана.";
+       printf '\e[36m%s\e[0m\n' "OK: база classes.bin уже создана.";
    else 
-     echo "" | awk -vindb="$sdb/" -vinax="$aux/" -vbkphydir="$bookstadir/" -vlocdic="$bookstadir/" -vmorphy_on="$morphy" -vmorphy_yo="$morphy_yo" \
-            -f "$sdb/"main.awk 2>&1 > /dev/null;
+     echo "" | awk ${awk_opts_std[@]} -f "$sdb/"main.awk 2>&1 > /dev/null;
      cur_dur; LC_ALL="en_US.UTF-8" printf '\e[36m%s \e[93m%s \e[36m%s\n' "Создание базы AWK:" $durhum;
    fi;
   fi; # << Конец блока создания локальных словарей
   
   # блок моделей xmods -- как основной
-  if [[ $xmods -eq 1 ]]; then run_xmods; fi;
+  if [[ $xmods -eq 1 ]] || [[ $xmods -eq 3 ]]; then run_xmods $xc_main $xjobs; fi;
   
   # Проверить наличие необработанных "все": если есть, применить все правила, иначе выключить пару "все/всё"
   yops=$(grep -io "[^$unxc]\bвсе\b[^$unxc]" "$bookwrkdir"/text-book.bas | wc -l)
@@ -414,13 +367,11 @@ if [[ $fixomo == "1" ]]; then
 
       cp $sdb/main.awk "$bookstadir"/main.awk
       if [[ $do_parallel -eq 1 ]]; then
-        printf '\e[32m%s \e[33m%s\e[0m\n' "GNU Parallel:" "$paraopts_awk"
-        parallel --env $paraopts_awk "$bookwrkdir"/text-book.bas \
-        awk -vindb="$sdb/" -vinax="$aux/" -vbkphydir="$bookstadir/" -vlocdic="$bookstadir/" -vmorphy_on="$morphy" -vmorphy_yo="$morphy_yo" \
-            -f "$bookstadir"/main.awk > "$bookwrkdir"/text-book.awk.txt
+        printf '\e[32m%s \e[33m%s\e[0m\n' "GNU Parallel:" "${paraopts_awk[*]}"
+        parallel --env "${paraopts_awk[@]}" "$bookwrkdir"/text-book.bas \
+        awk ${awk_opts_std[@]} -f "$bookstadir"/main.awk > "$bookwrkdir"/text-book.awk.txt
       else
-        awk -vindb="$sdb/" -vinax="$aux/" -vbkphydir="$bookstadir/" -vlocdic="$bookstadir/" -vmorphy_on="$morphy" -vmorphy_yo="$morphy_yo" \
-            -f "$bookstadir"/main.awk "$bookwrkdir"/text-book.bas > "$bookwrkdir"/text-book.awk.txt
+        awk ${awk_opts_std[@]} -f "$bookstadir"/main.awk "$bookwrkdir"/text-book.bas > "$bookwrkdir"/text-book.awk.txt
       fi # do_parallel
   
       mv "$bookwrkdir"/text-book.awk.txt "$bookwrkdir"/text-book.bas
@@ -431,19 +382,16 @@ if [[ $fixomo == "1" ]]; then
   else
     # обработка только одного омографа
     if [[ $swrd -eq 1 ]]; then
-#             s/^(.+#_#_# vsez !_#_!)$/#\1/g;
       sed -r '/^#_#_#txtmppra/,/^#_#_#txtmpprb/ {
               s/^(.+#_#_# all_omos !_#_!)$/#\1/g;
               s/^#([^"]+")dummy(".+#_#_# single_word !_#_!)$/\1'$somo'\2/g}' $sdb/main.awk > "$bookstadir"/main.awk
   
       if [[ $do_parallel -eq 1 ]]; then
-        printf '\e[32m%s \e[33m%s\e[0m\n' "GNU Parallel:" "$paraopts_awk"
-        parallel --env $paraopts_awk "$bookwrkdir"/text-book.bas \
-        awk -vindb="$sdb/" -vinax="$aux/" -vbkphydir="$bookstadir/" -vlocdic="$bookstadir/" -vmorphy_on="$morphy" -vmorphy_yo="$morphy_yo" \
-            -f "$bookstadir"/main.awk > "$bookwrkdir"/text-book.awk.txt
+        printf '\e[32m%s \e[33m%s\e[0m\n' "GNU Parallel:" "${paraopts_awk[*]}"
+        parallel --env "${paraopts_awk[@]}" "$bookwrkdir"/text-book.bas \
+        awk ${awk_opts_std[@]} -f "$bookstadir"/main.awk > "$bookwrkdir"/text-book.awk.txt
       else
-        awk -vindb="$sdb/" -vinax="$aux/" -vbkphydir="$bookstadir/" -vlocdic="$bookstadir/" -vmorphy_on="$morphy" -vmorphy_yo="$morphy_yo" \
-            -f "$bookstadir"/main.awk "$bookwrkdir"/text-book.bas > "$bookwrkdir"/text-book.awk.txt
+        awk ${awk_opts_std[@]} -f "$bookstadir"/main.awk "$bookwrkdir"/text-book.bas > "$bookwrkdir"/text-book.awk.txt
       fi # do_parallel
   
       mv "$bookwrkdir"/text-book.awk.txt "$bookwrkdir"/text-book.bas
@@ -452,19 +400,16 @@ if [[ $fixomo == "1" ]]; then
   
     # обработка только одной группы омографов
     if [[ $sgrp -eq 1 ]]; then
-#             s/^(.+#_#_# vsez !_#_!)$/#\1/g;
       sed -r '/^#_#_#txtmppra/,/^#_#_#txtmpprb/ {
               s/^(.+#_#_# all_omos !_#_!)$/#\1/g;
               s/^#([^"]+")dummy(".+#_#_# single_group !_#_!)$/\1'$somo'\2/g}' $sdb/main.awk > "$bookstadir"/main.awk
   
       if [[ $do_parallel -eq 1 ]]; then
-        printf '\e[32m%s \e[33m%s\e[0m\n' "GNU Parallel:" "$paraopts_awk"
-        parallel --env $paraopts_awk "$bookwrkdir"/text-book.bas \
-        awk -vindb="$sdb/" -vinax="$aux/" -vbkphydir="$bookstadir/" -vlocdic="$bookstadir/" -vmorphy_on="$morphy" -vmorphy_yo="$morphy_yo" \
-            -f "$bookstadir"/main.awk > "$bookwrkdir"/text-book.awk.txt
+        printf '\e[32m%s \e[33m%s\e[0m\n' "GNU Parallel:" "${paraopts_awk[*]}"
+        parallel --env "${paraopts_awk[@]}" "$bookwrkdir"/text-book.bas \
+        awk ${awk_opts_std[@]} -f "$bookstadir"/main.awk > "$bookwrkdir"/text-book.awk.txt
       else
-        awk -vindb="$sdb/" -vinax="$aux/" -vbkphydir="$bookstadir/" -vlocdic="$bookstadir/" -vmorphy_on="$morphy" -vmorphy_yo="$morphy_yo" \
-            -f "$bookstadir"/main.awk "$bookwrkdir"/text-book.bas > "$bookwrkdir"/text-book.awk.txt
+        awk ${awk_opts_std[@]} -f "$bookstadir"/main.awk "$bookwrkdir"/text-book.bas > "$bookwrkdir"/text-book.awk.txt
      fi # do_parallel
   
       mv "$bookwrkdir"/text-book.awk.txt "$bookwrkdir"/text-book.bas
@@ -474,7 +419,8 @@ if [[ $fixomo == "1" ]]; then
   fi
 
   # блок моделей xmods -- как вспомогательный
-  if [[ $xmods -eq 2 ]]; then run_xmods; fi;
+  if [[ $xmods -eq 2 ]]; then run_xmods $xc_main $xjobs; fi;
+  if [[ $xmods -eq 3 ]]; then run_xmods $xc_gess $xjobs; fi;
   
  fi # fixomo END
 

@@ -35,13 +35,17 @@ class OccurrenceCache:
         return len(self.cache_dict)
 
 
-def update_cache_entry(cache_manager, word, li, ti, lines, detokenize_fn, is_unaccented_fn, context_length):
+def update_cache_entry(cache_manager, word, li, ti, lines, detokenize_fn, is_unaccented_fn,
+                       context_length, fit_prefix=None, fit_suffix=None,
+                       max_prefix_px=None, max_suffix_px=None):
     """Обновляет одно вхождение в кэше"""
     cache_key = (word, True)
     cached = cache_manager.get(cache_key)
     if not cached:
         return
-    batch, om_width = cached
+    batch = cached[0]
+    om_width = cached[1]
+    rest = tuple(cached[2:])
     for idx, b in enumerate(batch):
         if b[1] == li and b[2] == ti:
             tokens = lines[li]
@@ -52,17 +56,22 @@ def update_cache_entry(cache_manager, word, li, ti, lines, detokenize_fn, is_una
                 pos += len(tokens[tj]["text"])
             om_start = pos
             om_end = pos + len(t["text"])
-            ctx_len = context_length
-            ctx_start = max(0, om_start - ctx_len)
-            ctx_end = min(len(line_str), om_end + ctx_len)
-            prefix = line_str[ctx_start:om_start]
-            suffix = line_str[om_end:ctx_end]
-            if ctx_start > 0:
-                prefix = "◊" + prefix
-            if ctx_end < len(line_str):
-                suffix = suffix + "◊"
+            if fit_prefix is not None and max_prefix_px:
+                prefix = fit_prefix(line_str[:om_start], max_prefix_px, context_length or None)
+            else:
+                ctx_start = max(0, om_start - context_length)
+                prefix = line_str[ctx_start:om_start]
+                if ctx_start > 0:
+                    prefix = "◊" + prefix
+            if fit_suffix is not None and max_suffix_px:
+                suffix = fit_suffix(line_str[om_end:], max_suffix_px)
+            else:
+                ctx_end = min(len(line_str), om_end + context_length)
+                suffix = line_str[om_end:ctx_end]
+                if ctx_end < len(line_str):
+                    suffix = suffix + "◊"
             batch[idx] = (li + 1, li, ti, prefix, t["text"], suffix, not is_unaccented_fn(t["text"]))
-            cache_manager.put(cache_key, (batch, om_width))
+            cache_manager.put(cache_key, (batch, om_width) + rest)
             break
 
 
